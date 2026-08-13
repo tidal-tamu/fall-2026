@@ -1,3 +1,71 @@
+/* -------------------------------------------------------------------------- */
+/*  Monochrome Y2K utilities.                                                  */
+/*                                                                            */
+/*  Everything here is black, white or a warm grey. The Y2K signals come from  */
+/*  form rather than colour: pixel type, hard un-blurred offsets, halftone     */
+/*  dots, checkerboards and scanlines.                                        */
+/* -------------------------------------------------------------------------- */
+
+/* ---------------------------------------------------------------- cursor -- */
+/*  The claw grabber. Drawn twice — a fat white stroke underneath and the ink  */
+/*  stroke on top — so it stays legible over the white page *and* over the     */
+/*  black cabinet. A single-colour cursor disappears against one or the other. */
+/*  Hotspot sits between the prongs, where the grab actually happens.          */
+
+.claw-cursor,
+.claw-cursor * {
+    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='36'%20height='36'%3E%3Cg%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cg%20stroke='%23ffffff'%20stroke-width='5.5'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M10%2012V24H14'/%3E%3Cpath%20d='M26%2012V24H22'/%3E%3C/g%3E%3Cg%20stroke='%23111110'%20stroke-width='2.6'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M10%2012V24H14'/%3E%3Cpath%20d='M26%2012V24H22'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+            18 22,
+        grab;
+}
+
+/* Prongs pinch shut while dragging. */
+.claw-cursor-grabbing,
+.claw-cursor-grabbing * {
+    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='36'%20height='36'%3E%3Cg%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cg%20stroke='%23ffffff'%20stroke-width='5.5'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M14%2012V24H17'/%3E%3Cpath%20d='M22%2012V24H19'/%3E%3C/g%3E%3Cg%20stroke='%23111110'%20stroke-width='2.6'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M14%2012V24H17'/%3E%3Cpath%20d='M22%2012V24H19'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
+            18 22,
+        grabbing !important;
+}
+
+/* ----------------------------------------------------------------- type --- */
+.label {
+    font-family: "Space Mono", ui-monospace, monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.22em;
+    font-size: 11px;
+}
+
+/* --------------------------------------------------------------- surfaces - */
+/*  Hard offset, zero blur. The Y2K/brutalist tell — a blurred shadow reads    */
+/*  as modern material design and kills the effect immediately.               */
+.hard-shadow {
+    box-shadow: 4px 4px 0 #111110;
+}
+
+.hard-shadow-sm {
+    box-shadow: 3px 3px 0 #111110;
+}
+
+.halftone {
+    background-image: radial-gradient(#111110 1px, transparent 1px);
+    background-size: 6px 6px;
+}
+
+.checker {
+    background-image:
+        linear-gradient(45deg, #111110 25%, transparent 25%),
+        linear-gradient(-45deg, #111110 25%, transparent 25%),
+        linear-gradient(45deg, transparent 75%, #111110 75%),
+        linear-gradient(-45deg, transparent 75%, #111110 75%);
+    background-size: 8px 8px;
+    background-position:
+        0 0,
+        0 4px,
+        4px -4px,
+        -4px 0px;
+}
+
+/* Scanlines, now neutral rather than cyan-tinted. */
 .crt-overlay {
     position: relative;
     overflow: hidden;
@@ -11,243 +79,136 @@
         0deg,
         transparent,
         transparent 2px,
-        rgba(0, 0, 0, 0.15) 2px,
-        rgba(0, 0, 0, 0.15) 4px
+        rgba(17, 17, 16, 0.06) 2px,
+        rgba(17, 17, 16, 0.06) 4px
     );
     pointer-events: none;
     z-index: 10;
 }
 
-.crt-overlay::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(
-        transparent 50%,
-        rgba(0, 191, 255, 0.03) 50%
-    );
-    background-size: 100% 4px;
-    animation: scanline 8s linear infinite;
-    pointer-events: none;
-    z-index: 11;
-}
-
-.crt-glow {
-    box-shadow:
-        0 0 20px rgba(0, 191, 255, 0.3),
-        0 0 60px rgba(0, 191, 255, 0.1),
-        inset 0 0 30px rgba(0, 0, 0, 0.5);
-    border: 2px solid rgba(0, 191, 255, 0.2);
-}
-
-.pixel-border {
-    border: 3px solid;
-    border-image: repeating-linear-gradient(
-            90deg,
-            #ffd700 0px,
-            #ffd700 4px,
-            transparent 4px,
-            transparent 8px
-        )
-        3;
-}
-
-.led-dot {
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #ffd700;
-    box-shadow:
-        0 0 4px #ffd700,
-        0 0 8px #ffd700,
-        0 0 16px rgba(255, 215, 0, 0.4);
-    transition: all 0.3s ease;
-}
-
-.led-dot.dimmed {
-    background: rgba(255, 215, 0, 0.15);
-    box-shadow: none;
-}
-
-.glow-text {
-    text-shadow:
-        0 0 10px currentColor,
-        0 0 20px currentColor,
-        0 0 40px currentColor;
-}
-
-.glow-text-pink {
-    text-shadow:
-        0 0 10px #ff69b4,
-        0 0 20px #ff69b4,
-        0 0 40px rgba(255, 105, 180, 0.4);
-}
-
-.glow-text-blue {
-    text-shadow:
-        0 0 10px #00bfff,
-        0 0 20px #00bfff,
-        0 0 40px rgba(0, 191, 255, 0.4);
-}
-
-.glow-text-gold {
-    text-shadow:
-        0 0 10px #ffd700,
-        0 0 20px #ffd700,
-        0 0 40px rgba(255, 215, 0, 0.4);
-}
-
-@keyframes typewriter {
-    from {
-        width: 0;
-    }
-    to {
-        width: 100%;
-    }
-}
-
-@keyframes blink-caret {
-    0%, 100% {
-        border-color: transparent;
-    }
-    50% {
-        border-color: #ff69b4;
-    }
-}
-
-.typewriter-text {
-    overflow: hidden;
-    white-space: nowrap;
-    border-right: 3px solid #ff69b4;
-    animation:
-        typewriter 3s steps(30) forwards,
-        blink-caret 0.75s step-end infinite;
-}
-
-.notebook-page {
-    background: linear-gradient(transparent 95%, rgba(0, 191, 255, 0.15) 95%);
-    background-size: 100% 2em;
-    position: relative;
-}
-
-.notebook-page::before {
-    content: "";
-    position: absolute;
-    left: 40px;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: rgba(255, 105, 180, 0.3);
-}
-
-.carnival-booth {
-    background: linear-gradient(135deg, #1a1a3e 0%, #0b0b2b 100%);
-    border: 3px solid #ffd700;
-    position: relative;
-}
-
-.carnival-booth::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 8px;
-    background: repeating-linear-gradient(
-        90deg,
-        #ff69b4 0px,
-        #ff69b4 12px,
-        #ffd700 12px,
-        #ffd700 24px
-    );
-}
-
-.tv-static {
-    position: relative;
-    overflow: hidden;
-}
-
-.tv-static::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-    pointer-events: none;
-    z-index: 1;
-}
-
-@keyframes float-y2k {
-    0%,
-    100% {
-        transform: translateY(0) rotate(0deg);
-    }
-    25% {
-        transform: translateY(-8px) rotate(1deg);
-    }
-    50% {
-        transform: translateY(-14px) rotate(-0.5deg);
-    }
-    75% {
-        transform: translateY(-6px) rotate(0.5deg);
-    }
-}
-
-.animate-float-y2k {
-    animation: float-y2k 6s ease-in-out infinite;
-}
-
-@keyframes sparkle {
-    0%, 100% {
-        opacity: 0;
-        transform: scale(0) rotate(0deg);
-    }
-    50% {
-        opacity: 1;
-        transform: scale(1) rotate(180deg);
-    }
-}
-
-.animate-sparkle {
-    animation: sparkle 2s ease-in-out infinite;
-}
-
+/* ---------------------------------------------------------------- button -- */
 .y2k-button {
     position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
     font-family: "Press Start 2P", monospace;
-    background: linear-gradient(180deg, #ff69b4 0%, #ff1493 100%);
-    border: none;
-    padding: 12px 24px;
-    color: white;
+    background: #111110;
+    color: #ffffff;
+    border: 1px solid #111110;
+    border-radius: 0;
+    padding: 16px 26px;
     cursor: pointer;
-    transition: all 0.2s ease;
-    image-rendering: pixelated;
-}
-
-.y2k-button::before {
-    content: "";
-    position: absolute;
-    inset: -3px;
-    background: linear-gradient(45deg, #ffd700, #ff69b4, #00bfff, #ffd700);
-    z-index: -1;
-    border-radius: 2px;
+    transition:
+        transform 0.12s steps(2),
+        box-shadow 0.12s steps(2),
+        background 0.12s;
+    box-shadow: 4px 4px 0 rgba(17, 17, 16, 0.25);
 }
 
 .y2k-button:hover {
-    transform: translateY(-2px);
-    box-shadow:
-        0 4px 0 #c2185b,
-        0 8px 24px rgba(255, 105, 180, 0.4);
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 #111110;
 }
 
 .y2k-button:active {
-    transform: translateY(2px);
-    box-shadow: 0 0 0 #c2185b;
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 #111110;
 }
 
-.star-decoration {
+/* ------------------------------------------------------------ hero title -- */
+/*  The reference glows the wordmark in purple. In monochrome a glow just goes
+    muddy grey, so the depth comes from stacked hard offsets instead — a
+    misregistered-print look that reads far more Y2K than a blur would. */
+/*  Offsets are in em, not px: the wordmark scales with the viewport, and a
+    fixed 4/8/12px stack that reads well at 70px turns into an illegible smear
+    at the ~28px mobile size. */
+.pixel-title {
+    text-shadow:
+        0.06em 0.06em 0 #CFCCC5,
+        0.12em 0.12em 0 #E4E2DD,
+        0.18em 0.18em 0 #F4F3F1;
+}
+
+/* Outline chip, echoing the reference's rounded info pills. */
+.chip {
+    display: inline-flex;
+    align-items: center;
+    border: 1.5px solid #111110;
+    border-radius: 999px;
+    padding: 9px 18px;
+    white-space: nowrap;
+}
+
+.chip--solid {
+    background: #111110;
+    color: #ffffff;
+}
+
+/* Pill CTA in the nav, matching the reference's filled Login button. */
+.nav-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #111110;
+    color: #ffffff;
+    border: 1.5px solid #111110;
+    border-radius: 999px;
+    padding: 10px 20px;
+    transition:
+        transform 0.12s steps(2),
+        box-shadow 0.12s steps(2);
+    box-shadow: 3px 3px 0 rgba(17, 17, 16, 0.22);
+}
+
+.nav-pill:hover {
+    transform: translate(-2px, -2px);
+    box-shadow: 5px 5px 0 #111110;
+}
+
+.nav-pill:active {
+    transform: translate(2px, 2px);
+    box-shadow: 0 0 0 #111110;
+}
+
+/* ----------------------------------------------------------------- cards -- */
+.prize-card {
     position: absolute;
-    width: 20px;
-    height: 20px;
-    background: radial-gradient(circle, #ffd700 0%, transparent 70%);
-    border-radius: 50%;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1.5px solid #111110;
+    border-radius: 0;
+    background: #ffffff;
+    box-shadow: 3px 3px 0 rgba(17, 17, 16, 0.2);
+    user-select: none;
+    -webkit-user-select: none;
+    will-change: transform;
+    touch-action: none;
+}
+
+.prize-card--ink {
+    background: #111110;
+    color: #ffffff;
+}
+
+.prize-card--held {
+    box-shadow: 6px 6px 0 #111110;
+}
+
+/* ---------------------------------------------------------- legacy glow --- */
+/*  The loading screen still asks for these. In monochrome they become a flat  */
+/*  ink offset rather than a coloured bloom.                                   */
+.glow-text-pink,
+.glow-text-blue,
+.glow-text-gold {
+    text-shadow: 3px 3px 0 rgba(17, 17, 16, 0.18);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .prize-card {
+        transition: none;
+    }
 }
