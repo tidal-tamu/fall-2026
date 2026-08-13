@@ -1,308 +1,180 @@
-import { useRef } from "react";
+import { Suspense, lazy } from "react";
 import { motion } from "framer-motion";
-import { FaPlay } from "react-icons/fa";
+
+const PrizeCards = lazy(() => import("./PrizeCards"));
 
 interface HeroProps {
     shouldAnimate?: boolean;
     registerUrl: string;
 }
 
-const Star = ({
-    x,
-    y,
-    delay,
-    size = 4,
-}: {
-    x: string;
-    y: string;
-    delay: number;
-    size?: number;
-}) => (
-    <motion.div
-        className="absolute rounded-full bg-y2k-gold"
-        style={{ left: x, top: y, width: size, height: size }}
-        animate={{
-            opacity: [0.2, 1, 0.2],
-            scale: [0.8, 1.3, 0.8],
-        }}
-        transition={{
-            duration: 2 + Math.random() * 2,
-            repeat: Infinity,
-            delay,
-        }}
-    />
-);
+const DISCORD_URL = "https://discord.gg/tidaltamu";
+const DEVPOST_URL = "https://tidalbyte.devpost.com";
+
+const NAV = [
+    { label: "About", href: "#about" },
+    { label: "Schedule", href: "#schedule" },
+    { label: "Prizes", href: "#prizes" },
+    { label: "FAQ", href: "#faq" },
+];
+
+const CHIPS = ["NOVEMBER 2026", "MSC BETHANCOURT", "24 HOURS"];
 
 const Hero = ({ shouldAnimate = false, registerUrl }: HeroProps) => {
-    const heroRef = useRef<HTMLDivElement>(null);
+    const rise = (delay: number) => ({
+        initial: { y: 16, opacity: 0 },
+        animate: shouldAnimate ? { y: 0, opacity: 1 } : { y: 16, opacity: 0 },
+        transition: { duration: 0.85, ease: [0.16, 1, 0.3, 1] as const, delay },
+    });
 
     return (
-        <div
-            ref={heroRef}
-            className="relative min-h-screen flex items-center justify-center px-6 md:px-12 select-none overflow-hidden"
-            style={{
-                background:
-                    "radial-gradient(ellipse at 50% 30%, #1a1a4e 0%, #0B0B2B 60%, #060618 100%)",
-            }}
-        >
-            {/* Twinkling stars background */}
-            <div className="absolute inset-0">
-                {[
-                    { x: "10%", y: "15%", d: 0 },
-                    { x: "25%", y: "8%", d: 0.5 },
-                    { x: "45%", y: "5%", d: 1 },
-                    { x: "70%", y: "12%", d: 1.5 },
-                    { x: "85%", y: "20%", d: 0.3 },
-                    { x: "15%", y: "40%", d: 0.8 },
-                    { x: "90%", y: "35%", d: 1.2 },
-                    { x: "5%", y: "60%", d: 0.6 },
-                    { x: "35%", y: "70%", d: 1.8 },
-                    { x: "60%", y: "75%", d: 0.4 },
-                    { x: "80%", y: "65%", d: 1.1 },
-                    { x: "50%", y: "90%", d: 0.9 },
-                    { x: "20%", y: "85%", d: 1.4 },
-                    { x: "95%", y: "50%", d: 0.2 },
-                    { x: "40%", y: "30%", d: 1.7 },
-                    { x: "75%", y: "45%", d: 0.7 },
-                ].map((star, i) => (
-                    <Star
-                        key={i}
-                        x={star.x}
-                        y={star.y}
-                        delay={star.d}
-                        size={Math.random() > 0.5 ? 3 : 2}
-                    />
-                ))}
-            </div>
+        <div className="relative h-screen w-full overflow-hidden select-none bg-paper text-ink claw-cursor">
+            {/* Hairline frame inset from the edge — the page as a printed sheet. */}
+            <div className="pointer-events-none absolute inset-3 md:inset-5 border border-rule z-30" />
 
-            {/* Sparkle decorations */}
-            <motion.div
-                className="absolute top-[15%] left-[8%] text-y2k-gold text-3xl md:text-4xl"
-                animate={{
-                    rotate: [0, 15, -15, 0],
-                    scale: [1, 1.2, 0.9, 1],
-                }}
-                transition={{ duration: 3, repeat: Infinity }}
+            {/* ---------------------------------------------------- navbar -- */}
+            {/* The MLH badge is deliberately NOT in this row. It is ~77px tall,
+                so as a flex child it set the row height and `items-center`
+                centred the wordmark and links against it — dragging the whole
+                nav well down the page. It is positioned separately below, and
+                the row just reserves right-hand space for it. */}
+            <motion.header
+                className="absolute top-0 left-0 right-0 z-40 flex items-center justify-between gap-6 px-7 md:px-12 lg:pr-[104px] pt-6 md:pt-7 pointer-events-none"
+                initial={{ opacity: 0 }}
+                animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.7, delay: 0.15 }}
             >
-                ✦
-            </motion.div>
-            <motion.div
-                className="absolute top-[25%] right-[10%] text-y2k-pink text-2xl"
-                animate={{
-                    rotate: [0, -20, 20, 0],
-                    scale: [0.8, 1.3, 0.8],
-                }}
-                transition={{ duration: 4, repeat: Infinity, delay: 0.5 }}
-            >
-                ✦
-            </motion.div>
+                <a
+                    href="#top"
+                    className="font-pixel text-[13px] md:text-[15px] tracking-tight pointer-events-auto"
+                >
+                    tidalBYTE
+                </a>
 
-            {/* MLH Badge */}
-            <a
-                href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=white"
-                className="hidden lg:block max-w-[80px] min-w-[50px] absolute top-0 right-[20px] w-[8%] z-30 hover:scale-105 transition-transform duration-200"
+                <nav className="flex items-center gap-5 md:gap-8 pointer-events-auto">
+                    <ul className="hidden md:flex items-center gap-6 lg:gap-8">
+                        {NAV.map((item) => (
+                            <li key={item.label}>
+                                <a
+                                    href={item.href}
+                                    className="label text-mid hover:text-ink transition-colors"
+                                >
+                                    {item.label}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+
+                    <a
+                        href={registerUrl}
+                        className="nav-pill font-pixel text-[8px] md:text-[9px]"
+                    >
+                        REGISTER
+                        <span aria-hidden="true">[→]</span>
+                    </a>
+
+                </nav>
+            </motion.header>
+
+            {/* MLH badge, pinned to the corner just inside the frame rule so it
+                can hang to its full height without affecting the nav. */}
+            <motion.a
+                href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=black"
+                className="hidden lg:block absolute top-7 right-7 w-[48px] z-40 opacity-90 hover:opacity-100 transition-opacity"
                 target="_blank"
                 rel="noopener noreferrer"
+                initial={{ opacity: 0 }}
+                animate={shouldAnimate ? { opacity: 0.9 } : { opacity: 0 }}
+                transition={{ duration: 0.7, delay: 0.15 }}
             >
                 <img
-                    src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-white.svg"
+                    src="https://s3.amazonaws.com/logged-assets/trust-badge/2026/mlh-trust-badge-2026-black.svg"
                     alt="Major League Hacking 2026 Hackathon Season"
                     decoding="async"
                 />
-            </a>
+            </motion.a>
 
-            {/* Main hero content */}
-            <div className="text-center z-20 max-w-5xl mx-auto flex flex-col items-center gap-6 md:gap-8">
-                {/* Info pills */}
-                <motion.div
-                    className="flex flex-wrap justify-center gap-2 sm:gap-3"
-                    initial={{ y: 30, opacity: 0 }}
-                    animate={
-                        shouldAnimate
-                            ? { y: 0, opacity: 1 }
-                            : { y: 30, opacity: 0 }
-                    }
-                    transition={{ duration: 1.5, ease: "easeOut", delay: 0.2 }}
+            {/* ------------------------------------------------ centrepiece -- */}
+            {/* pointer-events-none on the wrapper so the physics layer beneath
+                stays draggable everywhere except on the actual links. */}
+            {/* Padded at the foot so the block sits above centre, leaving the
+                lower band clear for the prize pile. */}
+            <main className="absolute inset-0 z-30 flex flex-col items-center justify-center px-6 pb-28 md:pb-36 pointer-events-none">
+                <motion.p
+                    className="label text-mid text-center mb-5"
+                    {...rise(0.3)}
                 >
-                    {["MSC Bethancourt", "24 Hours", "Fall 2026"].map(
-                        (text) => (
-                            <div
-                                key={text}
-                                className="border border-y2k-pink/40 bg-y2k-pink/10 px-3 py-1 rounded-full backdrop-blur-sm"
-                            >
-                                <span className="font-vt323 text-sm md:text-base text-y2k-pink">
-                                    {text}
-                                </span>
-                            </div>
-                        ),
-                    )}
-                </motion.div>
+                    TIDAL · TEXAS A&amp;M PRESENTS
+                </motion.p>
 
-                {/* Title */}
-                <motion.div
-                    className="flex flex-col items-center"
-                    initial={{ y: 40, opacity: 0 }}
-                    animate={
-                        shouldAnimate
-                            ? { y: 0, opacity: 1 }
-                            : { y: 40, opacity: 0 }
-                    }
-                    transition={{ duration: 1.8, ease: "easeOut", delay: 0.6 }}
+                {/* One lockup — "tidalBYTE '26" is the wordmark, not three
+                    separate words. Press Start 2P's space is a full em, which
+                    reads as a gap wide enough to break the lockup apart, so the
+                    year is spaced manually at roughly half that. */}
+                <motion.h1
+                    className="pixel-title font-pixel text-center leading-none whitespace-nowrap text-[clamp(1.05rem,5.6vw,4.4rem)] mb-9"
+                    {...rise(0.42)}
                 >
-                    <h1 className="font-pixel text-4xl sm:text-5xl md:text-6xl lg:text-7xl text-white glow-text-pink leading-tight">
-                        TIDAL
-                    </h1>
-                    <div className="flex items-baseline gap-2 mt-2">
-                        <span className="font-pixel text-2xl sm:text-3xl md:text-4xl lg:text-5xl text-y2k-blue glow-text-blue">
-                            byte
-                        </span>
-                        <span className="font-pixel text-lg sm:text-xl md:text-2xl text-y2k-gold glow-text-gold">
-                            '26
-                        </span>
-                    </div>
-                </motion.div>
+                    tidalBYTE
+                    <span aria-hidden="true" className="inline-block w-[0.4em]" />
+                    &apos;26
+                </motion.h1>
 
-                {/* Claw machine / Register area */}
-                <motion.div
-                    className="relative mt-4"
-                    initial={{ y: 50, opacity: 0 }}
-                    animate={
-                        shouldAnimate
-                            ? { y: 0, opacity: 1 }
-                            : { y: 50, opacity: 0 }
-                    }
-                    transition={{ duration: 1.5, ease: "easeOut", delay: 1.0 }}
+                <motion.ul
+                    className="flex flex-wrap items-center justify-center gap-2.5 md:gap-3.5 mb-10"
+                    {...rise(0.54)}
                 >
-                    {/* Claw machine frame */}
-                    <div className="relative mx-auto w-[280px] sm:w-[320px] md:w-[380px]">
-                        <div className="crt-glow rounded-lg bg-gradient-to-b from-[#1a1a4e] to-[#0e0e30] p-4 md:p-6">
-                            {/* Machine top label */}
-                            <div className="text-center mb-3">
-                                <span className="font-pixel text-[8px] md:text-[10px] text-y2k-gold bg-y2k-gold/10 px-3 py-1 border border-y2k-gold/30">
-                                    ★ VIP ★
-                                </span>
-                            </div>
-
-                            {/* Machine screen area with cute elements */}
-                            <div className="relative bg-gradient-to-b from-[#1e1e5e] to-[#12123a] rounded border border-y2k-blue/20 p-4 md:p-6 min-h-[120px] md:min-h-[150px] flex flex-col items-center justify-center crt-overlay">
-                                {/* Floating plushie balls */}
-                                <div className="flex gap-2 mb-3 opacity-60">
-                                    {["🔵", "🟣", "⚪", "🔵", "🟣"].map(
-                                        (ball, i) => (
-                                            <motion.span
-                                                key={i}
-                                                className="text-lg md:text-xl"
-                                                animate={{
-                                                    y: [0, -4, 0],
-                                                }}
-                                                transition={{
-                                                    duration: 2,
-                                                    repeat: Infinity,
-                                                    delay: i * 0.2,
-                                                }}
-                                            >
-                                                {ball}
-                                            </motion.span>
-                                        ),
-                                    )}
-                                </div>
-
-                                <a
-                                    href={registerUrl}
-                                    className="y2k-button font-pixel text-[10px] md:text-xs px-6 py-3 flex items-center gap-2"
-                                >
-                                    REGISTER
-                                    <FaPlay className="w-2 h-2" />
-                                </a>
-                            </div>
-
-                            {/* Machine controls */}
-                            <div className="flex justify-between items-center mt-3 px-2">
-                                <span className="font-pixel text-[6px] text-gray-500">
-                                    REFRESH (10)
-                                </span>
-                                <span className="font-pixel text-[6px] text-gray-500">
-                                    ◀ PLAY (1)
-                                </span>
-                            </div>
-                        </div>
-
-                        {/* Penguin mascot */}
-                        <motion.div
-                            className="absolute -right-12 md:-right-16 top-0 text-4xl md:text-5xl"
-                            animate={{
-                                y: [0, -8, 0],
-                                rotate: [0, 5, -5, 0],
-                            }}
-                            transition={{
-                                duration: 4,
-                                repeat: Infinity,
-                                ease: "easeInOut",
-                            }}
+                    {CHIPS.map((chip) => (
+                        <li
+                            key={chip}
+                            className="chip label text-ink !text-[10px] md:!text-[11px]"
                         >
-                            🐧
-                        </motion.div>
+                            {chip}
+                        </li>
+                    ))}
+                </motion.ul>
 
-                        {/* Music note */}
-                        <motion.div
-                            className="absolute -right-6 md:-right-8 top-[-20px] text-lg text-y2k-blue"
-                            animate={{
-                                opacity: [0, 1, 0],
-                                y: [0, -15, -30],
-                                x: [0, 5, 10],
-                            }}
-                            transition={{
-                                duration: 2.5,
-                                repeat: Infinity,
-                                delay: 1,
-                            }}
-                        >
-                            ♪
-                        </motion.div>
-                    </div>
-                </motion.div>
-
-                {/* Scroll indicator */}
                 <motion.div
-                    className="mt-8"
-                    initial={{ opacity: 0 }}
-                    animate={
-                        shouldAnimate ? { opacity: 1 } : { opacity: 0 }
-                    }
-                    transition={{ delay: 2, duration: 1 }}
+                    className="font-mono text-[12px] md:text-[14px] text-center leading-[2.1] text-mid pointer-events-auto"
+                    {...rise(0.66)}
                 >
-                    <motion.div
-                        animate={{ y: [0, 8, 0] }}
-                        transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            ease: "easeInOut",
-                        }}
-                    >
-                        <span className="font-pixel text-[8px] text-y2k-gold/60">
-                            ▼ SCROLL ▼
-                        </span>
-                    </motion.div>
+                    <p>
+                        Join the{" "}
+                        <a
+                            href={DISCORD_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-ink underline underline-offset-4 decoration-1 hover:opacity-60 transition-opacity"
+                        >
+                            Discord
+                        </a>{" "}
+                        and{" "}
+                        <a
+                            href={DEVPOST_URL}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-ink underline underline-offset-4 decoration-1 hover:opacity-60 transition-opacity"
+                        >
+                            Devpost
+                        </a>
+                    </p>
+                    <p>
+                        and{" "}
+                        <a
+                            href={registerUrl}
+                            className="text-ink underline underline-offset-4 decoration-1 hover:opacity-60 transition-opacity"
+                        >
+                            Register
+                        </a>{" "}
+                        to save your spot!
+                    </p>
                 </motion.div>
-            </div>
+            </main>
 
-            {/* LED dot trail at bottom */}
-            <div className="absolute bottom-8 left-0 right-0 flex justify-center gap-3">
-                {[...Array(15)].map((_, i) => (
-                    <motion.div
-                        key={i}
-                        className="led-dot"
-                        animate={{
-                            opacity: [0.3, 1, 0.3],
-                        }}
-                        transition={{
-                            duration: 1.5,
-                            repeat: Infinity,
-                            delay: i * 0.1,
-                        }}
-                    />
-                ))}
-            </div>
+            {/* ----------------------------------------- throwable prizes --- */}
+            <Suspense fallback={null}>
+                <PrizeCards />
+            </Suspense>
         </div>
     );
 };
