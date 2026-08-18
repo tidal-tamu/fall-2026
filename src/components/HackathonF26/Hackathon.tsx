@@ -1,44 +1,60 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence } from "framer-motion";
-import Hero from "./Hero";
+import { CoinProvider } from "./coinEconomy";
 import LoadingScreen from "./LoadingScreen";
+import Ticker from "./Ticker";
+import CoinTrail from "./CoinTrail";
+import StickerTray from "./StickerTray";
+import Hero from "./Hero";
+import Invite from "./Invite";
+import About from "./About";
+import Schedule from "./Schedule";
+import Prizes from "./Prizes";
+import Sponsors from "./Sponsors";
+import Footer from "../Footer";
 import "./tidal-effects.css";
-
-// Hero-only for now. Navbar, About, Schedule, Prizes, Sponsors, FAQs and Footer
-// all still live in this directory — re-import and drop them back in below when
-// we start building out the rest of the page.
 
 const REGISTER_URL = "https://tidaltamu.com/register";
 
+// the loader GIF is ~4.2s — dismiss just after a full playthrough
+const LOADER_MS = 4600;
+
 const HackathonF26 = () => {
-    const [shouldAnimate, setShouldAnimate] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => {
-            setIsLoading(false);
-        }, 2800);
-
-        const animTimer = setTimeout(() => {
-            setShouldAnimate(true);
-        }, 500);
-
-        return () => {
-            clearTimeout(timer);
-            clearTimeout(animTimer);
-        };
+        const timer = setTimeout(() => setIsLoading(false), LOADER_MS);
+        return () => clearTimeout(timer);
     }, []);
 
+    // lock scroll while the intro plays
+    useEffect(() => {
+        document.body.style.overflow = isLoading ? "hidden" : "";
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isLoading]);
+
     return (
-        <>
+        <CoinProvider>
             <AnimatePresence>
-                {isLoading && <LoadingScreen />}
+                {isLoading && <LoadingScreen onSkip={() => setIsLoading(false)} />}
             </AnimatePresence>
 
-            <div className="h-screen overflow-hidden w-full bg-paper">
-                <Hero shouldAnimate={shouldAnimate} registerUrl={REGISTER_URL} />
+            <div className="relative w-full">
+                <Ticker />
+                <CoinTrail />
+                <StickerTray />
+
+                <Hero registerUrl={REGISTER_URL} />
+                <Invite />
+                <About />
+                <Schedule />
+                <Prizes />
+                <Sponsors />
+                <Footer registerUrl={REGISTER_URL} />
             </div>
-        </>
+        </CoinProvider>
     );
 };
 
