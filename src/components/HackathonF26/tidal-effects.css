@@ -41,23 +41,38 @@
     }
 }
 
-/* ══════════ marquee ticker (y2k) ══════════ */
+/* ══════════ bottom marquee ticker (y2k) ══════════ */
+.hackathon-page {
+    --ticker-height: 58px;
+    --sponsor-cell-width: clamp(132px, 13vw, 180px);
+    position: relative;
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100svh;
+    padding-bottom: var(--ticker-height);
+    box-sizing: border-box;
+}
 .ticker {
-    position: sticky;
-    top: 0;
+    position: fixed;
+    right: 0;
+    bottom: 0;
+    left: 0;
     z-index: 60;
     background: linear-gradient(90deg, #241c63, #3a2c86, #241c63);
-    border-bottom: 2px solid var(--peri);
+    border-top: 2px solid var(--peri);
     overflow: hidden;
     white-space: nowrap;
-    font-size: 11px;
-    padding: 9px 0;
+    padding: 8px 0;
+    min-height: var(--ticker-height);
+    box-sizing: border-box;
     color: var(--pink);
     text-shadow: 0 0 8px rgba(255, 84, 200, 0.65);
 }
 .ticker-inner {
-    display: inline-block;
-    animation: tick 22s linear infinite;
+    display: flex;
+    width: max-content;
+    animation: tick 40s linear infinite;
+    will-change: transform;
 }
 @keyframes tick {
     from {
@@ -67,8 +82,28 @@
         transform: translateX(-50%);
     }
 }
-.ticker span {
-    margin: 0 26px;
+.ticker-set {
+    display: flex;
+    flex: none;
+}
+.ticker-item {
+    display: flex;
+    flex: 0 0 var(--sponsor-cell-width);
+    width: var(--sponsor-cell-width);
+    height: calc(var(--ticker-height) - 18px);
+    align-items: center;
+    justify-content: center;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+.ticker-logo {
+    display: block;
+    width: 120px;
+    height: 28px;
+    object-fit: contain;
+}
+.ticker-logo-light {
+    filter: brightness(0) invert(1);
 }
 
 /* ══════════ coin trail ══════════ */
@@ -357,6 +392,49 @@ section {
 }
 .neon-register:active {
     transform: translateY(1px) scale(1.01);
+}
+.neon-register:disabled {
+    background: linear-gradient(180deg, #d8d8e0, #8c8c9b);
+    color: #29263a;
+    cursor: default;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.45);
+    box-shadow:
+        0 0 0 2px #aaaab7,
+        0 0 22px rgba(180, 180, 195, 0.45),
+        inset 0 0 18px rgba(19, 14, 55, 0.2);
+}
+.neon-register:disabled::before {
+    background: #8c8c9b;
+    animation: none;
+}
+.neon-register:disabled::after {
+    background: linear-gradient(180deg, #d8d8e0 0%, #8c8c9b 100%);
+    -webkit-mask-image: repeating-linear-gradient(
+        135deg,
+        #000 0 9px,
+        rgba(0, 0, 0, 0.78) 9px 12px
+    );
+    mask-image: repeating-linear-gradient(
+        135deg,
+        #000 0 9px,
+        rgba(0, 0, 0, 0.78) 9px 12px
+    );
+}
+.neon-register:disabled .neon-shine::before {
+    background: linear-gradient(
+        105deg,
+        transparent 30%,
+        rgba(19, 14, 55, 0.22) 50%,
+        transparent 70%
+    );
+}
+.neon-register:disabled:hover,
+.neon-register:disabled:active {
+    transform: none;
+    box-shadow:
+        0 0 0 2px #aaaab7,
+        0 0 22px rgba(180, 180, 195, 0.45),
+        inset 0 0 18px rgba(19, 14, 55, 0.2);
 }
 .neon-hint {
     display: block;
@@ -896,9 +974,16 @@ section {
 
 /* ══════════ HERO ══════════ */
 .hero {
-    padding-top: 70px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(100vh - var(--ticker-height));
+    min-height: calc(100svh - var(--ticker-height));
+    padding-top: clamp(24px, 5vh, 48px);
+    padding-bottom: clamp(24px, 5vh, 48px);
     text-align: center;
-    min-height: 100vh;
 }
 .logo-row {
     display: flex;
@@ -930,7 +1015,7 @@ section {
 .logo-sub {
     font-size: 11px;
     color: var(--ink-dim);
-    margin-bottom: 44px;
+    margin-bottom: clamp(20px, 4vh, 36px);
 }
 .logo-sub b {
     color: var(--coin);
@@ -940,9 +1025,13 @@ section {
     grid-template-columns: 1fr auto auto;
     align-items: center;
     gap: 34px;
-    margin-top: 10px;
+    margin-top: 0;
     max-width: 1080px;
     margin-inline: auto;
+}
+
+.hero .neon-wrap {
+    margin-top: clamp(22px, 4vh, 34px);
 }
 .hero-girl {
     justify-self: end;

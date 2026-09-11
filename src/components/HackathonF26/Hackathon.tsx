@@ -3,12 +3,9 @@ import { AnimatePresence } from "framer-motion";
 import { CoinProvider } from "./coinEconomy";
 import LoadingScreen from "./LoadingScreen";
 import Ticker from "./Ticker";
-import CoinTrail from "./CoinTrail";
 import StickerTray from "./StickerTray";
 import Hero from "./Hero";
 import "./tidal-effects.css";
-
-const REGISTER_URL = "https://tidaltamu.com/register";
 
 // the loader GIF is ~4.2s — dismiss just after a full playthrough
 const LOADER_MS = 4600;
@@ -35,12 +32,11 @@ const HackathonF26 = () => {
                 {isLoading && <LoadingScreen onSkip={() => setIsLoading(false)} />}
             </AnimatePresence>
 
-            <div className="relative w-full">
-                <Ticker />
-                <CoinTrail />
+            <div className="hackathon-page">
                 <StickerTray />
 
-                <Hero registerUrl={REGISTER_URL} />
+                <Hero />
+                <Ticker />
             </div>
         </CoinProvider>
     );

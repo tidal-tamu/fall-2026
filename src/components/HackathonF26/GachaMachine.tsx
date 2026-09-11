@@ -23,13 +23,24 @@ interface Capsule {
 }
 
 let capsuleId = 0;
+const CAPSULE_POSITIONS = [
+    { left: 6, top: 10 },
+    { left: 29, top: 10 },
+    { left: 52, top: 10 },
+    { left: 75, top: 10 },
+    { left: 6, top: 57 },
+    { left: 29, top: 57 },
+    { left: 52, top: 57 },
+    { left: 75, top: 57 },
+];
+
 const makeCapsules = (): Capsule[] =>
     Array.from({ length: 8 }, (_, i) => ({
         id: capsuleId++,
         color: CAP_COLORS[i % CAP_COLORS.length],
         rot: Math.random() * 50 - 25,
-        left: 6 + Math.random() * 72,
-        top: 38 + Math.random() * 46,
+        left: CAPSULE_POSITIONS[i].left,
+        top: CAPSULE_POSITIONS[i].top,
         img: CHARACTERS[i % CHARACTERS.length],
         popped: false,
     }));
@@ -95,7 +106,7 @@ const GachaMachine = () => {
         <>
             <div className="gacha-wrap">
                 <div className={`gacha ${shaking ? "shake" : ""}`}>
-                    <div className="gacha-sign px">REGISTER</div>
+                    <div className="gacha-sign px">COLLECT</div>
                     <div className="gacha-glass">
                         {capsules.map((c, i) => (
                             <div

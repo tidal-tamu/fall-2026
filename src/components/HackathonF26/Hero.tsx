@@ -1,10 +1,6 @@
 import GachaMachine from "./GachaMachine";
 
-interface HeroProps {
-    registerUrl: string;
-}
-
-const Hero = ({ registerUrl }: HeroProps) => (
+const Hero = () => (
     <section id="hero" className="hero">
         <span className="sparkle" style={{ top: 90, left: "8%" }}>✦</span>
         <span className="sparkle" style={{ top: 150, right: "10%", animationDelay: "1s" }}>✧</span>
@@ -16,7 +12,7 @@ const Hero = ({ registerUrl }: HeroProps) => (
             <span className="logo-byte">byte</span>
         </div>
         <div className="px logo-sub">
-            school-wide hackathon ✦ <b>mar 14–15</b> ✦ 24 hrs ✦ the gymnasium
+            <b>November 21st</b> ✦ 12-hour hackathon ✦ <b>MSC 2304</b>
         </div>
 
         <div className="hero-stage">
@@ -29,14 +25,13 @@ const Hero = ({ registerUrl }: HeroProps) => (
         </div>
 
         <div className="neon-wrap">
-            <a
+            <button
                 className="neon-register"
-                href={registerUrl}
-                target="_blank"
-                rel="noopener noreferrer"
+                type="button"
+                disabled
             >
                 <span className="neon-shine" />▶ REGISTER NOW
-            </a>
+            </button>
         </div>
     </section>
 );
