@@ -37,12 +37,7 @@ const Hero = ({ registerUrl }: HeroProps) => (
             >
                 <span className="neon-shine" />▶ REGISTER NOW
             </a>
-            <span className="neon-hint">free · all students · takes 60 seconds</span>
         </div>
-        <p className="hand-note" style={{ marginTop: 44 }}>
-            scroll down &amp; follow the coins ↓ each one pac-man eats earns you a coin
-        </p>
-        <div className="dotline"><i /><i /><i /></div>
     </section>
 );
 

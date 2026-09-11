@@ -6,12 +6,6 @@ import Ticker from "./Ticker";
 import CoinTrail from "./CoinTrail";
 import StickerTray from "./StickerTray";
 import Hero from "./Hero";
-import Invite from "./Invite";
-import About from "./About";
-import Schedule from "./Schedule";
-import Prizes from "./Prizes";
-import Sponsors from "./Sponsors";
-import Footer from "../Footer";
 import "./tidal-effects.css";
 
 const REGISTER_URL = "https://tidaltamu.com/register";
@@ -47,12 +41,6 @@ const HackathonF26 = () => {
                 <StickerTray />
 
                 <Hero registerUrl={REGISTER_URL} />
-                <Invite />
-                <About />
-                <Schedule />
-                <Prizes />
-                <Sponsors />
-                <Footer registerUrl={REGISTER_URL} />
             </div>
         </CoinProvider>
     );
