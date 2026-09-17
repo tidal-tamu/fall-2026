@@ -205,7 +205,7 @@ const ClawCabinet = ({ showControls }: { showControls: boolean }) => {
                     anchorY="middle"
                     letterSpacing={0.06}
                 >
-                    MSC BETHANCOURT · 24 HOURS · FALL 2026
+                    MSC BETHANCOURT · 12 HOURS · FALL 2026
                 </Text>
             </group>
 

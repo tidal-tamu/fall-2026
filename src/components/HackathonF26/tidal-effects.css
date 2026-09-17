@@ -171,6 +171,53 @@
     box-shadow: 0 0 0 #111110;
 }
 
+.nav-pill--disabled {
+    background: #A3A099;
+    border-color: #A3A099;
+    box-shadow: none;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+.nav-pill--disabled:hover,
+.nav-pill--disabled:active {
+    transform: none;
+    box-shadow: none;
+}
+
+.sponsor-rail {
+    overflow: hidden;
+    scrollbar-width: none;
+}
+
+.sponsor-rail::-webkit-scrollbar {
+    display: none;
+}
+
+.sponsor-rail__track {
+    display: flex;
+    width: max-content;
+    animation: sponsor-marquee 34s linear infinite;
+}
+
+.sponsor-rail__sequence {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    padding-right: 1.25rem;
+}
+
+.sponsor-rail:hover .sponsor-rail__track,
+.sponsor-rail:focus-within .sponsor-rail__track {
+    animation-play-state: paused;
+}
+
+@keyframes sponsor-marquee {
+    to {
+        transform: translateX(-50%);
+    }
+}
+
 /* ----------------------------------------------------------------- cards -- */
 .prize-card {
     position: absolute;
@@ -210,5 +257,13 @@
 @media (prefers-reduced-motion: reduce) {
     .prize-card {
         transition: none;
+    }
+
+    .sponsor-rail {
+        overflow-x: auto;
+    }
+
+    .sponsor-rail__track {
+        animation: none;
     }
 }

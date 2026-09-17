@@ -5,11 +5,7 @@ const PrizeCards = lazy(() => import("./PrizeCards"));
 
 interface HeroProps {
     shouldAnimate?: boolean;
-    registerUrl: string;
 }
-
-const DISCORD_URL = "https://discord.gg/tidaltamu";
-const DEVPOST_URL = "https://tidalbyte.devpost.com";
 
 const NAV = [
     { label: "About", href: "#about" },
@@ -18,9 +14,9 @@ const NAV = [
     { label: "FAQ", href: "#faq" },
 ];
 
-const CHIPS = ["NOVEMBER 2026", "MSC BETHANCOURT", "24 HOURS"];
+const CHIPS = ["NOVEMBER 21, 2026", "MSC BETHANCOURT", "12 HOURS"];
 
-const Hero = ({ shouldAnimate = false, registerUrl }: HeroProps) => {
+const Hero = ({ shouldAnimate = false }: HeroProps) => {
     const rise = (delay: number) => ({
         initial: { y: 16, opacity: 0 },
         animate: shouldAnimate ? { y: 0, opacity: 1 } : { y: 16, opacity: 0 },
@@ -65,20 +61,21 @@ const Hero = ({ shouldAnimate = false, registerUrl }: HeroProps) => {
                         ))}
                     </ul>
 
-                    <a
-                        href={registerUrl}
-                        className="nav-pill font-pixel text-[8px] md:text-[9px]"
+                    <button
+                        type="button"
+                        disabled
+                        className="nav-pill nav-pill--disabled font-pixel text-[8px] md:text-[9px]"
                     >
                         REGISTER
                         <span aria-hidden="true">[→]</span>
-                    </a>
+                    </button>
 
                 </nav>
             </motion.header>
 
             {/* MLH badge, pinned to the corner just inside the frame rule so it
                 can hang to its full height without affecting the nav. */}
-            <motion.a
+            {/* <motion.a
                 href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2026-season&utm_content=black"
                 className="hidden lg:block absolute top-7 right-7 w-[48px] z-40 opacity-90 hover:opacity-100 transition-opacity"
                 target="_blank"
@@ -92,7 +89,7 @@ const Hero = ({ shouldAnimate = false, registerUrl }: HeroProps) => {
                     alt="Major League Hacking 2026 Hackathon Season"
                     decoding="async"
                 />
-            </motion.a>
+            </motion.a> */}
 
             {/* ------------------------------------------------ centrepiece -- */}
             {/* pointer-events-none on the wrapper so the physics layer beneath
@@ -104,7 +101,7 @@ const Hero = ({ shouldAnimate = false, registerUrl }: HeroProps) => {
                     className="label text-mid text-center mb-5"
                     {...rise(0.3)}
                 >
-                    TIDAL · TEXAS A&amp;M PRESENTS
+                    TEXAS A&amp;M · TIDAL PRESENTS
                 </motion.p>
 
                 {/* One lockup — "tidalBYTE '26" is the wordmark, not three
@@ -134,41 +131,12 @@ const Hero = ({ shouldAnimate = false, registerUrl }: HeroProps) => {
                     ))}
                 </motion.ul>
 
-                <motion.div
-                    className="font-mono text-[12px] md:text-[14px] text-center leading-[2.1] text-mid pointer-events-auto"
+                <motion.p
+                    className="label text-mid text-center"
                     {...rise(0.66)}
                 >
-                    <p>
-                        Join the{" "}
-                        <a
-                            href={DISCORD_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-ink underline underline-offset-4 decoration-1 hover:opacity-60 transition-opacity"
-                        >
-                            Discord
-                        </a>{" "}
-                        and{" "}
-                        <a
-                            href={DEVPOST_URL}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="text-ink underline underline-offset-4 decoration-1 hover:opacity-60 transition-opacity"
-                        >
-                            Devpost
-                        </a>
-                    </p>
-                    <p>
-                        and{" "}
-                        <a
-                            href={registerUrl}
-                            className="text-ink underline underline-offset-4 decoration-1 hover:opacity-60 transition-opacity"
-                        >
-                            Register
-                        </a>{" "}
-                        to save your spot!
-                    </p>
-                </motion.div>
+                    Registrations open soon...
+                </motion.p>
             </main>
 
             {/* ----------------------------------------- throwable prizes --- */}

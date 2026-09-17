@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import Matter from "matter-js";
+import { SPONSOR_RAIL_HEIGHT } from "./Sponsors";
 
 /* -------------------------------------------------------------------------- */
 /*  Throwable prize cards.                                                     */
@@ -22,7 +23,7 @@ type CardSpec = {
 };
 
 const CARDS: CardSpec[] = [
-    { text: "24 HOURS", w: 168, h: 62, size: 11 },
+    { text: "12 HOURS", w: 168, h: 62, size: 11 },
     { text: "MSC BETHANCOURT", w: 232, h: 62, size: 9 },
     { text: "FREE FOOD", w: 176, h: 62, ink: true, size: 11 },
     { text: "BEGINNER FRIENDLY", w: 244, h: 62, size: 9 },
@@ -31,10 +32,9 @@ const CARDS: CardSpec[] = [
 ];
 
 const WALL = 400; // thickness of the off-screen bounds
-/* Bounds are pulled in past the hairline frame (inset-3 / md:inset-5, so 12px
-   then 20px) on every side. At the viewport edge the cards slid underneath the
-   rule and got clipped by it; 24px keeps the whole pile inside the sheet. */
-const EDGE_INSET = 24;
+/* Match the hairline frame's responsive inset: inset-3 on small screens and
+   inset-5 from the md breakpoint up. */
+const frameInsetFor = (width: number) => (width >= 768 ? 20 : 12);
 
 /* Cards are sized for a desktop hero. Left at full size on a phone they are
    nearly viewport-wide and stack into a wall that buries the machine, so both
@@ -105,23 +105,25 @@ const PrizeCards = ({ enabled = true }: PrizeCardsProps) => {
         const world = engine.world;
 
         /* --- bounds: floor, ceiling and two side walls ---------------------- */
-        // Each wall's *inner face* lands on EDGE_INSET, so nothing can drift
-        // out under the frame rule. The ceiling stays far overhead to let the
-        // cards drop in from off-screen.
-        const makeWalls = (w: number, h: number) => [
-            Bodies.rectangle(w / 2, h - EDGE_INSET + WALL / 2, w * 3, WALL, {
+        // The floor's inner face meets the sponsor rail's top border; the
+        // other three walls meet the existing printed frame.
+        const makeWalls = (w: number, h: number) => {
+            const frameInset = frameInsetFor(w);
+            return [
+            Bodies.rectangle(w / 2, h - SPONSOR_RAIL_HEIGHT + WALL / 2, w * 3, WALL, {
                 isStatic: true,
             }),
-            Bodies.rectangle(w / 2, -WALL / 2 - h, w * 3, WALL, {
+            Bodies.rectangle(w / 2, frameInset - WALL / 2, w * 3, WALL, {
                 isStatic: true,
             }),
-            Bodies.rectangle(EDGE_INSET - WALL / 2, h / 2, WALL, h * 3, {
+            Bodies.rectangle(frameInset - WALL / 2, h / 2, WALL, h * 3, {
                 isStatic: true,
             }),
-            Bodies.rectangle(w - EDGE_INSET + WALL / 2, h / 2, WALL, h * 3, {
+            Bodies.rectangle(w - frameInset + WALL / 2, h / 2, WALL, h * 3, {
                 isStatic: true,
             }),
-        ];
+            ];
+        };
         let walls = makeWalls(W, H);
         Composite.add(world, walls);
 
@@ -131,14 +133,17 @@ const PrizeCards = ({ enabled = true }: PrizeCardsProps) => {
         const bodies = cards.map((c, i) => {
             // Spawn inside the same bounds the walls enforce, so nothing has to
             // be shoved back in on the first few ticks.
-            const lo = EDGE_INSET + c.w / 2;
-            const hi = Math.max(lo, W - EDGE_INSET - c.w / 2);
+            const frameInset = frameInsetFor(W);
+            const lo = frameInset + c.w / 2;
+            const hi = Math.max(lo, W - frameInset - c.w / 2);
             const lane = (i + 0.5) / cards.length;
             const x = Math.min(
                 hi,
                 Math.max(lo, lo + (hi - lo) * lane + (Math.random() - 0.5) * 60),
             );
-            const y = -80 - i * 55 - Math.random() * 40;
+            // Start just inside the frame, beneath the ceiling. Starting above
+            // it would leave cards stranded outside the visible play area.
+            const y = frameInset + c.h / 2 + 12;
             return Bodies.rectangle(x, y, c.w, c.h, {
                 chamfer: { radius: 0 },
                 restitution: 0.14,
