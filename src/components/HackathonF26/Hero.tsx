@@ -18,6 +18,14 @@ const NAV = [
 
 const CHIPS = [EVENT.date.toUpperCase(), EVENT.room, `${EVENT.hours} HOURS`];
 
+const WORDMARK = (
+    <>
+        tidalBYTE
+        <span aria-hidden="true" className="inline-block w-[0.4em]" />
+        &apos;26
+    </>
+);
+
 const Hero = ({ shouldAnimate = false }: HeroProps) => {
     const rise = (delay: number) => ({
         initial: { y: 16, opacity: 0 },
@@ -113,13 +121,22 @@ const Hero = ({ shouldAnimate = false }: HeroProps) => {
                     separate words. Press Start 2P's space is a full em, which
                     reads as a gap wide enough to break the lockup apart, so the
                     year is spaced manually at roughly half that. */}
+                {/* Hovering glitches it: two blue copies of the lockup sit
+                    behind and over the real one and only show on hover (see
+                    .glitch in tidal-hero.css). */}
                 <motion.h1
-                    className="pixel-title font-pixel text-center leading-none whitespace-nowrap text-[clamp(1.05rem,5.6vw,4.4rem)] mb-9"
+                    className="pixel-title font-pixel text-center leading-none whitespace-nowrap text-[clamp(1.05rem,5.6vw,4.4rem)] mb-9 pointer-events-auto"
                     {...rise(0.42)}
                 >
-                    tidalBYTE
-                    <span aria-hidden="true" className="inline-block w-[0.4em]" />
-                    &apos;26
+                    <span className="glitch">
+                        <span className="glitch__base">{WORDMARK}</span>
+                        <span aria-hidden="true" className="glitch__layer glitch__layer--ghost">
+                            {WORDMARK}
+                        </span>
+                        <span aria-hidden="true" className="glitch__layer glitch__layer--tear">
+                            {WORDMARK}
+                        </span>
+                    </span>
                 </motion.h1>
 
                 <motion.ul
