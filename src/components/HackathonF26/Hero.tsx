@@ -1,14 +1,13 @@
 import { motion } from "framer-motion";
 import { EVENT } from "./event";
-import DiaryPenguin from "./DiaryPenguin";
 import HeroSky from "./HeroSky";
 import Polaroids from "./Polaroids";
 import StickerTitle from "./StickerTitle";
 
 /* -------------------------------------------------------------------------- */
 /*  The Summer Diary hero, kept to what the reference holds and nothing more:  */
-/*  a sticker title over a towering cloud bank, polaroids either side of a     */
-/*  penguin walking the sidewalk, and one quiet line of facts on the road.     */
+/*  a sticker title and register button over a towering cloud bank, polaroids  */
+/*  floating across it, and one quiet line of facts on the road.               */
 /* -------------------------------------------------------------------------- */
 
 interface HeroProps {
@@ -82,12 +81,6 @@ const Hero = ({ shouldAnimate = false }: HeroProps) => {
                 <div className="diary-street__walk" />
                 <div className="diary-street__road" />
             </div>
-
-            <motion.div className="diary-penguin" {...rise(0.45)}>
-                <div className="diary-penguin__waddle">
-                    <DiaryPenguin />
-                </div>
-            </motion.div>
 
             <motion.p className="diary-tagline" {...rise(0.7)}>
                 {TAGLINE}

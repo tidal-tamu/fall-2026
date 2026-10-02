@@ -3,9 +3,9 @@ import { motion } from "framer-motion";
 import { STICKER } from "./event";
 
 /* -------------------------------------------------------------------------- */
-/*  Four polaroid stickers floating either side of the walker, as in the       */
-/*  Summer Diary reference: white frame, ink edge, a die-cut white border, and */
-/*  a tinted photo that alternates cool blue and soft grey.                    */
+/*  Four polaroid stickers floating over the cloud bank, as in the Summer      */
+/*  Diary reference: white frame, ink edge, a die-cut white border, and a      */
+/*  tinted photo that alternates cool blue and soft grey.                      */
 /* -------------------------------------------------------------------------- */
 
 const SHOTS = [
