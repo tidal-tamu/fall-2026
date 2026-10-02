@@ -1,0 +1,137 @@
+/* -------------------------------------------------------------------------- */
+/*  Hero: soft grey sky, drifting pixel clouds, polaroids and the runner lane. */
+/*  Palette stays black / white / soft grey; the blue is the hint only.        */
+/* -------------------------------------------------------------------------- */
+
+.hero-sky {
+    background: #e9ebec;
+    /* Height of the runner lane; the wordmark and polaroids centre in what's
+       left above it. */
+    --runner-h: 150px;
+}
+
+@media (min-width: 768px) {
+    .hero-sky {
+        --runner-h: 200px;
+    }
+}
+
+/* ------------------------------------------------------------ pixel clouds -- */
+.cloud-drift {
+    position: absolute;
+    left: 0;
+    animation: cloud-drift var(--dur) linear var(--delay) infinite;
+}
+
+@keyframes cloud-drift {
+    from {
+        transform: translateX(105vw);
+    }
+    to {
+        transform: translateX(-120px);
+    }
+}
+
+/* ---------------------------------------------------------------- polaroids -- */
+.polaroid-drag {
+    cursor: grab;
+    touch-action: auto;
+}
+
+.polaroid-drag--held {
+    position: relative;
+    z-index: 10;
+    cursor: grabbing;
+}
+
+.polaroid-bob {
+    animation: polaroid-bob 5.5s ease-in-out infinite alternate;
+}
+
+@keyframes polaroid-bob {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-9px);
+    }
+}
+
+.polaroid {
+    margin: 0;
+    padding: 6px 6px 0;
+    background: #ffffff;
+    border: 1.5px solid #111110;
+    box-shadow: 3px 3px 0 rgba(17, 17, 16, 0.18);
+    transform: rotate(var(--tilt));
+    transition:
+        transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.polaroid-drag:hover .polaroid,
+.polaroid-drag--held .polaroid {
+    transform: rotate(0deg) scale(1.04);
+    box-shadow: 5px 5px 0 #111110;
+}
+
+.polaroid__photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1;
+    background: #e6ebf0;
+    border: 1px solid rgba(17, 17, 16, 0.14);
+}
+
+.polaroid__photo img {
+    width: 84%;
+    height: 84%;
+    object-fit: contain;
+    pointer-events: none;
+}
+
+.polaroid__caption {
+    padding: 6px 2px 8px;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 9px;
+    line-height: 1.2;
+    text-align: center;
+    color: #383632;
+}
+
+@media (min-width: 768px) {
+    .polaroid {
+        padding: 8px 8px 0;
+    }
+    .polaroid__caption {
+        font-size: 11px;
+    }
+}
+
+/* ------------------------------------------------------------------ runner -- */
+.runner-canvas {
+    cursor: pointer;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.runner-canvas:focus {
+    outline: none;
+}
+
+.runner-canvas:focus-visible {
+    outline: 2px dashed #8ea7c2;
+    outline-offset: -4px;
+}
+
+/* Hold still: park the clouds where the sky looks balanced. */
+@media (prefers-reduced-motion: reduce) {
+    .cloud-drift {
+        animation: none;
+        transform: translateX(var(--rest));
+    }
+    .polaroid-bob {
+        animation: none;
+    }
+}

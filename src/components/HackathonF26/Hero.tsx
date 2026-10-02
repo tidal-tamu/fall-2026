@@ -1,8 +1,9 @@
-import { Suspense, lazy } from "react";
 import { motion } from "framer-motion";
 import { EVENT } from "./event";
-
-const PrizeCards = lazy(() => import("./PrizeCards"));
+import HeroSky from "./HeroSky";
+import Polaroids from "./Polaroids";
+import RunnerGame from "./RunnerGame";
+import { SPONSOR_RAIL_HEIGHT } from "./Sponsors";
 
 interface HeroProps {
     shouldAnimate?: boolean;
@@ -25,7 +26,7 @@ const Hero = ({ shouldAnimate = false }: HeroProps) => {
     });
 
     return (
-        <div className="relative h-screen w-full overflow-hidden select-none bg-paper text-ink claw-cursor">
+        <div className="hero-sky relative h-screen w-full overflow-hidden select-none text-ink">
             {/* Hairline frame inset from the edge — the page as a printed sheet. */}
             <div className="pointer-events-none absolute inset-3 md:inset-5 border border-rule z-30" />
 
@@ -92,12 +93,15 @@ const Hero = ({ shouldAnimate = false }: HeroProps) => {
                 />
             </motion.a> */}
 
+            <HeroSky />
+
             {/* ------------------------------------------------ centrepiece -- */}
-            {/* pointer-events-none on the wrapper so the physics layer beneath
-                stays draggable everywhere except on the actual links. */}
-            {/* Padded at the foot so the block sits above centre, leaving the
-                lower band clear for the prize pile. */}
-            <main className="absolute inset-0 z-30 flex flex-col items-center justify-center px-6 pb-28 md:pb-36 pointer-events-none">
+            {/* Centred in the sky above the runner lane, over the cloud bank.
+                pointer-events-none so only the links inside take clicks. */}
+            <main
+                className="absolute inset-x-0 top-0 z-30 flex flex-col items-center justify-center px-6 pt-14 pointer-events-none"
+                style={{ bottom: `calc(${SPONSOR_RAIL_HEIGHT}px + var(--runner-h))` }}
+            >
                 <motion.p
                     className="label text-mid text-center mb-5"
                     {...rise(0.3)}
@@ -140,10 +144,20 @@ const Hero = ({ shouldAnimate = false }: HeroProps) => {
                 </motion.p>
             </main>
 
-            {/* ----------------------------------------- throwable prizes --- */}
-            <Suspense fallback={null}>
-                <PrizeCards />
-            </Suspense>
+            <Polaroids shouldAnimate={shouldAnimate} />
+
+            {/* ------------------------------------------------ runner lane -- */}
+            {/* Inside the printed frame, its ground line resting just above the
+                sponsor rail like the road in the reference. */}
+            <motion.div
+                className="absolute inset-x-3 z-20 md:inset-x-5"
+                style={{ bottom: SPONSOR_RAIL_HEIGHT, height: "var(--runner-h)" }}
+                initial={{ opacity: 0 }}
+                animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
+                transition={{ duration: 0.7, delay: 0.9 }}
+            >
+                <RunnerGame />
+            </motion.div>
         </div>
     );
 };

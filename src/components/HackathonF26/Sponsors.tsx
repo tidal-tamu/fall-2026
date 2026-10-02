@@ -1,7 +1,7 @@
 type Sponsor = { name: string; logo: string };
 
-// The physics layer uses this too, so its floor lands exactly on the rail's
-// top border rather than underneath the sponsor logos.
+// The hero lays out its runner lane, polaroids and sky above this, so the
+// game's ground line sits right on the rail's top border.
 export const SPONSOR_RAIL_HEIGHT = 56;
 
 // Shared with the liner-notes sticker wall further down the page.
