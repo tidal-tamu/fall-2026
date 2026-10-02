@@ -2,7 +2,7 @@ import type { ReactElement } from "react";
 
 /* -------------------------------------------------------------------------- */
 /*  The city behind the caped penguin, generated once from fixed seeds so it   */
-/*  never reshuffles: a pale far skyline sinking into a cumulus bank, and a    */
+/*  never reshuffles: a pale far skyline, and a                                */
 /*  near row of comic line-art buildings with halftone shading, roof clutter,  */
 /*  "tidal" signage and windows that flicker on and off.                       */
 /*  Both draw into a -400..2000 x 420 box whose ground line is y = 420.        */
@@ -101,25 +101,6 @@ const FAR_WIN: Win = {
     sw: 0.9, lit: "#eef6fc", litChance: 0.38, steady: 0.3, minDur: 7, maxDur: 13,
 };
 
-/* A cumulus bank: a run of arcs rising toward the edges, dipping at the
-   centre where the hero stands. */
-function bank(s: Sheet, seed: number, lift: number, wMin: number, wMax: number, fill: string, stroke: string, sw: number) {
-    const r = rng(seed);
-    const base = (x: number) => 238 - Math.min(Math.abs(x - 800) / 1100, 1) * 64 + lift;
-    let bx = -440;
-    let d = `M-440,${GROUND + 10} L-440,${r1(base(-440))}`;
-    while (bx < 2040) {
-        const w = wMin + r() * (wMax - wMin);
-        const nx = bx + w;
-        const ny = base(nx) + (r() - 0.5) * 26;
-        const rad = r1(w * 0.62);
-        d += ` A${rad},${rad} 0 0 1 ${r1(nx)},${r1(ny)}`;
-        bx = nx;
-    }
-    d += ` L${r1(bx)},${GROUND + 10} Z`;
-    s.add(<path key={s.key()} d={d} fill={fill} stroke={stroke} strokeWidth={sw} strokeLinejoin="round" />);
-}
-
 function buildFar() {
     const s = new Sheet();
     const r = rng(11);
@@ -138,9 +119,6 @@ function buildFar() {
         windows(s, b, FAR_WIN, r, 22);
         x += w - 6 + r() * 12;
     }
-    bank(s, 3, 0, 70, 150, "#fbfcfd", "#56626d", 1.8);
-    bank(s, 8, 34, 50, 95, "#e1e9f0", "#aebcc8", 1.3);
-    bank(s, 15, 74, 40, 80, "#d3dde6", "#b9c6d1", 1.1);
     return s.els;
 }
 
@@ -273,7 +251,7 @@ function boxBuilding(s: Sheet, b: Building, fill: string, r: Rand) {
     }
 }
 
-/* The round tower: a "tidal" sign band, curved tiles and a NOV 21 banner. */
+/* The round tower: a dark band up top, curved tiles and a NOV 21 banner. */
 function cylinder(s: Sheet, b: Building, r: Rand) {
     const top = GROUND - b.h, cx = b.x + b.w / 2, rx = b.w / 2, ry = 14, capY = top + ry;
     const pts: [number, number][] = [[b.x, GROUND + 6], [b.x, capY]];
@@ -293,8 +271,6 @@ function cylinder(s: Sheet, b: Building, r: Rand) {
     const inner = new Sheet();
     const bandH = 36;
     inner.add(<path key={inner.key()} d={`M${b.x},${capY} Q${cx},${capY + ry * 2} ${b.x + b.w},${capY} L${b.x + b.w},${capY + bandH} Q${cx},${capY + bandH + ry * 2} ${b.x},${capY + bandH} Z`} fill="#4b5660" stroke={INK} strokeWidth={1.6} />);
-    pixelText(inner, cx - 13, capY + 34, 15, "#d6ecfb", "tidal");
-    heart(inner, cx + 30, capY + 21, 2, "#a9cfee", true);
 
     const xs = [b.x, ...[-74, -56, -38, -19, 0, 19, 38, 56, 74].map((deg) => cx + rx * Math.sin((deg * Math.PI) / 180)), b.x + b.w];
     const step = 21, y0 = capY + bandH + 6, y1 = GROUND - 34;

@@ -9,8 +9,14 @@ import { EVENT } from "./event";
 
 const LIVE = EVENT.registrationOpen && Boolean(EVENT.registerUrl);
 
-/* `icon` replaces the arrow, for heroes that want their own mark. */
-const RegisterButton = ({ className = "", icon }: { className?: string; icon?: ReactNode }) =>
+interface Props {
+    className?: string;
+    label?: string; // e.g. "APPLY"; same destination either way
+    icon?: ReactNode; // replaces the arrow, for heroes that want their own mark
+    soonTag?: boolean; // the "soon!" sticker while registration is closed
+}
+
+const RegisterButton = ({ className = "", label = "REGISTER", icon, soonTag = true }: Props) =>
     LIVE ? (
         <a
             href={EVENT.registerUrl}
@@ -18,7 +24,7 @@ const RegisterButton = ({ className = "", icon }: { className?: string; icon?: R
             rel="noopener noreferrer"
             className={`register-btn ${className}`}
         >
-            REGISTER {icon ?? <span aria-hidden="true">→</span>}
+            {label} {icon ?? <span aria-hidden="true">→</span>}
         </a>
     ) : (
         <span
@@ -26,11 +32,13 @@ const RegisterButton = ({ className = "", icon }: { className?: string; icon?: R
             aria-disabled="true"
             title="Registration opens soon"
         >
-            REGISTER
+            {label}
             {icon}
-            <span className="register-btn__tag" aria-hidden="true">
-                soon!
-            </span>
+            {soonTag && (
+                <span className="register-btn__tag" aria-hidden="true">
+                    soon!
+                </span>
+            )}
             <span className="sr-only">(registration opens soon)</span>
         </span>
     );

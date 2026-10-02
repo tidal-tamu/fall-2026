@@ -3,13 +3,13 @@ import { EVENT, NAV } from "../event";
 import RegisterButton from "../RegisterButton";
 import CapedPenguin, { type CapeHandle } from "./caped/CapedPenguin";
 import { Fog } from "./caped/fog";
-import { Clouds, GiantPenguin, Plane, SkyGrid, Sparkles } from "./caped/scenery";
+import { GiantPenguin, Plane, SkyGrid, Sparkles } from "./caped/scenery";
 import { FAR, HEART, NEAR } from "./caped/skyline";
 import "./hero-caped.css";
 
 /* -------------------------------------------------------------------------- */
-/*  Caped: a pastel comic city at dusk. A giant penguin looms in the mist      */
-/*  (move the cursor and the mist parts), clouds and a plane drift past, and   */
+/*  Caped: a pastel comic city at dusk. A giant penguin looms, still, in the   */
+/*  mist (move the cursor and the mist parts), a plane drifts past, and        */
 /*  on the lowest roof our caped penguin stands guard with a fish for a sword. */
 /*  Hover it and the cape billows: no powers needed.                          */
 /*                                                                            */
@@ -206,6 +206,7 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                     ))}
                     <RegisterButton
                         className="caped-register"
+                        soonTag={false}
                         icon={
                             <svg viewBox="0 0 7 7" aria-hidden="true">
                                 <path fill="#5b8fc4" d={HEART} />
@@ -215,19 +216,14 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                 </nav>
             </header>
 
-            <div ref={depth(3)} className="caped-layer caped-layer--back">
-                <Clouds layer="back" />
-            </div>
             <div ref={depth(4)} className="caped-layer caped-layer--sparkles" aria-hidden="true">
                 <Sparkles />
             </div>
-            <div ref={depth(5)} className="caped-giant-wrap" aria-hidden="true">
+            {/* no parallax: the giant stays put while the city moves */}
+            <div className="caped-giant-wrap" aria-hidden="true">
                 <GiantPenguin />
             </div>
             <canvas ref={fogRef} className="caped-fog" aria-hidden="true" />
-            <div ref={depth(8)} className="caped-layer caped-layer--front" aria-hidden="true">
-                <Clouds layer="front" />
-            </div>
             <div ref={depth(6)} className="caped-layer caped-layer--plane" aria-hidden="true">
                 <Plane />
             </div>
@@ -286,9 +282,9 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                         </span>
                     ))}
                 </div>
-                <p className="caped-soon caped-rv" style={{ "--d": "1.35s" } as CSSProperties}>
-                    {EVENT.registrationOpen ? "BEGINNER FRIENDLY · SUIT UP" : "REGISTRATIONS OPEN SOON..."}
-                </p>
+                <div className="caped-cta caped-rv" style={{ "--d": "1.35s" } as CSSProperties}>
+                    <RegisterButton className="caped-apply" label="APPLY" soonTag={false} />
+                </div>
             </div>
 
             <div className="caped-sidewalk" />

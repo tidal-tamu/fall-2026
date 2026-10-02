@@ -1,9 +1,8 @@
 /* -------------------------------------------------------------------------- */
 /*  Caped hero. --H is the scene's height; everything that has to line up     */
 /*  with the art (the giant, the city, the plane's flight path) scales off it. */
-/*  Back to front: sky (0), back clouds and sparkles (1), giant (2), mist (3), */
-/*  front clouds and plane (4), far city (5), near city and hero (7), street   */
-/*  (8), copy (10), nav (20).                                                  */
+/*  Back to front: sky (0), sparkles (1), giant (2), mist (3), plane (4), far  */
+/*  city (5), near city and hero (7), street (8), copy (10), nav (20).         */
 /* -------------------------------------------------------------------------- */
 
 .caped {
@@ -133,36 +132,12 @@ a.register-btn.caped-register:hover {
     pointer-events: none;
 }
 
-.caped-layer--back,
 .caped-layer--sparkles {
     z-index: 1;
 }
 
-.caped-layer--front,
 .caped-layer--plane {
     z-index: 4;
-}
-
-.caped-cloud {
-    position: absolute;
-    left: 0;
-    animation: caped-drift linear infinite;
-}
-
-.caped-cloud svg {
-    display: block;
-    width: 100%;
-    height: auto;
-    overflow: visible;
-}
-
-@keyframes caped-drift {
-    from {
-        transform: translateX(-440px);
-    }
-    to {
-        transform: translateX(calc(100vw + 40px));
-    }
 }
 
 .caped-sparkle {
@@ -229,14 +204,13 @@ a.register-btn.caped-register:hover {
     animation: caped-giant-in 2.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
+/* A fade only: the giant never moves, not even on the way in. */
 @keyframes caped-giant-in {
     from {
         opacity: 0;
-        transform: translateY(7%);
     }
     to {
         opacity: 1;
-        transform: none;
     }
 }
 
@@ -245,36 +219,6 @@ a.register-btn.caped-register:hover {
     width: 100%;
     height: auto;
     opacity: 0.5;
-}
-
-.caped-giant__sway {
-    transform-origin: 500px 1100px;
-    animation: caped-sway 18s ease-in-out infinite;
-}
-
-.caped-giant__breathe {
-    transform-origin: 500px 1100px;
-    animation: caped-breathe 7s ease-in-out infinite;
-}
-
-@keyframes caped-sway {
-    0%,
-    100% {
-        transform: rotate(-0.5deg);
-    }
-    50% {
-        transform: rotate(0.5deg);
-    }
-}
-
-@keyframes caped-breathe {
-    0%,
-    100% {
-        transform: scale(1, 1);
-    }
-    50% {
-        transform: scale(1.006, 1.014);
-    }
 }
 
 .caped-giant__blink,
@@ -583,11 +527,29 @@ a.register-btn.caped-register:hover {
     letter-spacing: 0.24em;
 }
 
-.caped-soon {
-    margin: clamp(14px, calc(var(--H) * 0.028), 28px) 0 0;
-    color: var(--ink-soft);
-    font-size: 13px;
-    letter-spacing: 0.3em;
+/* Apply: the hero's one solid button, so it outranks the pastel Register. */
+.caped-cta {
+    margin-top: clamp(16px, calc(var(--H) * 0.03), 30px);
+    pointer-events: auto;
+}
+
+.register-btn.caped-apply {
+    gap: 12px;
+    padding: 15px 34px;
+    border-color: var(--ink);
+    background: var(--ink);
+    box-shadow: 4px 4px 0 var(--pastel-deep);
+    color: #ffffff;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    transform: none;
+}
+
+a.register-btn.caped-apply:hover {
+    transform: translate(-1px, -2px);
+    box-shadow: 6px 6px 0 var(--pastel-deep);
 }
 
 /* Entrance: blur to sharp with a rise, held until the loading screen lifts. */
@@ -630,9 +592,9 @@ a.register-btn.caped-register:hover {
         font-size: 11px;
         letter-spacing: 0.18em;
     }
-    .caped-soon {
-        font-size: 11px;
-        letter-spacing: 0.24em;
+    .register-btn.caped-apply {
+        padding: 13px 26px;
+        font-size: 13px;
     }
 }
 
