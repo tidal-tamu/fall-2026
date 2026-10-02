@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { EVENT } from "./event";
 
 /* -------------------------------------------------------------------------- */
@@ -8,7 +9,8 @@ import { EVENT } from "./event";
 
 const LIVE = EVENT.registrationOpen && Boolean(EVENT.registerUrl);
 
-const RegisterButton = ({ className = "" }: { className?: string }) =>
+/* `icon` replaces the arrow, for heroes that want their own mark. */
+const RegisterButton = ({ className = "", icon }: { className?: string; icon?: ReactNode }) =>
     LIVE ? (
         <a
             href={EVENT.registerUrl}
@@ -16,7 +18,7 @@ const RegisterButton = ({ className = "" }: { className?: string }) =>
             rel="noopener noreferrer"
             className={`register-btn ${className}`}
         >
-            REGISTER <span aria-hidden="true">→</span>
+            REGISTER {icon ?? <span aria-hidden="true">→</span>}
         </a>
     ) : (
         <span
@@ -25,6 +27,7 @@ const RegisterButton = ({ className = "" }: { className?: string }) =>
             title="Registration opens soon"
         >
             REGISTER
+            {icon}
             <span className="register-btn__tag" aria-hidden="true">
                 soon!
             </span>

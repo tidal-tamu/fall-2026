@@ -6,6 +6,7 @@ import HeroGlass from "./heroes/HeroGlass";
 import HeroSlopes from "./heroes/HeroSlopes";
 import HeroPaper from "./heroes/HeroPaper";
 import HeroMusic from "./heroes/HeroMusic";
+import HeroCaped from "./heroes/HeroCaped";
 import HeroSwitcher from "./heroes/HeroSwitcher";
 import { useHeroVariant, type HeroVariant } from "./heroes/variants";
 import LoadingScreen from "./LoadingScreen";
@@ -33,6 +34,7 @@ import "./tidal-accents.css"; // pastel blue layer; must stay last
 /* Hero explorations: every version paired with the sponsor rail surface
    that sits right on it, or null where the hero runs to the bottom edge. */
 const HEROES: Record<HeroVariant, { Hero: ComponentType<{ shouldAnimate?: boolean }>; rail: RailTone | null }> = {
+    caped: { Hero: HeroCaped, rail: null },
     diary: { Hero, rail: null },
     glass: { Hero: HeroGlass, rail: "glass" },
     slopes: { Hero: HeroSlopes, rail: "paper" },
@@ -51,9 +53,10 @@ const HackathonF26 = () => {
             setIsLoading(false);
         }, 2800);
 
+        // entrances start as the loading screen begins to fade, not under it
         const animTimer = setTimeout(() => {
             setShouldAnimate(true);
-        }, 500);
+        }, 2500);
 
         return () => {
             clearTimeout(timer);

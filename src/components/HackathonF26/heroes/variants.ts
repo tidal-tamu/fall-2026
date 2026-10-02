@@ -2,7 +2,8 @@ import { useState } from "react";
 
 /* -------------------------------------------------------------------------- */
 /*  Hero explorations. Each id is a full-screen hero built from one reference: */
-/*    diary   Summer Diary: sticker title, cloud bank, polaroids (default)     */
+/*    caped   comic city, giant in the mist, caped penguin (default)          */
+/*    diary   Summer Diary: sticker title, cloud bank, polaroids               */
 /*    glass   Bluebird: frosted cards over a giant serif wordmark              */
 /*    slopes  Ski with the Club: illustrated layers around a huge headline     */
 /*    paper   Craft: grainy blue stock, halftone clouds, italic-swap serif     */
@@ -11,6 +12,7 @@ import { useState } from "react";
 /* -------------------------------------------------------------------------- */
 
 export const HERO_VARIANTS = [
+    { id: "caped", label: "caped" },
     { id: "diary", label: "diary" },
     { id: "glass", label: "glass" },
     { id: "slopes", label: "slopes" },
@@ -20,7 +22,7 @@ export const HERO_VARIANTS = [
 
 export type HeroVariant = (typeof HERO_VARIANTS)[number]["id"];
 
-const DEFAULT: HeroVariant = "diary";
+const DEFAULT: HeroVariant = "caped";
 
 const isVariant = (v: string | null): v is HeroVariant =>
     HERO_VARIANTS.some((h) => h.id === v);
