@@ -6,27 +6,6 @@
 /*  dots, checkerboards and scanlines.                                        */
 /* -------------------------------------------------------------------------- */
 
-/* ---------------------------------------------------------------- cursor -- */
-/*  The claw grabber. Drawn twice — a fat white stroke underneath and the ink  */
-/*  stroke on top — so it stays legible over the white page *and* over the     */
-/*  black cabinet. A single-colour cursor disappears against one or the other. */
-/*  Hotspot sits between the prongs, where the grab actually happens.          */
-
-.claw-cursor,
-.claw-cursor * {
-    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='36'%20height='36'%3E%3Cg%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cg%20stroke='%23ffffff'%20stroke-width='5.5'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M10%2012V24H14'/%3E%3Cpath%20d='M26%2012V24H22'/%3E%3C/g%3E%3Cg%20stroke='%23111110'%20stroke-width='2.6'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M10%2012V24H14'/%3E%3Cpath%20d='M26%2012V24H22'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
-            18 22,
-        grab;
-}
-
-/* Prongs pinch shut while dragging. */
-.claw-cursor-grabbing,
-.claw-cursor-grabbing * {
-    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='36'%20height='36'%3E%3Cg%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cg%20stroke='%23ffffff'%20stroke-width='5.5'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M14%2012V24H17'/%3E%3Cpath%20d='M22%2012V24H19'/%3E%3C/g%3E%3Cg%20stroke='%23111110'%20stroke-width='2.6'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M14%2012V24H17'/%3E%3Cpath%20d='M22%2012V24H19'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
-            18 22,
-        grabbing !important;
-}
-
 /* ----------------------------------------------------------------- type --- */
 .label {
     font-family: "Space Mono", ui-monospace, monospace;
@@ -218,33 +197,6 @@
     }
 }
 
-/* ----------------------------------------------------------------- cards -- */
-.prize-card {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1.5px solid #111110;
-    border-radius: 0;
-    background: #ffffff;
-    box-shadow: 3px 3px 0 rgba(17, 17, 16, 0.2);
-    user-select: none;
-    -webkit-user-select: none;
-    will-change: transform;
-    touch-action: none;
-}
-
-.prize-card--ink {
-    background: #111110;
-    color: #ffffff;
-}
-
-.prize-card--held {
-    box-shadow: 6px 6px 0 #111110;
-}
-
 /* ---------------------------------------------------------- legacy glow --- */
 /*  The loading screen still asks for these. In monochrome they become a flat  */
 /*  ink offset rather than a coloured bloom.                                   */
@@ -255,10 +207,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .prize-card {
-        transition: none;
-    }
-
     .sponsor-rail {
         overflow-x: auto;
     }
