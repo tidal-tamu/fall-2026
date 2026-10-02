@@ -40,6 +40,18 @@ export const TRACKS = [
 
 export const STICKER = (name: string) => `/f26/stickers/${name}.webp`;
 
+/* In-page links every hero's top nav shares. */
+export const NAV = [
+    { label: "About", href: "#about" },
+    { label: "Schedule", href: "#schedule" },
+    { label: "Prizes", href: "#prizes" },
+    { label: "FAQ", href: "#faq" },
+];
+
+/* Whole days until doors open, for the "N days to go" bits. */
+export const daysToDoors = (now = Date.now()) =>
+    Math.max(0, Math.ceil((Date.parse(EVENT.startsAt) - now) / 86_400_000));
+
 /* Format event times in College Station's zone, not the visitor's, so a
    hacker checking from another timezone still sees "7:00 AM". */
 export const fmtCentral = (iso: string, opts: Intl.DateTimeFormatOptions) =>

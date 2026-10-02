@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { EVENT } from "./event";
+import { EVENT, NAV } from "./event";
 import HeroSky from "./HeroSky";
 import Polaroids from "./Polaroids";
 import RunnerGame from "./RunnerGame";
@@ -8,13 +8,6 @@ import { SPONSOR_RAIL_HEIGHT } from "./Sponsors";
 interface HeroProps {
     shouldAnimate?: boolean;
 }
-
-const NAV = [
-    { label: "About", href: "#about" },
-    { label: "Schedule", href: "#schedule" },
-    { label: "Prizes", href: "#prizes" },
-    { label: "FAQ", href: "#faq" },
-];
 
 const CHIPS = [EVENT.date.toUpperCase(), EVENT.room, `${EVENT.hours} HOURS`];
 

@@ -9,6 +9,8 @@ export default {
                 grotesk: ['"Helvetica Neue"', "Helvetica", "Arial", "sans-serif"],
                 // dot-matrix numerals for the CD-player LCD bits
                 lcd: ['"Doto"', '"Space Mono"', "monospace"],
+                // editorial serif for the glass and paper hero explorations
+                display: ['"Instrument Serif"', "Georgia", "serif"],
             },
             colors: {
                 /* Monochrome Y2K. Never pure black — #111110 reads warmer and
