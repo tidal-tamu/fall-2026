@@ -75,13 +75,13 @@
 /* ------------------------------------------------------------- register -- */
 /* A dark slate pill with the polaroids' white die-cut ring: the one solid
    thing on the page, so it reads as the action without shouting over the
-   title. */
+   title. Shared by the diary and music heroes (RegisterButton.tsx). */
 .diary-cta {
     margin-top: clamp(14px, 2.6vh, 28px);
     pointer-events: auto;
 }
 
-.diary-register {
+.register-btn {
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -105,13 +105,13 @@
 }
 
 @media (min-width: 768px) {
-    .diary-register {
+    .register-btn {
         padding: 16px 26px 15px;
         font-size: 13px;
     }
 }
 
-a.diary-register:hover {
+a.register-btn:hover {
     transform: rotate(0deg) translateY(-2px);
     box-shadow:
         0 0 0 5px #ffffff,
@@ -119,22 +119,22 @@ a.diary-register:hover {
         0 16px 24px -10px rgba(51, 64, 76, 0.6);
 }
 
-a.diary-register:active {
+a.register-btn:active {
     transform: translateY(1px);
 }
 
-a.diary-register:focus-visible {
+a.register-btn:focus-visible {
     outline: 2px dashed #34506f;
     outline-offset: 9px;
 }
 
-.diary-register--soon {
+.register-btn--soon {
     cursor: not-allowed;
 }
 
 /* Until registration opens: a little paper tag stuck on the corner, in the
    title's light blue, like the '26 on the sticker above. */
-.diary-register__tag {
+.register-btn__tag {
     position: absolute;
     top: -15px;
     right: -24px;

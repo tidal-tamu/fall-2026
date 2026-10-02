@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import { EVENT } from "./event";
 import HeroSky from "./HeroSky";
 import Polaroids from "./Polaroids";
+import RegisterButton from "./RegisterButton";
 import StickerTitle from "./StickerTitle";
 
 /* -------------------------------------------------------------------------- */
@@ -16,8 +17,6 @@ interface HeroProps {
 
 const TAGLINE = `[ ${EVENT.date.toLowerCase()} · ${EVENT.room.toLowerCase()} · ${EVENT.hours} hours ]`;
 
-/* Goes live on its own once event.ts has registrationOpen and a registerUrl. */
-const REGISTER_LIVE = EVENT.registrationOpen && Boolean(EVENT.registerUrl);
 
 const Hero = ({ shouldAnimate = false }: HeroProps) => {
     const rise = (delay: number) => ({
@@ -49,28 +48,7 @@ const Hero = ({ shouldAnimate = false }: HeroProps) => {
                 </motion.h1>
 
                 <motion.div className="diary-cta" {...rise(0.4)}>
-                    {REGISTER_LIVE ? (
-                        <a
-                            href={EVENT.registerUrl}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="diary-register"
-                        >
-                            REGISTER <span aria-hidden="true">→</span>
-                        </a>
-                    ) : (
-                        <span
-                            className="diary-register diary-register--soon"
-                            aria-disabled="true"
-                            title="Registration opens soon"
-                        >
-                            REGISTER
-                            <span className="diary-register__tag" aria-hidden="true">
-                                soon!
-                            </span>
-                            <span className="sr-only">(registration opens soon)</span>
-                        </span>
-                    )}
+                    <RegisterButton />
                 </motion.div>
             </div>
 
