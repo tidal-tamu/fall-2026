@@ -2,10 +2,11 @@ import { useState } from "react";
 
 /* -------------------------------------------------------------------------- */
 /*  Hero explorations. Each id is a full-screen hero built from one reference: */
-/*    diary   Summer Diary + the dino runner (the current hero)                */
+/*    diary   Summer Diary: sticker title, cloud bank, polaroids (default)     */
 /*    glass   Bluebird: frosted cards over a giant serif wordmark              */
 /*    slopes  Ski with the Club: illustrated layers around a huge headline     */
 /*    paper   Craft: grainy blue stock, halftone clouds, italic-swap serif     */
+/*    music   the album's now-playing screen, with a chiptune to play          */
 /*  The choice lives in ?hero= so a link opens straight onto one version.     */
 /* -------------------------------------------------------------------------- */
 
@@ -14,6 +15,7 @@ export const HERO_VARIANTS = [
     { id: "glass", label: "glass" },
     { id: "slopes", label: "slopes" },
     { id: "paper", label: "paper" },
+    { id: "music", label: "music" },
 ] as const;
 
 export type HeroVariant = (typeof HERO_VARIANTS)[number]["id"];

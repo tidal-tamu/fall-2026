@@ -5,6 +5,7 @@ import Hero from "./Hero";
 import HeroGlass from "./heroes/HeroGlass";
 import HeroSlopes from "./heroes/HeroSlopes";
 import HeroPaper from "./heroes/HeroPaper";
+import HeroMusic from "./heroes/HeroMusic";
 import HeroSwitcher from "./heroes/HeroSwitcher";
 import { useHeroVariant, type HeroVariant } from "./heroes/variants";
 import LoadingScreen from "./LoadingScreen";
@@ -36,6 +37,7 @@ const HEROES: Record<HeroVariant, { Hero: ComponentType<{ shouldAnimate?: boolea
     glass: { Hero: HeroGlass, rail: "glass" },
     slopes: { Hero: HeroSlopes, rail: "paper" },
     paper: { Hero: HeroPaper, rail: "blue" },
+    music: { Hero: HeroMusic, rail: null },
 };
 
 const HackathonF26 = () => {
