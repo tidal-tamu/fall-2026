@@ -1,8 +1,8 @@
 /* -------------------------------------------------------------------------- */
 /*  Caped hero. --H is the scene's height; everything that has to line up     */
-/*  with the art (the giant, the city, the plane's flight path) scales off it. */
-/*  Back to front: sky (0), sparkles (1), giant (2), mist (3), plane (4), far  */
-/*  city (5), near city and hero (7), street (8), copy (10), nav (20).         */
+/*  with the art (the giant and the city) scales off it.                       */
+/*  Back to front: sky (0), sparkles (1), giant (2), mist (3), far city (5),   */
+/*  near city and hero (7), street (8), copy (10), nav (20).                   */
 /* -------------------------------------------------------------------------- */
 
 .caped {
@@ -136,10 +136,6 @@ a.register-btn.caped-register:hover {
     z-index: 1;
 }
 
-.caped-layer--plane {
-    z-index: 4;
-}
-
 .caped-sparkle {
     position: absolute;
     animation: caped-twinkle 4s ease-in-out infinite;
@@ -161,31 +157,6 @@ a.register-btn.caped-register:hover {
     50% {
         transform: scale(1) rotate(20deg);
         opacity: 1;
-    }
-}
-
-.caped-plane {
-    position: absolute;
-    top: 0;
-    left: 0;
-    animation: caped-fly 80s linear -22s infinite;
-}
-
-.caped-plane::before {
-    content: "";
-    position: absolute;
-    top: 10px;
-    right: 100%;
-    width: 200px;
-    border-top: 2px dotted rgba(70, 82, 92, 0.5);
-}
-
-@keyframes caped-fly {
-    from {
-        transform: translate(-20vw, calc(var(--H) * 0.3)) rotate(-7deg);
-    }
-    to {
-        transform: translate(115vw, calc(var(--H) * 0.09)) rotate(-7deg);
     }
 }
 
@@ -373,22 +344,6 @@ a.register-btn.caped-register:hover {
     100% {
         transform: scale(0) rotate(90deg);
     }
-}
-
-/* The speech bubble pops from its tail when the hero suits up. */
-.caped-hero__bubble {
-    opacity: 0;
-    transform-box: fill-box;
-    transform-origin: 70% 100%;
-    scale: 0.6;
-    transition:
-        opacity 0.2s,
-        scale 0.35s cubic-bezier(0.16, 1.6, 0.3, 1);
-}
-
-.caped-hero.is-on .caped-hero__bubble {
-    opacity: 1;
-    scale: 1;
 }
 
 /* ---------------------------------------------------------------- street -- */

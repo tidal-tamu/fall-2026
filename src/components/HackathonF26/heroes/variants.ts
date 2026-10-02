@@ -8,7 +8,7 @@ import { useState } from "react";
 /*    slopes  Ski with the Club: illustrated layers around a huge headline     */
 /*    paper   Craft: grainy blue stock, halftone clouds, italic-swap serif     */
 /*    music   the album's now-playing screen, with a chiptune to play          */
-/*  The choice lives in ?hero= so a link opens straight onto one version.     */
+/*  Pick one with ?hero=, e.g. ?hero=music; no param means the default.       */
 /* -------------------------------------------------------------------------- */
 
 export const HERO_VARIANTS = [
@@ -33,18 +33,10 @@ function readVariant(): HeroVariant {
     return isVariant(v) ? v : DEFAULT;
 }
 
+/* Read once on load: ?hero=glass and friends still open the other versions. */
 export function useHeroVariant() {
-    const [variant, setVariant] = useState<HeroVariant>(readVariant);
-
-    const choose = (next: HeroVariant) => {
-        setVariant(next);
-        const url = new URL(window.location.href);
-        if (next === DEFAULT) url.searchParams.delete("hero");
-        else url.searchParams.set("hero", next);
-        window.history.replaceState(null, "", url);
-    };
-
-    return [variant, choose] as const;
+    const [variant] = useState<HeroVariant>(readVariant);
+    return variant;
 }
 
 /* The shared entrance: a short rise once the loading screen lifts. */

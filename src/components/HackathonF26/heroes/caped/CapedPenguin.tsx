@@ -3,7 +3,8 @@ import { HEART, INK } from "./skyline";
 
 /* -------------------------------------------------------------------------- */
 /*  The hero of the hero: a flat doodle penguin in a pastel cape, a fish for a */
-/*  sword. The cape is redrawn every frame from a "billow" amount (0 idle, 1   */
+/*  sword. Hover it and the cape billows, the fish swings and sparkles pop.    */
+/*  The cape is redrawn every frame from a "billow" amount (0 idle, 1          */
 /*  heroic) so it can ripple; the parent's animation loop calls draw().        */
 /*  Drawn with its feet at (0, 0), so it can stand on any roof.               */
 /* -------------------------------------------------------------------------- */
@@ -121,13 +122,6 @@ const CapedPenguin = forwardRef<CapeHandle, Props>(({ x, y, on, onEnter, onLeave
                     </g>
                 </g>
             ))}
-            {/* the comic speech bubble: the page's beginner pitch, in hero voice */}
-            <g className="caped-hero__bubble" transform="translate(-150,-205)">
-                <path d="M0 6 Q0 0 6 0 H170 Q176 0 176 6 V40 Q176 46 170 46 H128 L136 66 L104 46 H6 Q0 46 0 40 Z" fill="#fff" stroke={INK} strokeWidth={2.4} strokeLinejoin="round" />
-                <text x={88} y={28} textAnchor="middle" fontFamily="'Press Start 2P', monospace" fontSize={9} fill={INK}>
-                    no powers needed!
-                </text>
-            </g>
         </g>
     );
 });

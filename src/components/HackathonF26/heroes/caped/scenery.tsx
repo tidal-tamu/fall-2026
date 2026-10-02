@@ -1,9 +1,8 @@
 import { INK } from "./skyline";
 
 /* -------------------------------------------------------------------------- */
-/*  The sky around the caped penguin: a faint grid, four-point sparkles, a     */
-/*  plane trailing a dotted contrail and the giant penguin looming behind the  */
-/*  city.                                                                      */
+/*  The sky around the caped penguin: a faint grid, four-point sparkles and    */
+/*  the giant penguin looming behind the city.                                 */
 /* -------------------------------------------------------------------------- */
 
 /* A soft white grid over the sky that fades out toward the city. */
@@ -44,16 +43,6 @@ export const Sparkles = () => (
             </div>
         ))}
     </>
-);
-
-export const Plane = () => (
-    <div className="caped-plane">
-        <svg width="34" height="20" viewBox="0 0 34 20" aria-hidden="true">
-            <path d="M3 11 Q17 8 31 9 Q34 10 31 11.5 Q17 13 3 11 Z" fill="#fff" stroke="#3a454f" strokeWidth={1.4} strokeLinejoin="round" />
-            <path d="M14 10.5 L9 18 L13 18 L20 10.8" fill="#fff" stroke="#3a454f" strokeWidth={1.4} strokeLinejoin="round" />
-            <path d="M5 10.5 L3 4 L6 4 L9.5 10" fill="#fff" stroke="#3a454f" strokeWidth={1.4} strokeLinejoin="round" />
-        </svg>
-    </div>
 );
 
 /* The far-off giant: it holds still behind the mist, only blinking. */

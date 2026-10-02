@@ -3,13 +3,13 @@ import { EVENT, NAV } from "../event";
 import RegisterButton from "../RegisterButton";
 import CapedPenguin, { type CapeHandle } from "./caped/CapedPenguin";
 import { Fog } from "./caped/fog";
-import { GiantPenguin, Plane, SkyGrid, Sparkles } from "./caped/scenery";
+import { GiantPenguin, SkyGrid, Sparkles } from "./caped/scenery";
 import { FAR, HEART, NEAR } from "./caped/skyline";
 import "./hero-caped.css";
 
 /* -------------------------------------------------------------------------- */
 /*  Caped: a pastel comic city at dusk. A giant penguin looms, still, in the   */
-/*  mist (move the cursor and the mist parts), a plane drifts past, and        */
+/*  mist (move the cursor and the mist parts), sparkles twinkle, and           */
 /*  on the lowest roof our caped penguin stands guard with a fish for a sword. */
 /*  Hover it and the cape billows: no powers needed.                          */
 /*                                                                            */
@@ -224,9 +224,6 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                 <GiantPenguin />
             </div>
             <canvas ref={fogRef} className="caped-fog" aria-hidden="true" />
-            <div ref={depth(6)} className="caped-layer caped-layer--plane" aria-hidden="true">
-                <Plane />
-            </div>
 
             <div className="caped-city caped-city--far" aria-hidden="true">
                 <svg viewBox="-400 0 2400 420" preserveAspectRatio="xMidYMax slice">

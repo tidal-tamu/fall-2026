@@ -7,7 +7,6 @@ import HeroSlopes from "./heroes/HeroSlopes";
 import HeroPaper from "./heroes/HeroPaper";
 import HeroMusic from "./heroes/HeroMusic";
 import HeroCaped from "./heroes/HeroCaped";
-import HeroSwitcher from "./heroes/HeroSwitcher";
 import { useHeroVariant, type HeroVariant } from "./heroes/variants";
 import LoadingScreen from "./LoadingScreen";
 import Sponsors, { type RailTone } from "./Sponsors";
@@ -45,7 +44,7 @@ const HEROES: Record<HeroVariant, { Hero: ComponentType<{ shouldAnimate?: boolea
 const HackathonF26 = () => {
     const [shouldAnimate, setShouldAnimate] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
-    const [variant, setVariant] = useHeroVariant();
+    const variant = useHeroVariant();
     const { Hero: CurrentHero, rail } = HEROES[variant];
 
     useEffect(() => {
@@ -94,7 +93,6 @@ const HackathonF26 = () => {
             </div>
 
             <Navbar />
-            {!isLoading && <HeroSwitcher value={variant} onChange={setVariant} />}
         </>
     );
 };
