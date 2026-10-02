@@ -1,7 +1,7 @@
 /* -------------------------------------------------------------------------- */
 /*  Pixel art for the hero's runner game, drawn as strings so it stays         */
 /*  editable without an image editor. One character is one pixel:              */
-/*    .  transparent   k  ink        g  Pebble grey   w  white                 */
+/*    .  transparent   k  ink        g  sheen grey    w  white                 */
 /*    b  blush         h  hint blue                                            */
 /*  Placeholder art: swap in real sprites by keeping the same row lengths.     */
 /* -------------------------------------------------------------------------- */
@@ -14,41 +14,47 @@ const PALETTE: Record<string, string> = {
     h: "#8EA7C2",
 };
 
-/* Pebble, facing right. Rows 0-13 are the body; the last row is the feet. */
-const PEBBLE_BODY = [
+/* The penguin, facing right: ink back, white face and belly, a hint-blue
+   scarf whose tail streams behind it. Rows 0-13 are the body; the last row
+   is the feet. */
+const PENGUIN_BODY = [
     "......kkkkk.....",
-    "....kkgggggkk...",
-    "...kgwwgggggk...",
-    "..kgwwgggggggk..",
-    "..kggggkgggkgk..",
-    ".kggggkgkgkgkgk.",
-    ".kgggggbgkgbggk.",
-    ".kgggggkgggkggk.",
-    ".kggggggkkkgggk.",
-    ".kggggggggggggk.",
-    ".kggggggggggggk.",
-    "kgggggggggggggk.",
-    "kgggggggggggggk.",
-    ".kkkkkkkkkkkkk..",
+    "....kkgkkkkkk...",
+    "...kkkkkkwwwwk..",
+    "...kkkkkwwwkwk..",
+    "..kkkkkkwwwwwwkk",
+    "..kkkkkkkwwwbk..",
+    "..khhhhhhhhhhk..",
+    "hhkkkkkkkwwwwk..",
+    ".kkkkkkkwwwwwk..",
+    "kkkkkkkwwwwwwk..",
+    ".kkkkkkwwwwwwk..",
+    "..kkkkkwwwwwwk..",
+    "..kkkkkwwwwwk...",
+    "...kkkkkkkkkk...",
 ];
 
-// Closed "^ ^" eyes become flat lines when Pebble hits something.
-const PEBBLE_DAZED_EYES = ["..kggggggggggk..", ".kgggkkkgkkkggk."];
+// Rows 2-4 again with the eye knocked into an "x" for a crash.
+const PENGUIN_DAZED_EYE = [
+    "...kkkkkkwkwkk..",
+    "...kkkkkwwwkwk..",
+    "..kkkkkkwwkwkwkk",
+];
 
 const FEET = {
-    a: "...kk.....kk....",
+    a: "...kk....kk.....",
     b: ".....kk.kk......",
-    tuck: "....kk...kk.....",
+    tuck: "....kk..kk......",
 };
 
-export const PEBBLE = {
-    runA: [...PEBBLE_BODY, FEET.a],
-    runB: [...PEBBLE_BODY, FEET.b],
-    jump: [...PEBBLE_BODY, FEET.tuck],
+export const PENGUIN = {
+    runA: [...PENGUIN_BODY, FEET.a],
+    runB: [...PENGUIN_BODY, FEET.b],
+    jump: [...PENGUIN_BODY, FEET.tuck],
     dazed: [
-        ...PEBBLE_BODY.slice(0, 4),
-        ...PEBBLE_DAZED_EYES,
-        ...PEBBLE_BODY.slice(6),
+        ...PENGUIN_BODY.slice(0, 2),
+        ...PENGUIN_DAZED_EYE,
+        ...PENGUIN_BODY.slice(5),
         FEET.a,
     ],
 };

@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
-import { BUG, COFFEE, PEBBLE, WARNING, bake } from "./runnerSprites";
+import { BUG, COFFEE, PENGUIN, WARNING, bake } from "./runnerSprites";
 
 /* -------------------------------------------------------------------------- */
-/*  Pebble's runner, after the offline dino game. Pebble ambles along the      */
-/*  hero's ground line until someone clicks or taps the lane; then it's a run: */
-/*  jump the bugs and warnings, grab coffee for points, chase the high score.  */
+/*  A penguin runner, after the offline dino game. The penguin waddles along   */
+/*  the hero's ground line until someone clicks or taps the lane; then it's a  */
+/*  run: jump the bugs and warnings, grab coffee, chase the high score.        */
 /*                                                                            */
 /*  Space only belongs to the game while the canvas has focus, so the page     */
 /*  still scrolls normally for everyone who isn't playing.                     */
@@ -72,10 +72,10 @@ const RunnerGame = () => {
         if (!canvas || !ctx) return;
 
         const art = {
-            runA: bake(PEBBLE.runA),
-            runB: bake(PEBBLE.runB),
-            jump: bake(PEBBLE.jump),
-            dazed: bake(PEBBLE.dazed),
+            runA: bake(PENGUIN.runA),
+            runB: bake(PENGUIN.runB),
+            jump: bake(PENGUIN.jump),
+            dazed: bake(PENGUIN.dazed),
             bugA: bake(BUG.a),
             bugB: bake(BUG.b),
             warn: bake(WARNING),
@@ -367,7 +367,7 @@ const RunnerGame = () => {
 
         /* Mouse jumps on press. Touch waits for the finger to lift and checks
            it barely moved, so a swipe that starts on the lane still scrolls
-           the page instead of making Pebble hop. */
+           the page instead of making the penguin hop. */
         let touchStart: { x: number; y: number } | null = null;
         const onPointerDown = (e: PointerEvent) => {
             if (e.pointerType === "mouse") {
@@ -414,7 +414,7 @@ const RunnerGame = () => {
             tabIndex={0}
             role="application"
             aria-roledescription="mini game"
-            aria-label="Pebble runner. Click or tap to start, then press space or tap to jump over bugs and grab coffee."
+            aria-label="Penguin runner. Click or tap to start, then press space or tap to jump over bugs and grab coffee."
             className="runner-canvas block h-full w-full"
         />
     );
