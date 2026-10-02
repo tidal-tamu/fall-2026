@@ -17,6 +17,7 @@ import "./tidal-profile.css";
 import "./tidal-player.css";
 import "./tidal-dock.css";
 import "./tidal-hero.css";
+import "./tidal-accents.css"; // pastel blue layer; must stay last
 
 /* The page is laid out as an album: the hero is the cover, every section
    after it is a numbered track (see TRACKS in event.ts), and the docked

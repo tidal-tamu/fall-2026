@@ -1,0 +1,184 @@
+/* -------------------------------------------------------------------------- */
+/*  Pastel accents. Loaded last, so it re-colours the monochrome system        */
+/*  without touching its structure. Delete the import to get back to pure      */
+/*  monochrome.                                                               */
+/*                                                                            */
+/*  The hierarchy, strongest first:                                           */
+/*    1. ink        headlines, wordmark, body copy, borders, primary buttons  */
+/*    2. dark blue  wayfinding: track eyebrows, active/selected, hover lifts  */
+/*    3. pastels    surfaces only: resting shadows, fills, tints, rules       */
+/*  Blue never takes over a headline or a block of text, so the page still     */
+/*  reads in the same order it did in black and white.                        */
+/* -------------------------------------------------------------------------- */
+
+:root {
+    --ink: #111110;
+    --accent-ink: #34506f; /* dark blue: the only blue used for text */
+    --accent: #8ea7c2;
+    --pastel-shadow: #b4c9df; /* resting hard offsets */
+    --pastel: #cfdeee;
+    --pastel-soft: #e3ecf6; /* fills: chips, hovers */
+    --pastel-mist: #f0f5fa; /* alternate section tint */
+}
+
+/* -------------------------------------------------------------- rhythm --- */
+/* The warm grey bands (schedule, prizes, faq) turn cool so the page sits in
+   the same light as the hero sky. White sections stay white. */
+.section.bg-shade-100 {
+    background-color: var(--pastel-mist);
+}
+
+.dot-grid {
+    background-image: radial-gradient(rgba(52, 80, 111, 0.16) 1px, transparent 1.4px);
+}
+
+/* Folio: the track number becomes the wayfinding colour, the rule a pastel. */
+.folio .label:first-child {
+    color: var(--accent-ink);
+}
+
+.folio__rule {
+    border-top-color: var(--accent);
+}
+
+/* ---------------------------------------------------------- hard shadows -- */
+/* Resting offsets go pastel so the containers stop competing with the
+   headlines; anything that lifts on hover lifts onto dark blue. */
+.hard-shadow {
+    box-shadow: 4px 4px 0 var(--pastel-shadow);
+}
+
+.hard-shadow-sm {
+    box-shadow: 3px 3px 0 var(--pastel-shadow);
+}
+
+.space,
+.player {
+    box-shadow: 6px 6px 0 var(--pastel-shadow);
+}
+
+.dialog {
+    box-shadow: 5px 5px 0 var(--pastel-shadow);
+}
+
+.dock,
+.dock__list {
+    box-shadow: 4px 4px 0 var(--pastel-shadow);
+}
+
+.ticket-shadow {
+    filter: drop-shadow(1.5px 0 0 var(--ink)) drop-shadow(-1.5px 0 0 var(--ink))
+        drop-shadow(0 1.5px 0 var(--ink)) drop-shadow(0 -1.5px 0 var(--ink))
+        drop-shadow(6px 6px 0 var(--pastel-shadow));
+}
+
+.sticker {
+    filter: drop-shadow(3px 4px 0 rgba(52, 80, 111, 0.22));
+}
+
+.sponsor-sticker {
+    box-shadow: 3px 3px 0 var(--pastel-shadow);
+}
+
+.sponsor-sticker:hover {
+    box-shadow: 6px 7px 0 var(--accent-ink);
+}
+
+/* --------------------------------------------------------------- buttons -- */
+.y2k-button,
+.nav-pill {
+    box-shadow: 3px 3px 0 var(--pastel-shadow);
+}
+
+.y2k-button:hover {
+    box-shadow: 6px 6px 0 var(--accent-ink);
+}
+
+.nav-pill:hover {
+    box-shadow: 5px 5px 0 var(--accent-ink);
+}
+
+/* Not open yet: a soft pastel pill rather than a dead grey one. */
+.nav-pill--disabled {
+    background: var(--pastel);
+    border-color: var(--pastel);
+    color: var(--accent-ink);
+    box-shadow: none;
+}
+
+.os-btn:hover {
+    background: var(--accent-ink);
+    border-color: var(--accent-ink);
+}
+
+.dock__btn:hover:not(:disabled),
+.player__btn:hover {
+    background: var(--pastel-soft);
+}
+
+/* ------------------------------------------------------------ selection -- */
+/* The playing track was solid ink; dark blue keeps it the loudest row in the
+   list without out-shouting the section headline above it. */
+.tracklist__row.is-active {
+    background: var(--accent-ink);
+}
+
+.faq-row.is-open .faq-row__no {
+    color: var(--accent-ink);
+}
+
+.faq-row__btn:hover .faq-row__q {
+    text-decoration-color: var(--accent);
+}
+
+/* ------------------------------------------------------------------ hero -- */
+.hero-sky {
+    background: #e5ecf3;
+}
+
+/* The wordmark stays ink; only its stacked misprint goes blue. */
+.pixel-title {
+    text-shadow:
+        0.06em 0.06em 0 var(--pastel-shadow),
+        0.12em 0.12em 0 var(--pastel),
+        0.18em 0.18em 0 var(--pastel-soft);
+}
+
+.chip {
+    background: var(--pastel-soft);
+}
+
+.cloud-drift rect {
+    fill: #9db4cc;
+}
+
+.polaroid {
+    box-shadow: 3px 3px 0 var(--pastel-shadow);
+}
+
+.polaroid-drag:hover .polaroid,
+.polaroid-drag--held .polaroid {
+    box-shadow: 5px 5px 0 var(--accent-ink);
+}
+
+/* ---------------------------------------------------------------- footer -- */
+/* On ink the pastels flip roles: they become the light accent. */
+.footer__bar,
+.footer__bar::after {
+    background: var(--pastel);
+}
+
+.footer__replay:hover,
+.footer__social:hover {
+    border-color: var(--pastel);
+    background: var(--pastel);
+    color: var(--ink);
+}
+
+.footer__link {
+    text-decoration-color: rgba(207, 222, 238, 0.5);
+}
+
+.footer__link:hover {
+    text-decoration-color: var(--pastel);
+}
