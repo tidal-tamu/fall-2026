@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/*  Event facts the page repeats in several places (hero chips, ticket,        */
+/*  Event facts the page repeats in several places (hero tagline, ticket,     */
 /*  receipt, profile, dock countdown). Change them here, not per section.      */
 /* -------------------------------------------------------------------------- */
 

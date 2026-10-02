@@ -1,7 +1,6 @@
 type Sponsor = { name: string; logo: string };
 
-// The hero lays out its runner lane, polaroids and sky above this, so the
-// game's ground line sits right on the rail's top border.
+// Heroes that show the rail lay themselves out above this height.
 export const SPONSOR_RAIL_HEIGHT = 56;
 
 // Shared with the liner-notes sticker wall further down the page.

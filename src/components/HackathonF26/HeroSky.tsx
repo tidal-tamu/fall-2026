@@ -1,128 +1,137 @@
-import type { CSSProperties } from "react";
-import { PIXEL_CLOUD } from "./runnerSprites";
-import { SPONSOR_RAIL_HEIGHT } from "./Sponsors";
-
 /* -------------------------------------------------------------------------- */
-/*  The hero's sky, after the "Summer Diary" reference: one big inked cumulus  */
-/*  behind the wordmark, a plane trailing a contrail, and the runner game's    */
-/*  little pixel clouds drifting across the top.                               */
+/*  The Summer Diary sky: a cloud bank that runs edge to edge and towers up    */
+/*  behind the title, a plane drawing a contrail across, and a few specks      */
+/*  drifting about.                                                           */
 /* -------------------------------------------------------------------------- */
 
-/* Puffs as [cx, cy, r] in a 1000 x 460 box. Unioned by drawing them three
-   times: a stroked pass for the outline, a hint-blue pass for the shading,
-   then a smaller, slightly raised white pass that leaves the blue showing
-   only along each puff's underside. */
+const LINE = "#3d4a57";
+
+/* Puffs as [cx, cy, r] in a 1440 x 640 box whose bottom edge is the curb.
+   Drawn three times: an outline pass, a blue shade pass, then smaller raised
+   white puffs that leave the shade showing along every underside. */
 const PUFFS: [number, number, number][] = [
-    [150, 290, 105],
-    [275, 215, 135],
-    [425, 165, 165],
-    [590, 185, 155],
-    [745, 235, 125],
-    [860, 295, 95],
-    [500, 290, 175],
-    [330, 310, 120],
-    [680, 310, 120],
-    [215, 355, 62],
-    [335, 378, 70],
-    [470, 390, 72],
-    [610, 385, 70],
-    [745, 365, 64],
-    [845, 340, 58],
+    // the tower behind the title
+    [745, 110, 95],
+    [690, 170, 95],
+    [805, 175, 100],
+    [745, 250, 140],
+    [640, 300, 120],
+    [860, 300, 120],
+    // shoulders stepping down either side
+    [520, 345, 95],
+    [975, 345, 95],
+    [430, 400, 90],
+    [1065, 400, 90],
+    [320, 445, 85],
+    [1170, 450, 85],
+    [210, 480, 80],
+    [1280, 490, 80],
+    [100, 500, 78],
+    [1380, 515, 78],
+    [0, 520, 80],
+    [1440, 530, 80],
+    // the base, down behind the curb
+    [90, 600, 110],
+    [280, 585, 120],
+    [480, 570, 130],
+    [700, 560, 150],
+    [920, 570, 130],
+    [1120, 585, 120],
+    [1320, 600, 110],
 ];
+
+/* A few inner lines where a front lump overlaps the one behind it, as in the
+   reference's linework. [cx, cy, r, fromDeg, toDeg] */
+const FOLDS: [number, number, number, number, number][] = [
+    [640, 300, 120, 205, 285],
+    [860, 300, 120, 255, 335],
+    [520, 345, 95, 200, 280],
+    [975, 345, 95, 260, 340],
+    [320, 445, 85, 205, 280],
+    [1170, 450, 85, 260, 335],
+    [480, 570, 130, 220, 290],
+    [920, 570, 130, 250, 320],
+];
+
+const arc = ([cx, cy, r, a, b]: (typeof FOLDS)[number]) => {
+    const p = (deg: number) => {
+        const t = (deg * Math.PI) / 180;
+        return `${(cx + r * Math.cos(t)).toFixed(1)} ${(cy + r * Math.sin(t)).toFixed(1)}`;
+    };
+    return `M${p(a)} A${r} ${r} 0 0 1 ${p(b)}`;
+};
 
 const CloudBank = () => (
-    <svg viewBox="0 0 1000 460" className="h-auto w-full overflow-visible" aria-hidden="true">
-        <g fill="none" stroke="#383632" strokeWidth={5} vectorEffect="non-scaling-stroke">
+    <svg viewBox="0 0 1440 640" preserveAspectRatio="xMidYMax slice" className="h-full w-full" aria-hidden="true">
+        <g fill="none" stroke={LINE} strokeWidth="4">
             {PUFFS.map(([cx, cy, r]) => (
-                <circle key={`o${cx}${cy}`} cx={cx} cy={cy} r={r} vectorEffect="non-scaling-stroke" />
+                <circle key={`o${cx}-${cy}`} cx={cx} cy={cy} r={r} vectorEffect="non-scaling-stroke" />
             ))}
         </g>
-        <g fill="#E6EBF0">
+        <g fill="#d9e4ef">
             {PUFFS.map(([cx, cy, r]) => (
-                <circle key={`s${cx}${cy}`} cx={cx} cy={cy} r={r} />
+                <circle key={`s${cx}-${cy}`} cx={cx} cy={cy} r={r} />
             ))}
         </g>
-        <g fill="#FFFFFF">
+        <g fill="#ffffff">
             {PUFFS.map(([cx, cy, r]) => (
-                <circle key={`w${cx}${cy}`} cx={cx - 4} cy={cy - 12} r={r - 14} />
+                <circle key={`w${cx}-${cy}`} cx={cx - 4} cy={cy - 12} r={r - 12} />
+            ))}
+        </g>
+        <g fill="none" stroke={LINE} strokeWidth="1.5" strokeLinecap="round" opacity="0.55">
+            {FOLDS.map((f) => (
+                <path key={`f${f[0]}-${f[1]}`} d={arc(f)} vectorEffect="non-scaling-stroke" />
             ))}
         </g>
     </svg>
 );
 
-const PixelCloud = () => (
-    <svg
-        viewBox={`0 0 ${PIXEL_CLOUD[0].length} ${PIXEL_CLOUD.length}`}
-        shapeRendering="crispEdges"
-        className="h-auto w-[70px] md:w-[92px]"
-        aria-hidden="true"
-    >
-        {PIXEL_CLOUD.flatMap((row, y) =>
-            [...row].map((c, x) =>
-                c === "k" ? <rect key={`${x}-${y}`} x={x} y={y} width={1} height={1} fill="#85827A" /> : null,
-            ),
-        )}
+/* The plane flies up and to the left; its contrail runs back behind the title
+   and the clouds. Cropped rather than stretched, so the plane keeps its shape. */
+const Contrail = () => (
+    <svg viewBox="0 0 1440 900" preserveAspectRatio="xMidYMid slice" className="h-full w-full" aria-hidden="true">
+        <path d="M1110 336 L346 124" stroke="#ffffff" strokeWidth="2" strokeLinecap="round" opacity="0.9" />
+        <g
+            transform="translate(332 120) rotate(195.5)"
+            stroke={LINE}
+            strokeWidth="1.3"
+            strokeLinejoin="round"
+            fill="#ffffff"
+        >
+            <path d="M2 -3 L-5 -16 L-1 -16 L9 -3 Z M2 3 L-5 16 L-1 16 L9 3 Z" />
+            <path d="M-13 -3 L-17 -9 L-14 -9 L-9 -3 Z M-13 3 L-17 9 L-14 9 L-9 3 Z" />
+            <path d="M-16 0 C-16 -2 -14 -3 -10 -3 L12 -3 C16 -3 18 -1.5 18 0 C18 1.5 16 3 12 3 L-10 3 C-14 3 -16 2 -16 0 Z" />
+        </g>
     </svg>
 );
 
-/* Negative delays spread the clouds across the sky on first paint instead of
-   having them all queue up off the right edge. */
-const DRIFTERS = [
-    { top: "13%", dur: "78s", delay: "-12s", rest: "14vw" },
-    { top: "24%", dur: "104s", delay: "-61s", rest: "58vw" },
-    { top: "9%", dur: "131s", delay: "-95s", rest: "80vw" },
+/* Little specks drifting in the air, like the reference's seeds. */
+const SPECKS = [
+    { left: "15%", top: "30%", rot: -20, delay: "0s" },
+    { left: "34.5%", top: "50%", rot: 15, delay: "-3s" },
+    { left: "81%", top: "33%", rot: 30, delay: "-6s" },
+    { left: "9.5%", top: "75%", rot: -10, delay: "-1.5s" },
+    { left: "68%", top: "66%", rot: 25, delay: "-4.5s" },
+    { left: "88%", top: "78%", rot: -25, delay: "-2s" },
 ];
 
-const Plane = () => (
-    <svg
-        viewBox="0 0 300 90"
-        className="absolute left-[4%] top-[15%] hidden w-[220px] md:block lg:w-[280px]"
-        aria-hidden="true"
-    >
-        <path
-            d="M4 86 C 90 70, 170 46, 262 22"
-            fill="none"
-            stroke="#8EA7C2"
-            strokeWidth={2}
-            strokeLinecap="round"
-            strokeDasharray="1 7"
-        />
-        <g transform="translate(262 20) rotate(-16)">
-            <path
-                d="M-14 0 L14 -1 L18 0 L14 1 Z M-3 0 L3 -9 L6 -9 L2 0 L6 9 L3 9 Z M-13 0 L-10 -5 L-8 -5 L-9 0 L-8 5 L-10 5 Z"
-                fill="#FFFFFF"
-                stroke="#111110"
-                strokeWidth={1.4}
-                strokeLinejoin="round"
-            />
-        </g>
-    </svg>
-);
-
 const HeroSky = () => (
-    <div className="pointer-events-none absolute inset-0 z-10" aria-hidden="true">
-        {DRIFTERS.map((d) => (
-            <div
-                key={d.top}
-                className="cloud-drift"
-                style={{ top: d.top, "--dur": d.dur, "--delay": d.delay, "--rest": d.rest } as CSSProperties}
-            >
-                <PixelCloud />
-            </div>
-        ))}
-
-        <Plane />
-
-        {/* Same box the wordmark is centred in, so the bank sits behind it. */}
-        <div
-            className="absolute inset-x-0 top-0 flex items-center justify-center pt-10"
-            style={{ bottom: `calc(${SPONSOR_RAIL_HEIGHT}px + var(--runner-h))` }}
-        >
-            <div className="w-[170vw] shrink-0 translate-y-[4%] md:w-[min(92vw,1120px)]">
-                <CloudBank />
-            </div>
+    <>
+        <div className="diary-contrail" aria-hidden="true">
+            <Contrail />
         </div>
-    </div>
+        <div className="diary-clouds" aria-hidden="true">
+            <CloudBank />
+        </div>
+        {SPECKS.map((s) => (
+            <span
+                key={s.left}
+                className="diary-speck"
+                style={{ left: s.left, top: s.top, rotate: `${s.rot}deg`, animationDelay: s.delay }}
+                aria-hidden="true"
+            />
+        ))}
+    </>
 );
 
 export default HeroSky;

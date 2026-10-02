@@ -30,9 +30,9 @@ import "./tidal-accents.css"; // pastel blue layer; must stay last
    player in Navbar walks between them. */
 
 /* Hero explorations: every version paired with the sponsor rail surface
-   that sits right on it. */
-const HEROES: Record<HeroVariant, { Hero: ComponentType<{ shouldAnimate?: boolean }>; rail: RailTone }> = {
-    diary: { Hero, rail: "paper" },
+   that sits right on it, or null where the hero runs to the bottom edge. */
+const HEROES: Record<HeroVariant, { Hero: ComponentType<{ shouldAnimate?: boolean }>; rail: RailTone | null }> = {
+    diary: { Hero, rail: null },
     glass: { Hero: HeroGlass, rail: "glass" },
     slopes: { Hero: HeroSlopes, rail: "paper" },
     paper: { Hero: HeroPaper, rail: "blue" },
@@ -76,7 +76,7 @@ const HackathonF26 = () => {
             <div className="w-full bg-paper text-ink">
                 <div id="top" className="relative h-screen overflow-hidden">
                     <CurrentHero key={variant} shouldAnimate={shouldAnimate} />
-                    <Sponsors tone={rail} />
+                    {rail && <Sponsors tone={rail} />}
                 </div>
 
                 <Invite />
