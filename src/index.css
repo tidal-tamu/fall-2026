@@ -53,7 +53,8 @@ html::-webkit-scrollbar {
     height: 100%;
 }
 
+/* Highlighted text takes the palette's blue hint rather than inverting. */
 ::selection {
-    background: #111110;
-    color: #ffffff;
+    background: #8ea7c2;
+    color: #111110;
 }
