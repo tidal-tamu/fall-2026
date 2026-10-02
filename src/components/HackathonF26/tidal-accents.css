@@ -17,7 +17,7 @@
     --accent: #8ea7c2;
     --pastel-shadow: #b4c9df; /* resting hard offsets */
     --pastel: #cfdeee;
-    --pastel-soft: #e3ecf6; /* fills: chips, hovers */
+    --pastel-soft: #e3ecf6; /* fills: hovers, LCDs */
     --pastel-mist: #f0f5fa; /* alternate section tint */
 }
 
@@ -131,34 +131,13 @@
     text-decoration-color: var(--accent);
 }
 
-/* ------------------------------------------------------------------ hero -- */
-.hero-sky {
-    background: #e5ecf3;
-}
-
-/* The wordmark stays ink; only its stacked misprint goes blue. */
+/* ---------------------------------------------------------------- ticket -- */
+/* The invite ticket's wordmark keeps the stacked misprint; it goes blue. */
 .pixel-title {
     text-shadow:
         0.06em 0.06em 0 var(--pastel-shadow),
         0.12em 0.12em 0 var(--pastel),
         0.18em 0.18em 0 var(--pastel-soft);
-}
-
-.chip {
-    background: var(--pastel-soft);
-}
-
-.cloud-drift rect {
-    fill: #9db4cc;
-}
-
-.polaroid {
-    box-shadow: 3px 3px 0 var(--pastel-shadow);
-}
-
-.polaroid-drag:hover .polaroid,
-.polaroid-drag--held .polaroid {
-    box-shadow: 5px 5px 0 var(--accent-ink);
 }
 
 /* ---------------------------------------------------------------- footer -- */
