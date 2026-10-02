@@ -1,24 +1,46 @@
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
-import { CoinProvider } from "./coinEconomy";
-import LoadingScreen from "./LoadingScreen";
-import Ticker from "./Ticker";
-import StickerTray from "./StickerTray";
 import Hero from "./Hero";
+import LoadingScreen from "./LoadingScreen";
+import Sponsors from "./Sponsors";
+import Invite from "./Invite";
+import About from "./About";
+import Schedule from "./Schedule";
+import Prizes from "./Prizes";
+import LinerNotes from "./LinerNotes";
+import FAQs from "./FAQs/FAQs";
+import Navbar from "./Navbar";
+import Footer from "../Footer";
 import "./tidal-effects.css";
+import "./tidal-paper.css";
+import "./tidal-profile.css";
+import "./tidal-player.css";
+import "./tidal-dock.css";
 
-// the loader GIF is ~4.2s — dismiss just after a full playthrough
-const LOADER_MS = 4600;
+/* The page is laid out as an album: the hero is the cover, every section
+   after it is a numbered track (see TRACKS in event.ts), and the docked
+   player in Navbar walks between them. */
 
 const HackathonF26 = () => {
+    const [shouldAnimate, setShouldAnimate] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const timer = setTimeout(() => setIsLoading(false), LOADER_MS);
-        return () => clearTimeout(timer);
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 2800);
+
+        const animTimer = setTimeout(() => {
+            setShouldAnimate(true);
+        }, 500);
+
+        return () => {
+            clearTimeout(timer);
+            clearTimeout(animTimer);
+        };
     }, []);
 
-    // lock scroll while the intro plays
+    // hold the page still while the loading screen covers it
     useEffect(() => {
         document.body.style.overflow = isLoading ? "hidden" : "";
         return () => {
@@ -27,18 +49,28 @@ const HackathonF26 = () => {
     }, [isLoading]);
 
     return (
-        <CoinProvider>
+        <>
             <AnimatePresence>
-                {isLoading && <LoadingScreen onSkip={() => setIsLoading(false)} />}
+                {isLoading && <LoadingScreen />}
             </AnimatePresence>
 
-            <div className="hackathon-page">
-                <StickerTray />
+            <div className="w-full bg-paper text-ink">
+                <div id="top" className="relative h-screen overflow-hidden">
+                    <Hero shouldAnimate={shouldAnimate} />
+                    <Sponsors />
+                </div>
 
-                <Hero />
-                <Ticker />
+                <Invite />
+                <About />
+                <Schedule />
+                <Prizes />
+                <LinerNotes />
+                <FAQs />
+                <Footer />
             </div>
-        </CoinProvider>
+
+            <Navbar />
+        </>
     );
 };
 

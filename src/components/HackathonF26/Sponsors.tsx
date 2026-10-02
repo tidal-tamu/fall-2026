@@ -1,98 +1,60 @@
-import { useEffect, useState } from "react";
-import Sticker from "./Sticker";
+type Sponsor = { name: string; logo: string };
 
-/* Sponsor wall: a pile of retro CRT TVs whose screens flicker on and off.
-   Logos are text placeholders until real sponsor assets land. */
+// The physics layer uses this too, so its floor lands exactly on the rail's
+// top border rather than underneath the sponsor logos.
+export const SPONSOR_RAIL_HEIGHT = 56;
 
-interface Sponsor {
-    n: string;
-    c: string;
-    row: number;
-    w: number;
-    h: number;
-    tilt?: number;
-    ant?: boolean;
-}
-
-const SPONSORS: Sponsor[] = [
-    { n: "Google", c: "#8AB4F8", row: 0, w: 200, h: 120 },
-    { n: "NVIDIA", c: "#76B900", row: 0, w: 180, h: 130, tilt: -2 },
-    { n: "Jane Street", c: "#F0EEFA", row: 0, w: 210, h: 110, tilt: 1.5 },
-    { n: "Figma", c: "#FF7262", row: 1, w: 230, h: 140, tilt: 1, ant: true },
-    { n: "Netflix", c: "#E50914", row: 1, w: 250, h: 150, tilt: -1.5 },
-    { n: "Framer", c: "#7B7BF0", row: 2, w: 300, h: 150, tilt: 0.6 },
+// Shared with the liner-notes sticker wall further down the page.
+export const sponsors: Sponsor[] = [
+    { name: "Adobe", logo: "/f26/sponsors/adobe.png" },
+    { name: "Amazon Web Services", logo: "/f26/sponsors/aws.png" },
+    { name: "Base44", logo: "/f26/sponsors/base44.png" },
+    { name: "Diodes", logo: "/f26/sponsors/diodes.png" },
+    { name: "ElevenLabs", logo: "/f26/sponsors/elevenlabs.png" },
+    { name: "Google", logo: "/f26/sponsors/google.png" },
+    { name: "Jane Street", logo: "/f26/sponsors/jane-street.png" },
+    { name: "Microsoft", logo: "/f26/sponsors/microsoft.png" },
+    { name: "NVIDIA", logo: "/f26/sponsors/nvidia.png" },
+    { name: "xPerf", logo: "/f26/sponsors/xperf.png" },
 ];
 
-const Tv = ({ sponsor, index }: { sponsor: Sponsor; index: number }) => {
-    const [lit, setLit] = useState(false);
-
-    // staggered random flicker, like a wall of half-working CRTs
-    useEffect(() => {
-        let timer: ReturnType<typeof setTimeout>;
-        let alive = true;
-        const cycle = () => {
-            if (!alive) return;
-            setLit((l) => !l);
-            timer = setTimeout(cycle, 1200 + Math.random() * 2200);
-        };
-        timer = setTimeout(cycle, index * 420);
-        return () => {
-            alive = false;
-            clearTimeout(timer);
-        };
-    }, [index]);
-
-    const { n, c, w, h, tilt, ant } = sponsor;
-    return (
-        <div
-            className={`tv ${lit ? "lit" : ""}`}
-            style={{ width: w, height: h, transform: `rotate(${tilt || 0}deg)` }}
-        >
-            {ant && <div className="antenna" />}
-            <div
-                className="glow"
-                style={{ boxShadow: `0 0 34px ${c}66, 0 0 70px ${c}33` }}
-            />
-            <div className="screen">
-                <span className="logo" style={{ color: c, textShadow: `0 0 14px ${c}` }}>
-                    {n}
-                </span>
-            </div>
-            <div className="knobs"><i /><i /></div>
-        </div>
-    );
-};
-
-const Sponsors = () => {
-    const rows: Sponsor[][] = [[], [], []];
-    SPONSORS.forEach((s) => rows[s.row].push(s));
-    let idx = 0;
-
-    return (
-        <section id="sponsors">
-            <div className="sec-head">
-                <div className="eyebrow px">POWERED BY</div>
-                <h2 className="px">SPONSORS</h2>
-                <div className="hand">a pile of light-up TVs, obviously</div>
-            </div>
-            <Sticker tilt="0deg">
-                <div className="tv-pile">
-                    <div className="tv-rows">
-                        {rows.map((row, r) => (
-                            <div className="tv-row" key={r}>
-                                {row.map((s) => (
-                                    <Tv key={s.n} sponsor={s} index={idx++} />
-                                ))}
-                            </div>
-                        ))}
-                    </div>
-                </div>
-            </Sticker>
-            <p className="hand-note" style={{ textAlign: "center", marginTop: 34 }}>
-                screens glow on + off ✦ logos are placeholders for now
+const Sponsors = () => (
+    <aside
+        aria-label="Sponsors"
+        className="absolute inset-x-0 bottom-0 z-40 border-t border-rule bg-paper/95 px-5 py-3 backdrop-blur-sm md:px-8"
+        style={{ height: SPONSOR_RAIL_HEIGHT }}
+    >
+        <div className="flex items-center gap-4 md:gap-7">
+            <p className="label shrink-0 !text-[8px] text-mid md:!text-[9px]">
+                Powered by
             </p>
-        </section>
-    );
-};
+            <div className="sponsor-rail min-w-0 flex-1">
+                <div className="sponsor-rail__track">
+                    {[false, true].map((duplicate) => (
+                        <ul
+                            key={String(duplicate)}
+                            aria-hidden={duplicate || undefined}
+                            className="sponsor-rail__sequence"
+                        >
+                            {sponsors.map((sponsor) => (
+                                <li
+                                    key={sponsor.name}
+                                    className="flex h-7 min-w-14 shrink-0 items-center justify-center md:h-8 md:min-w-16"
+                                >
+                                    <img
+                                        src={sponsor.logo}
+                                        alt={duplicate ? "" : sponsor.name}
+                                        className="max-h-full max-w-[88px] object-contain brightness-0 opacity-80 md:max-w-[108px]"
+                                        loading="eager"
+                                    />
+                                </li>
+                            ))}
+                        </ul>
+                    ))}
+                </div>
+            </div>
+        </div>
+    </aside>
+);
 
 export default Sponsors;

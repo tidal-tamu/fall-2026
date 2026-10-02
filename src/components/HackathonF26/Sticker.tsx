@@ -1,63 +1,38 @@
-import { CSSProperties, ReactNode, useEffect, useRef, useState } from "react";
-
-/* Slap-on entrance: elements start shrunken/rotated and "slap" onto the
-   page when scrolled into view (see .sticker/.stuck in tidal-effects.css).
-   The rotation target comes from the --tilt custom property so the CSS
-   keyframes can compose it. */
+import { motion, useReducedMotion } from "framer-motion";
 
 interface StickerProps {
-    tilt?: string; // e.g. "-3deg"
-    delay?: number; // ms before the slap fires once visible
-    /** keep bobbing after the slap lands (composes via the translate property) */
-    float?: boolean;
+    src: string;
+    width: number;
+    rotate?: number;
+    delay?: number;
     className?: string;
-    style?: CSSProperties;
-    children: ReactNode;
+    alt?: string;
 }
 
-const Sticker = ({
-    tilt = "0deg",
-    delay = 0,
-    float = false,
-    className = "",
-    style,
-    children,
-}: StickerProps) => {
-    const ref = useRef<HTMLDivElement>(null);
-    const [stuck, setStuck] = useState(false);
-
-    useEffect(() => {
-        const el = ref.current;
-        if (!el) return;
-        const obs = new IntersectionObserver(
-            ([entry]) => {
-                if (entry.isIntersecting) {
-                    setTimeout(() => setStuck(true), delay);
-                    obs.disconnect();
-                }
-            },
-            { threshold: 0.25 },
-        );
-        obs.observe(el);
-        return () => obs.disconnect();
-    }, [delay]);
-
-    const floatStyle: CSSProperties =
-        float && stuck
-            ? {
-                  animation:
-                      "slap .62s cubic-bezier(.26,1.45,.42,1) forwards, stickerFloat 5s ease-in-out 1.5s infinite",
-              }
-            : {};
+/* A grayscale die-cut sticker (the white border is baked into the asset) that
+   slaps onto the page the first time it scrolls into view. Decorative by
+   default, so it stays out of the accessibility tree and never eats clicks. */
+const Sticker = ({ src, width, rotate = 0, delay = 0, className = "", alt = "" }: StickerProps) => {
+    const reduce = useReducedMotion();
 
     return (
-        <div
-            ref={ref}
-            className={`sticker ${stuck ? "stuck" : ""} ${className}`}
-            style={{ "--tilt": tilt, ...style, ...floatStyle } as CSSProperties}
-        >
-            {children}
-        </div>
+        <motion.img
+            src={src}
+            alt={alt}
+            aria-hidden={alt ? undefined : true}
+            width={width}
+            loading="lazy"
+            decoding="async"
+            draggable={false}
+            className={`sticker pointer-events-none select-none ${className}`}
+            // a CSS var rather than a fixed width, so callers can resize per
+            // breakpoint with e.g. `md:[--sticker-w:150px]`
+            style={{ width: `var(--sticker-w, ${width}px)`, height: "auto" }}
+            initial={reduce ? { rotate } : { opacity: 0, scale: 1.4, rotate: rotate - 14 }}
+            whileInView={{ opacity: 1, scale: 1, rotate }}
+            viewport={{ once: true, margin: "0px 0px -12% 0px" }}
+            transition={{ type: "spring", stiffness: 380, damping: 17, delay }}
+        />
     );
 };
 

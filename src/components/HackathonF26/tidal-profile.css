@@ -1,0 +1,302 @@
+/* -------------------------------------------------------------------------- */
+/*  tidalspace: the About section as a 2006 MySpace profile, in monochrome.    */
+/*  MySpace's blue boxes become the cold hint wash; its orange headers become  */
+/*  ink bars. Verdana-era density, so type here runs small on purpose.        */
+/* -------------------------------------------------------------------------- */
+
+.space {
+    background: #ffffff;
+    border: 1.5px solid #111110;
+    box-shadow: 6px 6px 0 #111110;
+}
+
+.space a {
+    color: #34506f;
+    font-weight: 700;
+}
+
+.space a:hover {
+    text-decoration: underline;
+}
+
+.space__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px 20px;
+    padding: 10px 16px;
+    background: #111110;
+    color: #ffffff;
+}
+
+.space__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 14px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+}
+
+.space .space__nav a {
+    color: #e6ebf0;
+    font-weight: 400;
+}
+
+.space__body {
+    display: grid;
+    gap: 22px;
+    padding: 18px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* Two columns only once the left one can fit the photo beside its vitals. */
+@media (min-width: 1024px) {
+    .space__body {
+        grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+        gap: 30px;
+        padding: 26px;
+    }
+}
+
+.space__name {
+    font-size: 24px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+}
+
+.space__pic {
+    flex: 0 0 auto;
+    width: 150px;
+    align-self: flex-start;
+    border: 1.5px solid #111110;
+}
+
+.space__pic img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+@media (min-width: 768px) {
+    .space__pic {
+        width: 172px;
+    }
+}
+
+.space__vitals {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    color: #383632;
+    font-size: 12px;
+    line-height: 1.45;
+}
+
+.space__online {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    color: #34506f;
+    font-weight: 700;
+}
+
+.space__dot {
+    width: 9px;
+    height: 9px;
+    border: 1.5px solid #34506f;
+    border-radius: 50%;
+    background: #8ea7c2;
+    animation: online-blink 1.6s steps(2, jump-none) infinite;
+}
+
+@keyframes online-blink {
+    50% {
+        background: #ffffff;
+    }
+}
+
+.space__small {
+    color: #383632;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+.space__box {
+    border: 1px solid rgba(17, 17, 16, 0.55);
+}
+
+.space__boxhead {
+    padding: 5px 10px;
+    background: #111110;
+    color: #ffffff;
+    font-size: 12px;
+    font-weight: 700;
+}
+
+.space__contact {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: rgba(17, 17, 16, 0.18);
+}
+
+.space__contact a,
+.space__contact button {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    background: #ffffff;
+    color: #34506f;
+    font-size: 12px;
+    font-weight: 700;
+    text-align: left;
+}
+
+.space__contact a:hover,
+.space__contact button:hover {
+    background: #e6ebf0;
+    text-decoration: underline;
+}
+
+.space__details {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 3px;
+    font-size: 12px;
+}
+
+.space__details th {
+    width: 38%;
+    padding: 5px 8px;
+    background: #e6ebf0;
+    color: #34506f;
+    font-weight: 700;
+    text-align: left;
+    vertical-align: top;
+}
+
+.space__details td {
+    padding: 5px 8px;
+    background: #f4f3f1;
+}
+
+.space__network {
+    padding: 16px 18px;
+    border: 1px solid rgba(17, 17, 16, 0.55);
+    font-size: clamp(17px, 2.2vw, 21px);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.space__blurb {
+    padding: 12px 14px 16px;
+    color: #383632;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.space__blurb h5 {
+    margin-top: 14px;
+    color: #111110;
+    font-weight: 700;
+}
+
+.space__blurb h5:first-child {
+    margin-top: 0;
+}
+
+.space__blurb p {
+    margin-top: 4px;
+}
+
+.space__friends {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px 10px;
+    padding: 12px;
+}
+
+.space__friends li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    text-align: center;
+}
+
+.space__friendname {
+    display: flex;
+    align-items: flex-end;
+    min-height: 2.4em;
+    color: #34506f;
+    font-size: 11px;
+    font-weight: 700;
+    line-height: 1.2;
+}
+
+.space__friendpic {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 1px solid rgba(17, 17, 16, 0.35);
+    background: #ffffff;
+}
+
+.space__friendpic img {
+    width: 88%;
+    height: 88%;
+    object-fit: contain;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.space__friends li:hover .space__friendpic img {
+    transform: rotate(-7deg) scale(1.07);
+}
+
+.space a.space__friendpic--you {
+    border: 1.5px dashed rgba(17, 17, 16, 0.5);
+    color: #a3a099;
+    font-family: "Press Start 2P", monospace;
+    font-size: 20px;
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.space a.space__friendpic--you:hover {
+    background: #f4f3f1;
+    color: #111110;
+}
+
+.space__comment {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+}
+
+.space__commenter {
+    display: flex;
+    flex: 0 0 64px;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+}
+
+.space__commenter .space__friendname {
+    min-height: 0;
+}
+
+.space__commenter img {
+    width: 56px;
+    height: 56px;
+    object-fit: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .space__dot {
+        animation: none;
+    }
+}
