@@ -46,22 +46,106 @@
 }
 
 /* ----------------------------------------------------------------- title -- */
-.diary-title {
+/* Title and register button share one column, so the button always lands
+   just under the sticker whatever size the sticker scales to. */
+.diary-head {
     position: absolute;
     top: 6%;
     right: 0;
     left: 0;
     z-index: 4;
     display: flex;
-    justify-content: center;
-    margin: 0;
+    flex-direction: column;
+    align-items: center;
     pointer-events: none;
 }
 
 @media (max-width: 767px) {
-    .diary-title {
+    .diary-head {
         top: 9%;
     }
+}
+
+.diary-title {
+    display: flex;
+    justify-content: center;
+    margin: 0;
+}
+
+/* ------------------------------------------------------------- register -- */
+/* A dark slate pill with the polaroids' white die-cut ring: the one solid
+   thing on the page, so it reads as the action without shouting over the
+   title. */
+.diary-cta {
+    margin-top: clamp(14px, 2.6vh, 28px);
+    pointer-events: auto;
+}
+
+.diary-register {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 22px 13px;
+    border: 2px solid #33404c;
+    border-radius: 999px;
+    background: #33404c;
+    box-shadow:
+        0 0 0 5px #ffffff,
+        0 0 0 6px rgba(51, 64, 76, 0.14),
+        0 12px 20px -10px rgba(51, 64, 76, 0.55);
+    color: #ffffff;
+    font-family: "Press Start 2P", monospace;
+    font-size: 11px;
+    line-height: 1;
+    transform: rotate(-2deg);
+    transition:
+        transform 0.25s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (min-width: 768px) {
+    .diary-register {
+        padding: 16px 26px 15px;
+        font-size: 13px;
+    }
+}
+
+a.diary-register:hover {
+    transform: rotate(0deg) translateY(-2px);
+    box-shadow:
+        0 0 0 5px #ffffff,
+        0 0 0 6px rgba(51, 64, 76, 0.14),
+        0 16px 24px -10px rgba(51, 64, 76, 0.6);
+}
+
+a.diary-register:active {
+    transform: translateY(1px);
+}
+
+a.diary-register:focus-visible {
+    outline: 2px dashed #34506f;
+    outline-offset: 9px;
+}
+
+.diary-register--soon {
+    cursor: not-allowed;
+}
+
+/* Until registration opens: a little paper tag stuck on the corner, in the
+   title's light blue, like the '26 on the sticker above. */
+.diary-register__tag {
+    position: absolute;
+    top: -15px;
+    right: -24px;
+    padding: 5px 7px 4px;
+    border: 1.5px solid #33404c;
+    border-radius: 4px;
+    background: #c3d5e4;
+    box-shadow: 0 0 0 3px #ffffff;
+    color: #33404c;
+    font-size: 8px;
+    transform: rotate(12deg);
 }
 
 .sticker-title__svg {

@@ -17,6 +17,9 @@ interface HeroProps {
 
 const TAGLINE = `[ ${EVENT.date.toLowerCase()} · ${EVENT.room.toLowerCase()} · ${EVENT.hours} hours ]`;
 
+/* Goes live on its own once event.ts has registrationOpen and a registerUrl. */
+const REGISTER_LIVE = EVENT.registrationOpen && Boolean(EVENT.registerUrl);
+
 const Hero = ({ shouldAnimate = false }: HeroProps) => {
     const rise = (delay: number) => ({
         initial: { y: 16, opacity: 0 },
@@ -28,22 +31,49 @@ const Hero = ({ shouldAnimate = false }: HeroProps) => {
         <div className="diary relative h-screen w-full overflow-hidden">
             <HeroSky />
 
-            {/* Hovering glitches it: blue copies of the sticker sit over the real
-                one and only show on hover (see .glitch in tidal-hero.css). */}
-            <motion.h1 className="diary-title" {...rise(0.25)}>
-                <span className="sr-only">tidalBYTE &apos;26</span>
-                <span className="glitch">
-                    <span className="glitch__base">
-                        <StickerTitle />
+            <div className="diary-head">
+                {/* Hovering glitches it: blue copies of the sticker sit over the
+                    real one and only show on hover (see .glitch in tidal-hero.css). */}
+                <motion.h1 className="diary-title" {...rise(0.25)}>
+                    <span className="sr-only">tidalBYTE &apos;26</span>
+                    <span className="glitch">
+                        <span className="glitch__base">
+                            <StickerTitle />
+                        </span>
+                        <span aria-hidden="true" className="glitch__layer glitch__layer--ghost">
+                            <StickerTitle />
+                        </span>
+                        <span aria-hidden="true" className="glitch__layer glitch__layer--tear">
+                            <StickerTitle />
+                        </span>
                     </span>
-                    <span aria-hidden="true" className="glitch__layer glitch__layer--ghost">
-                        <StickerTitle />
-                    </span>
-                    <span aria-hidden="true" className="glitch__layer glitch__layer--tear">
-                        <StickerTitle />
-                    </span>
-                </span>
-            </motion.h1>
+                </motion.h1>
+
+                <motion.div className="diary-cta" {...rise(0.4)}>
+                    {REGISTER_LIVE ? (
+                        <a
+                            href={EVENT.registerUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="diary-register"
+                        >
+                            REGISTER <span aria-hidden="true">→</span>
+                        </a>
+                    ) : (
+                        <span
+                            className="diary-register diary-register--soon"
+                            aria-disabled="true"
+                            title="Registration opens soon"
+                        >
+                            REGISTER
+                            <span className="diary-register__tag" aria-hidden="true">
+                                soon!
+                            </span>
+                            <span className="sr-only">(registration opens soon)</span>
+                        </span>
+                    )}
+                </motion.div>
+            </div>
 
             <Polaroids shouldAnimate={shouldAnimate} />
 
