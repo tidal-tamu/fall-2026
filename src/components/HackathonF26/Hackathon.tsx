@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
+import type { ComponentType } from "react";
 import Hero from "./Hero";
+import HeroGlass from "./heroes/HeroGlass";
+import HeroSlopes from "./heroes/HeroSlopes";
+import HeroPaper from "./heroes/HeroPaper";
+import HeroSwitcher from "./heroes/HeroSwitcher";
+import { useHeroVariant, type HeroVariant } from "./heroes/variants";
 import LoadingScreen from "./LoadingScreen";
-import Sponsors from "./Sponsors";
+import Sponsors, { type RailTone } from "./Sponsors";
 import Invite from "./Invite";
 import About from "./About";
 import Schedule from "./Schedule";
@@ -23,9 +29,20 @@ import "./tidal-accents.css"; // pastel blue layer; must stay last
    after it is a numbered track (see TRACKS in event.ts), and the docked
    player in Navbar walks between them. */
 
+/* Hero explorations: every version paired with the sponsor rail surface
+   that sits right on it. */
+const HEROES: Record<HeroVariant, { Hero: ComponentType<{ shouldAnimate?: boolean }>; rail: RailTone }> = {
+    diary: { Hero, rail: "paper" },
+    glass: { Hero: HeroGlass, rail: "glass" },
+    slopes: { Hero: HeroSlopes, rail: "paper" },
+    paper: { Hero: HeroPaper, rail: "blue" },
+};
+
 const HackathonF26 = () => {
     const [shouldAnimate, setShouldAnimate] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const [variant, setVariant] = useHeroVariant();
+    const { Hero: CurrentHero, rail } = HEROES[variant];
 
     useEffect(() => {
         const timer = setTimeout(() => {
@@ -58,8 +75,8 @@ const HackathonF26 = () => {
 
             <div className="w-full bg-paper text-ink">
                 <div id="top" className="relative h-screen overflow-hidden">
-                    <Hero shouldAnimate={shouldAnimate} />
-                    <Sponsors />
+                    <CurrentHero key={variant} shouldAnimate={shouldAnimate} />
+                    <Sponsors tone={rail} />
                 </div>
 
                 <Invite />
@@ -72,6 +89,7 @@ const HackathonF26 = () => {
             </div>
 
             <Navbar />
+            {!isLoading && <HeroSwitcher value={variant} onChange={setVariant} />}
         </>
     );
 };
