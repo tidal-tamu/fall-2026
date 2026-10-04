@@ -1,10 +1,10 @@
 type Sponsor = { name: string; logo: string };
 
-// The physics layer uses this too, so its floor lands exactly on the rail's
-// top border rather than underneath the sponsor logos.
+// Heroes that show the rail lay themselves out above this height.
 export const SPONSOR_RAIL_HEIGHT = 56;
 
-const sponsors: Sponsor[] = [
+// Shared with the liner-notes sticker wall further down the page.
+export const sponsors: Sponsor[] = [
     { name: "Adobe", logo: "/f26/sponsors/adobe.png" },
     { name: "Amazon Web Services", logo: "/f26/sponsors/aws.png" },
     { name: "Base44", logo: "/f26/sponsors/base44.png" },
@@ -17,14 +17,36 @@ const sponsors: Sponsor[] = [
     { name: "xPerf", logo: "/f26/sponsors/xperf.png" },
 ];
 
-const Sponsors = () => (
+/* The rail sits on whatever the hero puts behind it, so each hero version
+   picks the surface: printed paper, clear over glass, or white-on-blue. */
+export type RailTone = "paper" | "glass" | "blue";
+
+const TONES: Record<RailTone, { rail: string; label: string; logo: string }> = {
+    paper: {
+        rail: "border-t border-rule bg-paper/95 backdrop-blur-sm",
+        label: "text-mid",
+        logo: "brightness-0 opacity-80",
+    },
+    glass: {
+        rail: "border-t border-white/40 bg-white/25 backdrop-blur-md",
+        label: "text-hint-deep",
+        logo: "brightness-0 opacity-70",
+    },
+    blue: {
+        rail: "border-t border-white/25 bg-transparent",
+        label: "text-white/80",
+        logo: "brightness-0 invert opacity-85",
+    },
+};
+
+const Sponsors = ({ tone = "paper" }: { tone?: RailTone }) => (
     <aside
         aria-label="Sponsors"
-        className="absolute inset-x-0 bottom-0 z-40 border-t border-rule bg-paper/95 px-5 py-3 backdrop-blur-sm md:px-8"
+        className={`absolute inset-x-0 bottom-0 z-40 px-5 py-3 md:px-8 ${TONES[tone].rail}`}
         style={{ height: SPONSOR_RAIL_HEIGHT }}
     >
         <div className="flex items-center gap-4 md:gap-7">
-            <p className="label shrink-0 !text-[8px] text-mid md:!text-[9px]">
+            <p className={`label shrink-0 !text-[8px] md:!text-[9px] ${TONES[tone].label}`}>
                 Powered by
             </p>
             <div className="sponsor-rail min-w-0 flex-1">
@@ -43,7 +65,7 @@ const Sponsors = () => (
                                     <img
                                         src={sponsor.logo}
                                         alt={duplicate ? "" : sponsor.name}
-                                        className="max-h-full max-w-[88px] object-contain brightness-0 opacity-80 md:max-w-[108px]"
+                                        className={`max-h-full max-w-[88px] object-contain md:max-w-[108px] ${TONES[tone].logo}`}
                                         loading="eager"
                                     />
                                 </li>

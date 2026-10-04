@@ -7,6 +7,10 @@ export default {
                 pixel: ['"Press Start 2P"', "monospace"],
                 mono: ['"Space Mono"', "ui-monospace", "Menlo", "monospace"],
                 grotesk: ['"Helvetica Neue"', "Helvetica", "Arial", "sans-serif"],
+                // dot-matrix numerals for the CD-player LCD bits
+                lcd: ['"Doto"', '"Space Mono"', "monospace"],
+                // editorial serif for the glass and paper hero explorations
+                display: ['"Instrument Serif"', "Georgia", "serif"],
             },
             colors: {
                 /* Monochrome Y2K. Never pure black — #111110 reads warmer and
@@ -24,6 +28,14 @@ export default {
                     500: "#85827A",
                     600: "#5C5A54",
                     700: "#383632",
+                },
+                /* The theme pitch's one allowed accent: a cold blue hint.
+                   Used sparingly (links, LCD glow, the ticket stamp) so the
+                   page still reads as monochrome. */
+                hint: {
+                    DEFAULT: "#8EA7C2",
+                    deep: "#34506F",
+                    wash: "#E6EBF0",
                 },
             },
             letterSpacing: {

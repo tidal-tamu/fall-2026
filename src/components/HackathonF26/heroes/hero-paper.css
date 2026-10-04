@@ -1,0 +1,289 @@
+/* -------------------------------------------------------------------------- */
+/*  Paper hero (Craft reference).                                             */
+/*  #557A9F is the lightest dusty blue that still holds white body text at     */
+/*  4.5:1, so the eyebrow and meta lines stay readable, not just the serif.    */
+/* -------------------------------------------------------------------------- */
+
+.paper-page {
+    background-color: #557a9f;
+    color: #ffffff;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* Film grain: fractal noise, desaturated, laid over the blue. */
+.paper-page::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    mix-blend-mode: overlay;
+    opacity: 0.5;
+    pointer-events: none;
+}
+
+/* Faint guide lines, as if the page were printed on a layout grid. */
+.paper-page::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background-image:
+        linear-gradient(90deg, transparent calc(3% - 0.5px), rgba(17, 17, 16, 0.2) calc(3% - 0.5px) calc(3% + 0.5px), transparent calc(3% + 0.5px)),
+        linear-gradient(90deg, transparent calc(25.5% - 0.5px), rgba(17, 17, 16, 0.2) calc(25.5% - 0.5px) calc(25.5% + 0.5px), transparent calc(25.5% + 0.5px)),
+        linear-gradient(90deg, transparent calc(74.5% - 0.5px), rgba(17, 17, 16, 0.2) calc(74.5% - 0.5px) calc(74.5% + 0.5px), transparent calc(74.5% + 0.5px)),
+        linear-gradient(90deg, transparent calc(97% - 0.5px), rgba(17, 17, 16, 0.2) calc(97% - 0.5px) calc(97% + 0.5px), transparent calc(97% + 0.5px));
+    pointer-events: none;
+}
+
+/* ------------------------------------------------------------------- nav -- */
+.paper-nav {
+    position: absolute;
+    top: 14px;
+    right: 12px;
+    left: 12px;
+    z-index: 6;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 22px;
+    height: 48px;
+    padding: 6px 6px 6px 18px;
+    border: 1px solid rgba(255, 255, 255, 0.85);
+    border-radius: 999px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95), rgba(214, 229, 244, 0.95));
+    box-shadow:
+        0 12px 30px -16px rgba(20, 40, 64, 0.55),
+        inset 0 1px 0 #ffffff;
+    color: #111110;
+}
+
+/* Centred with margins, not a transform: framer-motion owns the transform
+   for the entrance rise. */
+@media (min-width: 768px) {
+    .paper-nav {
+        top: 24px;
+        right: 0;
+        left: 0;
+        width: max-content;
+        margin: 0 auto;
+    }
+}
+
+.paper-nav__logo {
+    font-size: 11px;
+}
+
+.paper-nav__links {
+    display: none;
+    gap: 18px;
+    font-size: 15px;
+}
+
+.paper-nav__links a:hover,
+.paper-nav__quiet:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+@media (min-width: 768px) {
+    .paper-nav__links {
+        display: flex;
+    }
+}
+
+.paper-nav__end {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.paper-nav__quiet {
+    display: none;
+    font-size: 15px;
+}
+
+@media (min-width: 768px) {
+    .paper-nav__quiet {
+        display: inline;
+    }
+}
+
+.paper-nav__cta {
+    display: inline-flex;
+    align-items: center;
+    height: 36px;
+    padding: 0 16px;
+    border-radius: 999px;
+    background: #111110;
+    color: #ffffff;
+    font-size: 14px;
+    cursor: not-allowed;
+}
+
+/* ---------------------------------------------------------------- centre -- */
+.paper-center {
+    position: absolute;
+    inset: 0 0 var(--rail);
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 84px 20px 40px;
+    text-align: center;
+}
+
+.paper-eyebrow {
+    color: #e3ecf6;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
+
+@media (min-width: 768px) {
+    .paper-eyebrow {
+        font-size: 14px;
+    }
+}
+
+.paper-title {
+    position: relative;
+    margin-top: 18px;
+    color: #ffffff;
+    font-family: "Instrument Serif", Georgia, serif;
+    font-size: clamp(50px, 9.2vw, 150px);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.02em;
+}
+
+.paper-title em {
+    font-style: italic;
+}
+
+/* One sticker slapped on the corner of the page, as on a notebook. */
+.paper-sticker {
+    position: absolute;
+    top: -0.55em;
+    left: -0.6em;
+    width: clamp(60px, 7vw, 112px);
+    transform: rotate(-12deg);
+    filter: drop-shadow(3px 5px 0 rgba(17, 17, 16, 0.18));
+    pointer-events: none;
+}
+
+/* Phones: the headline runs edge to edge, so the sticker lifts above it. */
+@media (max-width: 767px) {
+    .paper-sticker {
+        top: -1.2em;
+        left: 0.05em;
+        width: 56px;
+    }
+}
+
+.paper-meta {
+    max-width: 34ch;
+    margin-top: 26px;
+    color: #e3ecf6;
+    font-size: 13px;
+    line-height: 1.5;
+}
+
+@media (min-width: 768px) {
+    .paper-meta {
+        max-width: none;
+        font-size: 15px;
+    }
+}
+
+.paper-ctas {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 26px;
+}
+
+.paper-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    height: 44px;
+    padding: 0 20px;
+    border-radius: 999px;
+    background: #111110;
+    color: #ffffff;
+    font-size: 14px;
+    transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.paper-cta:hover {
+    transform: translateY(-2px);
+}
+
+.paper-cta--ghost {
+    border: 1px solid rgba(255, 255, 255, 0.75);
+    background: transparent;
+}
+
+/* ---------------------------------------------------------------- clouds -- */
+/* In front of the type, as in the reference: the dots break up the letters
+   they drift across instead of hiding behind them. */
+.paper-cloud {
+    position: absolute;
+    z-index: 3;
+    height: auto;
+    pointer-events: none;
+}
+
+.paper-cloud--left {
+    top: 60%;
+    left: -12%;
+    width: clamp(240px, 34vw, 560px);
+    animation: paper-drift 16s ease-in-out infinite alternate;
+}
+
+.paper-cloud--right {
+    top: 20%;
+    right: -9%;
+    width: clamp(200px, 27vw, 440px);
+    animation: paper-drift 21s ease-in-out -6s infinite alternate-reverse;
+}
+
+/* The left cloud may cross the headline but never the meta line below it,
+   whose small type can't afford the lost contrast. */
+@media (min-width: 768px) {
+    .paper-cloud--left {
+        top: 38%;
+        left: -6%;
+    }
+    .paper-cloud--right {
+        top: 20%;
+        right: 4%;
+    }
+}
+
+@media (min-width: 1280px) {
+    .paper-cloud--left {
+        top: 45%;
+        left: 3%;
+    }
+}
+
+@keyframes paper-drift {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(26px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .paper-cloud--left,
+    .paper-cloud--right {
+        animation: none;
+    }
+}

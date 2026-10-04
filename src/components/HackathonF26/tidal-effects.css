@@ -6,27 +6,6 @@
 /*  dots, checkerboards and scanlines.                                        */
 /* -------------------------------------------------------------------------- */
 
-/* ---------------------------------------------------------------- cursor -- */
-/*  The claw grabber. Drawn twice — a fat white stroke underneath and the ink  */
-/*  stroke on top — so it stays legible over the white page *and* over the     */
-/*  black cabinet. A single-colour cursor disappears against one or the other. */
-/*  Hotspot sits between the prongs, where the grab actually happens.          */
-
-.claw-cursor,
-.claw-cursor * {
-    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='36'%20height='36'%3E%3Cg%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cg%20stroke='%23ffffff'%20stroke-width='5.5'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M10%2012V24H14'/%3E%3Cpath%20d='M26%2012V24H22'/%3E%3C/g%3E%3Cg%20stroke='%23111110'%20stroke-width='2.6'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M10%2012V24H14'/%3E%3Cpath%20d='M26%2012V24H22'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
-            18 22,
-        grab;
-}
-
-/* Prongs pinch shut while dragging. */
-.claw-cursor-grabbing,
-.claw-cursor-grabbing * {
-    cursor: url("data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='36'%20height='36'%3E%3Cg%20fill='none'%20stroke-linecap='round'%20stroke-linejoin='round'%3E%3Cg%20stroke='%23ffffff'%20stroke-width='5.5'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M14%2012V24H17'/%3E%3Cpath%20d='M22%2012V24H19'/%3E%3C/g%3E%3Cg%20stroke='%23111110'%20stroke-width='2.6'%3E%3Cpath%20d='M18%205V12'/%3E%3Cpath%20d='M9%2012H27'/%3E%3Cpath%20d='M14%2012V24H17'/%3E%3Cpath%20d='M22%2012V24H19'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")
-            18 22,
-        grabbing !important;
-}
-
 /* ----------------------------------------------------------------- type --- */
 .label {
     font-family: "Space Mono", ui-monospace, monospace;
@@ -130,21 +109,6 @@
         0.18em 0.18em 0 #F4F3F1;
 }
 
-/* Outline chip, echoing the reference's rounded info pills. */
-.chip {
-    display: inline-flex;
-    align-items: center;
-    border: 1.5px solid #111110;
-    border-radius: 999px;
-    padding: 9px 18px;
-    white-space: nowrap;
-}
-
-.chip--solid {
-    background: #111110;
-    color: #ffffff;
-}
-
 /* Pill CTA in the nav, matching the reference's filled Login button. */
 .nav-pill {
     display: inline-flex;
@@ -218,33 +182,6 @@
     }
 }
 
-/* ----------------------------------------------------------------- cards -- */
-.prize-card {
-    position: absolute;
-    top: 0;
-    left: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1.5px solid #111110;
-    border-radius: 0;
-    background: #ffffff;
-    box-shadow: 3px 3px 0 rgba(17, 17, 16, 0.2);
-    user-select: none;
-    -webkit-user-select: none;
-    will-change: transform;
-    touch-action: none;
-}
-
-.prize-card--ink {
-    background: #111110;
-    color: #ffffff;
-}
-
-.prize-card--held {
-    box-shadow: 6px 6px 0 #111110;
-}
-
 /* ---------------------------------------------------------- legacy glow --- */
 /*  The loading screen still asks for these. In monochrome they become a flat  */
 /*  ink offset rather than a coloured bloom.                                   */
@@ -255,15 +192,112 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    .prize-card {
-        transition: none;
-    }
-
     .sponsor-rail {
         overflow-x: auto;
     }
 
     .sponsor-rail__track {
+        animation: none;
+    }
+}
+
+/* ------------------------------------------------------------- sections -- */
+/*  Everything below the hero. Generous padding on purpose: the pitch asks     */
+/*  for an indie-magazine layout with lots of negative space.                  */
+.section {
+    position: relative;
+    padding: 112px 20px;
+    /* stickers hang off the edges; clip (not hidden) so sticky columns
+       inside a section keep working */
+    overflow-x: clip;
+}
+
+@media (min-width: 768px) {
+    .section {
+        padding: 168px 40px;
+    }
+}
+
+.dot-grid {
+    background-color: #ffffff;
+    background-image: radial-gradient(rgba(17, 17, 16, 0.1) 1px, transparent 1.4px);
+    background-size: 22px 22px;
+}
+
+/* Magazine folio above each headline: TRACK 03 ········ schedule.rcpt */
+.folio {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.folio__rule {
+    flex: 1;
+    height: 0;
+    border-top: 2px dotted rgba(17, 17, 16, 0.3);
+}
+
+.headline {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: clamp(3.1rem, 9.5vw, 7.6rem);
+    line-height: 0.88;
+    letter-spacing: -0.05em;
+    text-transform: lowercase;
+}
+
+.dek {
+    max-width: 34rem;
+    font-size: 14px;
+    line-height: 1.7;
+    color: #6b6862;
+}
+
+/* Die-cut border is baked into the sticker art; this adds the lift. */
+.sticker {
+    filter: drop-shadow(3px 4px 0 rgba(17, 17, 16, 0.14));
+}
+
+.caret {
+    display: inline-block;
+    width: 0.55em;
+    height: 1.05em;
+    margin-left: 4px;
+    vertical-align: -0.16em;
+    background: #111110;
+    animation: caret-blink 1s step-end infinite;
+}
+
+@keyframes caret-blink {
+    50% {
+        opacity: 0;
+    }
+}
+
+/* Pseudo-random bars from three overlapping periods. */
+.barcode {
+    display: block;
+    height: 46px;
+    background:
+        repeating-linear-gradient(90deg, #111110 0 2px, transparent 2px 5px),
+        repeating-linear-gradient(90deg, transparent 0 7px, #111110 7px 8px, transparent 8px 11px),
+        repeating-linear-gradient(90deg, transparent 0 13px, #111110 13px 16px, transparent 16px 23px);
+}
+
+:where(a, button):focus-visible {
+    outline: 2px solid #34506f;
+    outline-offset: 3px;
+}
+
+/* The dock's pause button: freeze every CSS animation on the page. */
+html[data-motion="paused"] *,
+html[data-motion="paused"] *::before,
+html[data-motion="paused"] *::after {
+    animation-play-state: paused !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .caret {
         animation: none;
     }
 }

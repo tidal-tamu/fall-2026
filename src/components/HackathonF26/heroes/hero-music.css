@@ -1,0 +1,464 @@
+/* -------------------------------------------------------------------------- */
+/*  Music hero: the album's now-playing screen. Same kit as the rest of the    */
+/*  site: ink lines, pastel offset shadows, Doto numerals, pixel stickers.     */
+/*  --beat and --eq0..4 are written every frame from the audio analyser.       */
+/* -------------------------------------------------------------------------- */
+
+.music-page {
+    --line: #33404c;
+    --beat: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 56px 20px 32px;
+    background-color: #e8eff6;
+    background-image:
+        radial-gradient(60% 55% at 22% 45%, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 70%),
+        radial-gradient(rgba(52, 80, 111, 0.14) 1px, transparent 1.4px);
+    background-size: auto, 22px 22px;
+    color: #111110;
+}
+
+.music-wrap {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    justify-items: center;
+    gap: 24px;
+    width: min(1180px, 100%);
+    text-align: center;
+}
+
+@media (min-width: 1024px) {
+    .music-wrap {
+        grid-template-columns: auto minmax(0, 1fr);
+        justify-items: start;
+        align-items: center;
+        gap: clamp(40px, 6vw, 110px);
+        text-align: left;
+    }
+}
+
+/* ------------------------------------------------------------------- art -- */
+/* The box is wider than the sleeve to leave room for the record's overhang. */
+.music-art {
+    --sleeve: min(58vw, 30vh);
+    position: relative;
+    width: calc(var(--sleeve) * 1.48);
+    height: var(--sleeve);
+}
+
+@media (min-width: 1024px) {
+    .music-art {
+        --sleeve: min(46vh, 30vw);
+    }
+}
+
+.music-sleeve {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 2;
+    width: var(--sleeve);
+    aspect-ratio: 1;
+    overflow: hidden;
+    border: 2px solid var(--line);
+    border-radius: 6px;
+    background: linear-gradient(180deg, #a9c3dc 0%, #c9dbec 58%, #e3ecf6 100%);
+    box-shadow: 8px 8px 0 #b4c9df;
+}
+
+.music-sleeve__clouds {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 44%;
+}
+
+.music-sleeve__brand,
+.music-sleeve__year {
+    position: absolute;
+    top: 6%;
+    color: var(--line);
+    font-size: calc(var(--sleeve) * 0.04);
+}
+
+.music-sleeve__brand {
+    left: 6%;
+}
+
+.music-sleeve__year {
+    right: 6%;
+}
+
+/* Pebble bops on every kick: a lift, a lean and a little swell. */
+.music-sleeve__pebble {
+    position: absolute;
+    bottom: 15%;
+    left: 18%;
+    width: 64%;
+    filter: drop-shadow(0 6px 0 rgba(51, 64, 76, 0.18));
+    transform: translateY(calc(var(--beat) * -12%)) rotate(calc(var(--beat) * -5deg))
+        scale(calc(1 + var(--beat) * 0.05));
+    transition: transform 70ms linear;
+}
+
+/* A nod to the parental advisory label, in the page's own words. */
+.music-advisory {
+    position: absolute;
+    right: 4.5%;
+    bottom: 4.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    width: 26%;
+    border: 1.5px solid #111110;
+    background: #ffffff;
+    color: #111110;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 800;
+    line-height: 1;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.music-advisory b {
+    padding: 4% 0 3%;
+    font-size: calc(var(--sleeve) * 0.032);
+    letter-spacing: 0.04em;
+}
+
+.music-advisory i {
+    padding: 4% 0;
+    background: #111110;
+    color: #ffffff;
+    font-size: calc(var(--sleeve) * 0.04);
+    font-style: normal;
+    letter-spacing: 0.02em;
+}
+
+.music-advisory small {
+    padding: 4% 2% 4%;
+    font-size: calc(var(--sleeve) * 0.018);
+    letter-spacing: 0.04em;
+}
+
+/* ---------------------------------------------------------------- record -- */
+.music-record {
+    position: absolute;
+    top: 3%;
+    left: 0;
+    z-index: 1;
+    width: calc(var(--sleeve) * 0.94);
+    aspect-ratio: 1;
+    border-radius: 50%;
+    transform: translateX(34%);
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.is-playing .music-record {
+    transform: translateX(50%);
+}
+
+.music-record__disc {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background:
+        radial-gradient(circle, transparent 0 34%, rgba(255, 255, 255, 0.06) 34.4% 35%, transparent 35.4%),
+        repeating-radial-gradient(circle, #19191b 0 2px, #232327 2px 3.5px);
+    box-shadow: 0 0 0 2px #111110;
+    animation: music-spin 1.8s linear infinite;
+    animation-play-state: paused;
+}
+
+.is-playing .music-record__disc {
+    animation-play-state: running;
+}
+
+@keyframes music-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.music-record__label {
+    display: grid;
+    place-items: center;
+    width: 36%;
+    aspect-ratio: 1;
+    border: 2px solid #111110;
+    border-radius: 50%;
+    background: #c3d5e4;
+}
+
+.music-record__label img {
+    width: 72%;
+}
+
+/* Light doesn't turn with the record, so the sheen sits on its own layer. */
+.music-record__shine {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: conic-gradient(
+        from 20deg,
+        transparent 0deg,
+        rgba(255, 255, 255, 0.16) 30deg,
+        transparent 60deg,
+        transparent 180deg,
+        rgba(255, 255, 255, 0.12) 210deg,
+        transparent 240deg
+    );
+    pointer-events: none;
+}
+
+/* ------------------------------------------------------------------ info -- */
+.music-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+@media (min-width: 1024px) {
+    .music-info {
+        align-items: flex-start;
+    }
+}
+
+.music-eyebrow {
+    display: flex;
+    align-items: flex-end;
+    gap: 10px;
+    color: #34506f;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.music-eq {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 18px;
+}
+
+.music-eq span {
+    width: 4px;
+    height: 3px;
+    border-radius: 1px;
+    background: #34506f;
+    transition: height 60ms linear;
+}
+
+.music-eq span:nth-child(1) {
+    height: calc(3px + var(--eq0, 0) * 15px);
+}
+
+.music-eq span:nth-child(2) {
+    height: calc(3px + var(--eq1, 0) * 15px);
+}
+
+.music-eq span:nth-child(3) {
+    height: calc(3px + var(--eq2, 0) * 15px);
+}
+
+.music-eq span:nth-child(4) {
+    height: calc(3px + var(--eq3, 0) * 15px);
+}
+
+.music-eq span:nth-child(5) {
+    height: calc(3px + var(--eq4, 0) * 15px);
+}
+
+.music-title {
+    --sticker-fill: #c3d5e4;
+    --sticker-ink: #33404c;
+    --sticker-edge: #ffffff;
+    width: 82vw;
+    margin: 14px 0 0;
+}
+
+@media (min-width: 1024px) {
+    .music-title {
+        width: clamp(300px, 32vw, 500px);
+        margin-left: -12px; /* the sticker's white border, so the letters line up */
+    }
+}
+
+.music-meta {
+    margin-top: 10px;
+    color: #6b6862;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 12px;
+}
+
+/* ---------------------------------------------------------------- player -- */
+.music-player {
+    width: min(100%, 460px);
+    margin-top: 22px;
+}
+
+.music-progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.music-time {
+    min-width: 3.4em;
+    color: #6b6862;
+    font-family: "Doto", "Space Mono", monospace;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+}
+
+.music-time:last-child {
+    text-align: right;
+}
+
+.music-bar {
+    position: relative;
+    flex: 1;
+    height: 4px;
+    overflow: hidden;
+    border-radius: 2px;
+    background: #cfdeee;
+}
+
+.music-bar__fill {
+    position: absolute;
+    inset: 0;
+    background: #34506f;
+    transform: scaleX(0);
+    transform-origin: left;
+}
+
+.music-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 18px 22px;
+    margin-top: 16px;
+}
+
+@media (min-width: 1024px) {
+    .music-controls {
+        justify-content: flex-start;
+    }
+}
+
+.music-play {
+    display: grid;
+    place-items: center;
+    width: 62px;
+    height: 62px;
+    border: 2px solid #111110;
+    border-radius: 50%;
+    background: #ffffff;
+    color: #111110;
+    box-shadow: 4px 4px 0 #b4c9df;
+    transition:
+        transform 0.15s,
+        background 0.15s,
+        color 0.15s;
+}
+
+.music-play:hover {
+    background: #e3ecf6;
+}
+
+.music-play:active {
+    transform: scale(0.94);
+}
+
+.music-play[aria-pressed="true"] {
+    background: #33404c;
+    color: #ffffff;
+}
+
+.music-skip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: #111110;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+}
+
+.music-skip:hover {
+    text-decoration: underline;
+    text-underline-offset: 4px;
+}
+
+/* ------------------------------------------------------------- tracklist -- */
+/* Hidden where there isn't room; the dock carries the same list. */
+.music-tracks {
+    display: none;
+}
+
+@media (min-width: 1024px) and (min-height: 760px) {
+    .music-tracks {
+        display: block;
+        width: min(100%, 460px);
+        margin-top: 26px;
+        border-top: 1.5px solid #111110;
+    }
+}
+
+.music-tracks li + li {
+    border-top: 1px solid rgba(17, 17, 16, 0.14);
+}
+
+.music-track {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+    padding: 8px 10px;
+    transition: background 0.15s;
+}
+
+.music-track:hover {
+    background: #ffffff;
+}
+
+.music-track__no {
+    color: #85827a;
+    font-family: "Doto", "Space Mono", monospace;
+    font-size: 15px;
+    font-weight: 800;
+    letter-spacing: 0.06em;
+}
+
+.music-track__title {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 16px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+.music-track__file {
+    color: #6b6862;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 11px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .music-record,
+    .music-sleeve__pebble {
+        transition: none;
+    }
+    .is-playing .music-record__disc {
+        animation-play-state: paused;
+    }
+}

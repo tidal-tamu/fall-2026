@@ -1,0 +1,360 @@
+/* -------------------------------------------------------------------------- */
+/*  Player hardware: the prize CD player + tracklist, and the sponsor sticker  */
+/*  wall. The dock, FAQ and footer live in tidal-dock.css.                     */
+/* -------------------------------------------------------------------------- */
+
+/* ------------------------------------------------------------ cd player -- */
+.player {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    padding: 28px 22px 20px;
+    border: 1.5px solid #111110;
+    border-radius: 32px;
+    background: #ffffff;
+    box-shadow: 6px 6px 0 #111110;
+}
+
+/* The iridescence and grooves stay still (light doesn't turn with the disc);
+   only the printed label ring and its sticker spin. */
+.disc {
+    position: relative;
+    width: min(100%, 330px);
+    aspect-ratio: 1;
+    border: 1.5px solid #111110;
+    border-radius: 50%;
+    background: repeating-radial-gradient(circle at 50% 50%, rgba(17, 17, 16, 0.045) 0 1px, transparent 1px 3.5px),
+        conic-gradient(from 210deg, #f4f3f1, #ffffff 7%, #d8dfe6 15%, #f7f6f4 23%, #cfccc5 31%, #ffffff 40%, #dce3ea 50%, #f4f3f1 59%, #ffffff 68%, #d5dce3 78%, #eceae6 88%, #f4f3f1);
+    box-shadow: inset 0 0 0 9px rgba(255, 255, 255, 0.55), inset 0 0 0 10px rgba(17, 17, 16, 0.12);
+}
+
+.disc::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: linear-gradient(125deg, transparent 30%, rgba(255, 255, 255, 0.8) 45%, transparent 58%);
+    pointer-events: none;
+}
+
+.disc__spin {
+    position: absolute;
+    inset: 26%;
+    border: 1px solid rgba(17, 17, 16, 0.22);
+    border-radius: 50%;
+    background: #ffffff;
+}
+
+.disc__spin.is-spinning {
+    animation: disc-spin 3.2s linear infinite;
+}
+
+@keyframes disc-spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.disc__ring {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.disc__ring text {
+    fill: #6b6862;
+    font-family: "Space Mono", monospace;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+
+.disc__sticker {
+    position: absolute;
+    right: -14%;
+    bottom: -6%;
+    width: 50%;
+    transform: rotate(14deg);
+    filter: drop-shadow(2px 3px 0 rgba(17, 17, 16, 0.14));
+}
+
+.disc__hub {
+    position: absolute;
+    inset: 43.5%;
+    z-index: 2;
+    border: 1.5px solid #111110;
+    border-radius: 50%;
+    background: #f4f3f1;
+    box-shadow: 0 0 0 8px rgba(255, 255, 255, 0.75), 0 0 0 9px rgba(17, 17, 16, 0.22);
+}
+
+/* CD-player LCD: dot-matrix type on a cold backlit panel. */
+.lcd,
+.dock__lcd {
+    background-color: #e6ebf0;
+    background-image: repeating-linear-gradient(0deg, rgba(52, 80, 111, 0.06) 0 1px, transparent 1px 3px);
+    color: #1b2a3a;
+    font-family: "Doto", "Space Mono", monospace;
+}
+
+.lcd {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    width: 100%;
+    padding: 10px 14px 12px;
+    border: 1.5px solid #111110;
+    border-radius: 12px;
+}
+
+.lcd__row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.14em;
+}
+
+.lcd__title {
+    overflow: hidden;
+    font-size: clamp(21px, 3.4vw, 27px);
+    font-weight: 800;
+    letter-spacing: 0.05em;
+    text-overflow: ellipsis;
+    text-transform: uppercase;
+    white-space: nowrap;
+}
+
+.player__progress {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    color: #6b6862;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+}
+
+.player__bar {
+    --p: 0;
+    position: relative;
+    flex: 1;
+    height: 3px;
+    border-radius: 2px;
+    background: rgba(17, 17, 16, 0.15);
+}
+
+.player__fill {
+    position: absolute;
+    inset: 0 auto 0 0;
+    width: calc(var(--p) * 100%);
+    border-radius: 2px;
+    background: #111110;
+}
+
+.player__knob {
+    position: absolute;
+    top: 50%;
+    left: calc(var(--p) * 100%);
+    width: 11px;
+    height: 11px;
+    margin: -5.5px 0 0 -5.5px;
+    border-radius: 50%;
+    background: #111110;
+}
+
+.player__controls {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.player__btn {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: #111110;
+    transition: background 0.15s, transform 0.12s;
+}
+
+.player__btn:hover {
+    background: #f4f3f1;
+}
+
+.player__btn:active {
+    transform: scale(0.93);
+}
+
+.player__btn.is-on {
+    color: #34506f;
+}
+
+.player__btn--main {
+    width: 58px;
+    height: 58px;
+    border: 2px solid #111110;
+}
+
+.player__btn--main svg {
+    width: 22px;
+    height: 22px;
+}
+
+/* ------------------------------------------------------------ tracklist -- */
+.tracklist__head,
+.tracklist__row {
+    display: grid;
+    grid-template-columns: 44px minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 12px;
+}
+
+.tracklist__head {
+    padding: 0 14px 10px;
+    border-bottom: 1.5px solid #111110;
+    color: #85827a;
+    font-size: 10px;
+}
+
+.tracklist li + li {
+    border-top: 1px solid rgba(17, 17, 16, 0.14);
+}
+
+.tracklist__row {
+    width: 100%;
+    padding: 16px 14px;
+    text-align: left;
+    transition: background 0.15s, color 0.15s;
+}
+
+.tracklist__row:hover {
+    background: #ffffff;
+}
+
+.tracklist__row.is-active {
+    background: #111110;
+    color: #ffffff;
+}
+
+.tracklist__no {
+    font-family: "Doto", "Space Mono", monospace;
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+}
+
+.tracklist__title {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: clamp(19px, 2.4vw, 24px);
+    font-weight: 700;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+}
+
+.tracklist__title small {
+    display: block;
+    margin-top: 5px;
+    color: #85827a;
+    font-family: "Space Mono", monospace;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+}
+
+.tracklist__row.is-active small {
+    color: #a3a099;
+}
+
+.tracklist__prize {
+    font-family: "Press Start 2P", monospace;
+    font-size: 10px;
+}
+
+.eq {
+    display: inline-flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 16px;
+}
+
+.eq i {
+    width: 3px;
+    height: 6px;
+    background: currentColor;
+    animation: eq-bounce 0.9s ease-in-out infinite;
+}
+
+.eq i:nth-child(2) {
+    animation-delay: -0.3s;
+}
+
+.eq i:nth-child(3) {
+    animation-delay: -0.6s;
+}
+
+@keyframes eq-bounce {
+    0%,
+    100% {
+        height: 4px;
+    }
+    50% {
+        height: 16px;
+    }
+}
+
+/* -------------------------------------------------------------- sponsors -- */
+.sponsor-sticker {
+    --tilt: 0deg;
+    display: grid;
+    place-items: center;
+    aspect-ratio: 3 / 2;
+    padding: 18px 20px;
+    border: 1.5px solid #111110;
+    border-radius: 16px;
+    background: #ffffff;
+    box-shadow: 3px 3px 0 #111110;
+    rotate: var(--tilt);
+    transition: rotate 0.35s cubic-bezier(0.16, 1, 0.3, 1), translate 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+        box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.sponsor-sticker:hover {
+    rotate: 0deg;
+    translate: -2px -3px;
+    box-shadow: 6px 7px 0 #111110;
+}
+
+.sponsor-sticker img {
+    max-width: 100%;
+    max-height: 40px;
+    object-fit: contain;
+    filter: brightness(0);
+    opacity: 0.85;
+}
+
+.sponsor-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 22px;
+    padding: 26px;
+    border: 1.5px dashed rgba(17, 17, 16, 0.55);
+    border-radius: 18px;
+    background: #ffffff;
+}
+
+@media (min-width: 768px) {
+    .sponsor-cta {
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 30px 34px;
+    }
+}

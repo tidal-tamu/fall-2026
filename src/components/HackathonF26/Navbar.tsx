@@ -1,245 +1,240 @@
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import {
-    FaGithub,
-    FaLinkedin,
-    FaInstagram,
-    FaDiscord,
-} from "react-icons/fa";
+import { useEffect, useRef, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
+import { EVENT, TRACKS } from "./event";
 
-const MAIN_SITE = "https://tidaltamu.com";
+/* -------------------------------------------------------------------------- */
+/*  The docked mini player: site navigation once the hero is out of view.      */
+/*  prev / next walk the page's "tracks", the LCD shows the section you're on  */
+/*  plus a countdown to doors, and the bar under it is scroll progress.        */
+/*  The middle button pauses every CSS animation on the page (marquee, disc,   */
+/*  caret) for anyone who'd rather it sat still.                               */
+/* -------------------------------------------------------------------------- */
 
-type NavLink = {
-    title: string;
-    path: string;
-    isExternal?: boolean;
-};
+const START = Date.parse(EVENT.startsAt);
+const END = Date.parse(EVENT.endsAt);
+const MOTION_KEY = "f26-motion";
+const pad = (n: number) => String(n).padStart(2, "0");
 
-const navLinks: NavLink[] = [
-    { title: "About", path: "about" },
-    { title: "Schedule", path: "schedule" },
-    { title: "Prizes", path: "prizes" },
-    { title: "Sponsors", path: "sponsors" },
-    { title: "FAQ", path: "faq" },
-];
+function useCountdown() {
+    const [now, setNow] = useState(() => Date.now());
+    useEffect(() => {
+        const t = setInterval(() => setNow(Date.now()), 1000);
+        return () => clearInterval(t);
+    }, []);
 
-interface NavbarProps {
-    onMenuToggle?: (isOpen: boolean) => void;
-    shouldAnimate?: boolean;
-    registerUrl: string;
-    isMobileMenuOpen: boolean;
+    if (now >= END) return "THAT'S A WRAP";
+    const live = now >= START;
+    const ms = live ? END - now : START - now;
+    const h = Math.floor(ms / 3.6e6);
+    const hms = `${pad(h % 24)}:${pad(Math.floor(ms / 6e4) % 60)}:${pad(Math.floor(ms / 1e3) % 60)}`;
+    if (live) return `LIVE -${hms}`;
+    return `-${Math.floor(h / 24)}D ${hms}`;
 }
 
-export default function Navbar({
-    onMenuToggle,
-    shouldAnimate = false,
-    registerUrl,
-}: NavbarProps) {
-    const [isOpen, setIsOpen] = useState(false);
-    const [scrolled, setScrolled] = useState(false);
+function readMotionPref() {
+    try {
+        return localStorage.getItem(MOTION_KEY) === "paused";
+    } catch {
+        return false;
+    }
+}
 
-    const handleAnchorClick = (
-        e: React.MouseEvent<HTMLAnchorElement>,
-        path: string,
-    ) => {
-        if (!path.startsWith("/") && !path.startsWith("http")) {
-            e.preventDefault();
-            const element = document.getElementById(path);
-            if (element) {
-                element.scrollIntoView({ behavior: "smooth", block: "start" });
-                setIsOpen(false);
-            }
-        }
-    };
+const Glyph = ({ d }: { d: string }) => (
+    <svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" focusable="false">
+        <path d={d} fill="currentColor" />
+    </svg>
+);
 
+const G = {
+    prev: "M6 5h2.5v14H6zM20 5v14L9.5 12z",
+    next: "M15.5 5H18v14h-2.5zM4 5l10.5 7L4 19z",
+    play: "M7 4.5v15L19.5 12z",
+    pause: "M6.5 5h4v14h-4zM13.5 5h4v14h-4z",
+    list: "M4 6h16v2.2H4zM4 11h16v2.2H4zM4 16h10v2.2H4z",
+};
+
+const Navbar = () => {
+    const reduce = useReducedMotion();
+    const countdown = useCountdown();
+    const [visible, setVisible] = useState(false);
+    const [current, setCurrent] = useState(0);
+    const [open, setOpen] = useState(false);
+    const [paused, setPaused] = useState(readMotionPref);
+    const fillRef = useRef<HTMLSpanElement>(null);
+    const navRef = useRef<HTMLElement>(null);
+
+    /* show once the hero is mostly gone; paint scroll progress directly.
+       Re-runs on `visible` so the bar is painted the moment the dock mounts. */
     useEffect(() => {
-        const onScroll = () => setScrolled(window.scrollY > 50);
+        let raf = 0;
+        const onScroll = () => {
+            cancelAnimationFrame(raf);
+            raf = requestAnimationFrame(() => {
+                const max = document.documentElement.scrollHeight - window.innerHeight;
+                setVisible(window.scrollY > window.innerHeight * 0.6);
+                if (fillRef.current) {
+                    fillRef.current.style.transform = `scaleX(${max > 0 ? window.scrollY / max : 0})`;
+                }
+            });
+        };
+        onScroll();
         window.addEventListener("scroll", onScroll, { passive: true });
-        return () => window.removeEventListener("scroll", onScroll);
+        window.addEventListener("resize", onScroll);
+        return () => {
+            cancelAnimationFrame(raf);
+            window.removeEventListener("scroll", onScroll);
+            window.removeEventListener("resize", onScroll);
+        };
+    }, [visible]);
+
+    /* which track is under the middle of the viewport */
+    useEffect(() => {
+        const els = TRACKS.map((t) => document.getElementById(t.id)).filter(
+            (el): el is HTMLElement => el !== null,
+        );
+        const obs = new IntersectionObserver(
+            (entries) => {
+                for (const e of entries) {
+                    if (!e.isIntersecting) continue;
+                    const i = TRACKS.findIndex((t) => t.id === e.target.id);
+                    if (i >= 0) setCurrent(i);
+                }
+            },
+            { rootMargin: "-45% 0px -54% 0px" },
+        );
+        els.forEach((el) => obs.observe(el));
+        return () => obs.disconnect();
     }, []);
 
     useEffect(() => {
-        if (isOpen) {
-            document.body.style.overflow = "hidden";
-            document.documentElement.style.overflow = "hidden";
-            document.body.style.position = "fixed";
-            document.body.style.top = `-${window.scrollY}px`;
-            document.body.style.width = "100%";
-        } else {
-            const scrollY = document.body.style.top;
-            document.body.style.overflow = "";
-            document.documentElement.style.overflow = "";
-            document.body.style.position = "";
-            document.body.style.top = "";
-            document.body.style.width = "";
-            if (scrollY) {
-                window.scrollTo(0, parseInt(scrollY || "0") * -1);
-            }
+        document.documentElement.dataset.motion = paused ? "paused" : "playing";
+        try {
+            localStorage.setItem(MOTION_KEY, paused ? "paused" : "playing");
+        } catch {
+            // storage blocked (private mode): the toggle still works this visit
         }
-        onMenuToggle?.(isOpen);
-    }, [isOpen, onMenuToggle]);
+    }, [paused]);
+
+    /* tracklist popover: close on Escape or a click outside the dock */
+    useEffect(() => {
+        if (!open) return;
+        const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
+        const onDown = (e: PointerEvent) => {
+            if (!navRef.current?.contains(e.target as Node)) setOpen(false);
+        };
+        window.addEventListener("keydown", onKey);
+        window.addEventListener("pointerdown", onDown);
+        return () => {
+            window.removeEventListener("keydown", onKey);
+            window.removeEventListener("pointerdown", onDown);
+        };
+    }, [open]);
+
+    const go = (i: number) => {
+        const t = TRACKS[Math.max(0, Math.min(TRACKS.length - 1, i))];
+        document.getElementById(t.id)?.scrollIntoView({ block: "start" });
+    };
+
+    const track = TRACKS[current];
+    const doorsLabel = `Doors open ${EVENT.day}, ${EVENT.date}`;
 
     return (
-        <motion.nav
-            className={`fixed top-0 w-full z-[9999] transition-all duration-300 ${
-                scrolled
-                    ? "bg-y2k-darkNavy/90 backdrop-blur-md border-b border-y2k-pink/20"
-                    : "bg-transparent"
-            }`}
-        >
-            <div className="w-full px-6 lg:px-12 py-4 flex items-center justify-between">
-                <motion.a
-                    href={MAIN_SITE}
-                    className="flex items-center gap-2 z-50"
-                    initial={{ opacity: 0 }}
-                    animate={shouldAnimate ? { opacity: 1 } : { opacity: 0 }}
-                    transition={{ duration: 1.2, ease: "easeOut" }}
+        <AnimatePresence>
+            {visible && (
+                <motion.nav
+                    ref={navRef}
+                    aria-label="Page sections"
+                    className="dock"
+                    initial={reduce ? { opacity: 0 } : { y: 110 }}
+                    animate={reduce ? { opacity: 1 } : { y: 0 }}
+                    exit={reduce ? { opacity: 0 } : { y: 110 }}
+                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                 >
-                    <span className="font-pixel text-sm text-y2k-pink glow-text-pink">
-                        TIDAL
-                    </span>
-                    <span className="font-pixel text-[10px] text-y2k-blue glow-text-blue">
-                        byte
-                    </span>
-                </motion.a>
-
-                {/* Desktop nav */}
-                <div className="hidden md:flex items-center gap-6">
-                    {navLinks.map((link, i) => (
-                        <motion.a
-                            key={link.title}
-                            href={`#${link.path}`}
-                            onClick={(e) => handleAnchorClick(e, link.path)}
-                            className="font-vt323 text-lg text-gray-300 hover:text-y2k-pink transition-colors duration-200"
-                            initial={{ opacity: 0, y: -10 }}
-                            animate={
-                                shouldAnimate
-                                    ? { opacity: 1, y: 0 }
-                                    : { opacity: 0, y: -10 }
-                            }
-                            transition={{ delay: 0.1 * i, duration: 0.5 }}
+                    <div className="dock__controls">
+                        <button
+                            type="button"
+                            className="dock__btn"
+                            aria-label="Previous section"
+                            disabled={current === 0}
+                            onClick={() => go(current - 1)}
                         >
-                            {link.title}
-                        </motion.a>
-                    ))}
-                    <motion.a
-                        href={registerUrl}
-                        className="y2k-button font-pixel text-[8px] px-4 py-2"
-                        initial={{ opacity: 0, scale: 0.8 }}
-                        animate={
-                            shouldAnimate
-                                ? { opacity: 1, scale: 1 }
-                                : { opacity: 0, scale: 0.8 }
-                        }
-                        transition={{ delay: 0.6, duration: 0.5 }}
+                            <Glyph d={G.prev} />
+                        </button>
+                        <button
+                            type="button"
+                            className="dock__btn dock__btn--main"
+                            aria-pressed={paused}
+                            aria-label={paused ? "Resume page animations" : "Pause page animations"}
+                            title={paused ? "resume animations" : "pause animations"}
+                            onClick={() => setPaused((p) => !p)}
+                        >
+                            <Glyph d={paused ? G.play : G.pause} />
+                        </button>
+                        <button
+                            type="button"
+                            className="dock__btn"
+                            aria-label="Next section"
+                            disabled={current === TRACKS.length - 1}
+                            onClick={() => go(current + 1)}
+                        >
+                            <Glyph d={G.next} />
+                        </button>
+                    </div>
+
+                    <div className="dock__lcd">
+                        <span className="dock__line">
+                            <span className="dock__trk">TRK {pad(current)}</span>
+                            <span className="dock__title">{track.title}</span>
+                            <span className="dock__count" aria-hidden="true">
+                                {countdown}
+                            </span>
+                            <span className="sr-only">{doorsLabel}</span>
+                        </span>
+                        <span className="dock__progress" aria-hidden="true">
+                            <span ref={fillRef} className="dock__fill" />
+                        </span>
+                    </div>
+
+                    <button
+                        type="button"
+                        className="dock__btn"
+                        aria-label="Tracklist"
+                        aria-expanded={open}
+                        aria-controls="dock-tracklist"
+                        onClick={() => setOpen((o) => !o)}
                     >
-                        REGISTER
-                    </motion.a>
-                </div>
+                        <Glyph d={G.list} />
+                    </button>
 
-                {/* Mobile hamburger */}
-                <button
-                    className="md:hidden p-2 z-50 text-white"
-                    onClick={() => setIsOpen(!isOpen)}
-                >
-                    {isOpen ? (
-                        <svg
-                            className="w-6 h-6"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                        >
-                            <path
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M6 18L18 6M6 6l12 12"
-                            />
-                        </svg>
-                    ) : (
-                        <svg
-                            className="w-6 h-6"
-                            fill="none"
-                            viewBox="0 0 17 14"
-                        >
-                            <path
-                                stroke="currentColor"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                                strokeWidth="2"
-                                d="M1 1h15M1 7h15M1 13h15"
-                            />
-                        </svg>
-                    )}
-                </button>
-            </div>
-
-            {/* Mobile menu */}
-            <motion.div
-                className="md:hidden fixed inset-0 bg-y2k-darkNavy/95 backdrop-blur-xl z-[9998]"
-                initial={{ x: "100%", opacity: 0 }}
-                animate={{
-                    x: isOpen ? "0%" : "100%",
-                    opacity: isOpen ? 1 : 0,
-                }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                style={{ display: isOpen ? "block" : "none" }}
-            >
-                <div className="flex flex-col h-full px-6 py-12">
-                    <div className="flex-1 flex flex-col items-center justify-center gap-8">
-                        {navLinks.map((link) => (
-                            <a
-                                key={link.title}
-                                href={`#${link.path}`}
-                                onClick={(e) => {
-                                    handleAnchorClick(e, link.path);
-                                    setIsOpen(false);
-                                }}
-                                className="font-pixel text-sm text-gray-300 hover:text-y2k-pink transition-colors"
+                    <AnimatePresence>
+                        {open && (
+                            <motion.ol
+                                id="dock-tracklist"
+                                className="dock__list"
+                                initial={{ opacity: 0, y: 8 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                exit={{ opacity: 0, y: 8 }}
+                                transition={{ duration: 0.18 }}
                             >
-                                {link.title}
-                            </a>
-                        ))}
-                        <a
-                            href={registerUrl}
-                            className="y2k-button font-pixel text-[10px] px-6 py-3 mt-4"
-                        >
-                            REGISTER
-                        </a>
-                    </div>
-
-                    <div className="flex justify-center gap-4 pb-16">
-                        {[
-                            {
-                                icon: FaGithub,
-                                url: "https://github.com/tidal-tamu/",
-                            },
-                            {
-                                icon: FaLinkedin,
-                                url: "https://www.linkedin.com/company/tidaltamu",
-                            },
-                            {
-                                icon: FaInstagram,
-                                url: "https://www.instagram.com/tidaltamu/",
-                            },
-                            {
-                                icon: FaDiscord,
-                                url: "https://discord.gg/eQ8ScamG4H",
-                            },
-                        ].map(({ icon: Icon, url }) => (
-                            <a
-                                key={url}
-                                href={url}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="w-10 h-10 bg-white/5 border border-y2k-pink/30 rounded flex items-center justify-center text-gray-400 hover:text-y2k-pink hover:border-y2k-pink transition-all"
-                            >
-                                <Icon className="w-4 h-4" />
-                            </a>
-                        ))}
-                    </div>
-                </div>
-            </motion.div>
-        </motion.nav>
+                                {TRACKS.map((t, i) => (
+                                    <li key={t.id}>
+                                        <a
+                                            href={`#${t.id}`}
+                                            aria-current={i === current ? "location" : undefined}
+                                            onClick={() => setOpen(false)}
+                                        >
+                                            <span>{pad(i)}</span>
+                                            {t.title}
+                                        </a>
+                                    </li>
+                                ))}
+                            </motion.ol>
+                        )}
+                    </AnimatePresence>
+                </motion.nav>
+            )}
+        </AnimatePresence>
     );
-}
+};
+
+export default Navbar;
