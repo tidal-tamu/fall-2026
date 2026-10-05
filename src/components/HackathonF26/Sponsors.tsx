@@ -1,20 +1,22 @@
 type Sponsor = { name: string; logo: string };
 
+const sponsorLogo = (file: string) => `${import.meta.env.BASE_URL}f26/sponsors/${file}`;
+
 // Heroes that show the rail lay themselves out above this height.
 export const SPONSOR_RAIL_HEIGHT = 56;
 
 // Shared with the liner-notes sticker wall further down the page.
 export const sponsors: Sponsor[] = [
-    { name: "Adobe", logo: "/f26/sponsors/adobe.png" },
-    { name: "Amazon Web Services", logo: "/f26/sponsors/aws.png" },
-    { name: "Base44", logo: "/f26/sponsors/base44.png" },
-    { name: "Diodes", logo: "/f26/sponsors/diodes.png" },
-    { name: "ElevenLabs", logo: "/f26/sponsors/elevenlabs.png" },
-    { name: "Google", logo: "/f26/sponsors/google.png" },
-    { name: "Jane Street", logo: "/f26/sponsors/jane-street.png" },
-    { name: "Microsoft", logo: "/f26/sponsors/microsoft.png" },
-    { name: "NVIDIA", logo: "/f26/sponsors/nvidia.png" },
-    { name: "xPerf", logo: "/f26/sponsors/xperf.png" },
+    { name: "Adobe", logo: sponsorLogo("adobe.png") },
+    { name: "Amazon Web Services", logo: sponsorLogo("aws.png") },
+    { name: "Base44", logo: sponsorLogo("base44.png") },
+    { name: "Diodes", logo: sponsorLogo("diodes.png") },
+    { name: "ElevenLabs", logo: sponsorLogo("elevenlabs.png") },
+    { name: "Google", logo: sponsorLogo("google.png") },
+    { name: "Jane Street", logo: sponsorLogo("jane-street.png") },
+    { name: "Microsoft", logo: sponsorLogo("microsoft.png") },
+    { name: "NVIDIA", logo: sponsorLogo("nvidia.png") },
+    { name: "xPerf", logo: sponsorLogo("xperf.png") },
 ];
 
 /* The rail sits on whatever the hero puts behind it, so each hero version

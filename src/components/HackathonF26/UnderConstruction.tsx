@@ -20,7 +20,7 @@ export default function UnderConstruction() {
                         QUESTIONS? EMAIL US <span aria-hidden="true">↗</span>
                     </a>
                 </div>
-                <img className="caped-construction__mascot" src="/f26/pebble-caped.png" alt="" aria-hidden="true" loading="lazy" />
+                <img className="caped-construction__mascot" src={`${import.meta.env.BASE_URL}f26/pebble-caped.png`} alt="" aria-hidden="true" loading="lazy" />
             </div>
             <div className="caped-construction__road" aria-hidden="true" />
         </section>
