@@ -472,6 +472,10 @@ a.register-btn.caped-register:hover {
     gap: 14px;
 }
 
+.caped-date-short {
+    display: none;
+}
+
 .caped-pill {
     padding: 12px 24px;
     border: 2px solid var(--ink);
@@ -532,6 +536,22 @@ a.register-btn.caped-apply:hover {
 }
 
 @media (max-width: 760px) {
+    .caped *:not(.caped-sparkle):not(.caped-giant__blink),
+    .caped *::before,
+    .caped *::after {
+        animation: none !important;
+        transition: none !important;
+    }
+    .caped .caped-rv,
+    .caped .caped-ch,
+    .caped .caped-giant-wrap {
+        opacity: 1 !important;
+        filter: none !important;
+        transform: none !important;
+    }
+    .caped-fog {
+        display: none;
+    }
     .caped-link {
         display: none;
     }
@@ -543,9 +563,22 @@ a.register-btn.caped-apply:hover {
         font-size: 12px;
     }
     .caped-pill {
-        padding: 10px 16px;
+        padding: 9px 8px;
         font-size: 11px;
-        letter-spacing: 0.18em;
+        letter-spacing: 0.02em;
+        text-align: center;
+        white-space: nowrap;
+    }
+    .caped-pills {
+        flex-wrap: nowrap;
+        gap: 6px;
+        width: min(100%, 340px);
+    }
+    .caped-date-full {
+        display: none;
+    }
+    .caped-date-short {
+        display: inline;
     }
     .register-btn.caped-apply {
         padding: 13px 26px;

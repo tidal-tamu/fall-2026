@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
-import { EVENT, NAV } from "../event";
+import { EVENT, NAV, fmtCentral } from "../event";
 import RegisterButton from "../RegisterButton";
 import CapedPenguin, { type CapeHandle } from "./caped/CapedPenguin";
 import { Fog } from "./caped/fog";
@@ -23,6 +23,8 @@ const TILT = [-3, 2, -2, 3, -1, 2, -3, 1, -2, 0, 3, -2];
 const NOISE = "#%&$@/*+=?01<>";
 const WORD = [..."tidalBYTE"];
 const YEAR = [..."'26"];
+const STATIC_SCENE_QUERY = "(max-width: 760px), (prefers-reduced-motion: reduce)";
+const prefersStaticScene = () => window.matchMedia(STATIC_SCENE_QUERY).matches;
 
 const holdStill = () =>
     window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ||
@@ -32,10 +34,10 @@ const pick = <T,>(xs: T[]) => xs[Math.floor(Math.random() * xs.length)];
 
 /* Hovering the title sets off short glitch bursts: a few letters split into
    blue and peach, nudge, or flip to a stray glyph, then snap back. */
-function useTitleGlitch(title: RefObject<HTMLHeadingElement>) {
+function useTitleGlitch(title: RefObject<HTMLHeadingElement>, staticScene: boolean) {
     useEffect(() => {
         const el = title.current;
-        if (!el) return;
+        if (!el || staticScene) return;
         const chars = [...el.querySelectorAll<HTMLElement>(".caped-ch")];
         const orig = chars.map((c) => c.textContent ?? "");
         let interval = 0, frame = 0, busy = false;
@@ -80,7 +82,7 @@ function useTitleGlitch(title: RefObject<HTMLHeadingElement>) {
             clearTimeout(frame);
             restore();
         };
-    }, [title]);
+    }, [title, staticScene]);
 }
 
 const Letter = ({ c, i }: { c: string; i: number }) => (
@@ -97,8 +99,16 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
     const layers = useRef(new Map<HTMLElement, number>());
     const billowTarget = useRef(IDLE);
     const [heroOn, setHeroOn] = useState(false);
+    const [staticScene, setStaticScene] = useState(prefersStaticScene);
 
-    useTitleGlitch(titleRef);
+    useTitleGlitch(titleRef, staticScene);
+
+    useEffect(() => {
+        const query = window.matchMedia(STATIC_SCENE_QUERY);
+        const update = () => setStaticScene(query.matches);
+        query.addEventListener("change", update);
+        return () => query.removeEventListener("change", update);
+    }, []);
 
     const depth = (d: number) => (el: HTMLElement | null) => {
         if (el) layers.current.set(el, d);
@@ -120,7 +130,7 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
     useEffect(() => {
         const root = rootRef.current;
         const canvas = fogRef.current;
-        if (!root || !canvas) return;
+        if (!root || !canvas || staticScene) return;
         const fog = new Fog(canvas);
         const fit = () => {
             const r = root.getBoundingClientRect();
@@ -180,7 +190,7 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
             root.removeEventListener("pointerdown", poke);
             clearTimeout(tapTimer.current);
         };
-    }, []);
+    }, [staticScene]);
 
     return (
         <section ref={rootRef} className={`caped ${shouldAnimate ? "is-in" : ""}`} aria-label="tidalBYTE '26">
@@ -273,11 +283,14 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                     </span>
                 </h1>
                 <div className="caped-pills">
-                    {[EVENT.date.toUpperCase(), EVENT.room, `${EVENT.hours} HOURS`].map((pill, i) => (
-                        <span key={pill} className="caped-pill caped-rv" style={{ "--d": `${0.95 + i * 0.1}s` } as CSSProperties}>
-                            {pill}
+                    <span className="caped-pill caped-pill--date caped-rv" style={{ "--d": ".95s" } as CSSProperties}>
+                        <span className="caped-date-full">{EVENT.date.toUpperCase()}</span>
+                        <span className="caped-date-short">
+                            {fmtCentral(EVENT.startsAt, { month: "short", day: "numeric", year: "numeric" }).toUpperCase()}
                         </span>
-                    ))}
+                    </span>
+                    <span className="caped-pill caped-rv" style={{ "--d": "1.05s" } as CSSProperties}>{EVENT.room}</span>
+                    <span className="caped-pill caped-rv" style={{ "--d": "1.15s" } as CSSProperties}>{EVENT.hours} HOURS</span>
                 </div>
                 <div className="caped-cta caped-rv" style={{ "--d": "1.35s" } as CSSProperties}>
                     <RegisterButton className="caped-apply" label="APPLY" soonTag={false} />
