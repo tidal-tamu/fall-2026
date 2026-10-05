@@ -1,8 +1,8 @@
-name: Deploy temporary site to Pages
+name: Deploy site to Pages
 
 on:
   push:
-    branches: [hero-sponsors]
+    branches: [main]
   workflow_dispatch:
 
 permissions:
