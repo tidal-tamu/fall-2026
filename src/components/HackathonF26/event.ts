@@ -12,8 +12,8 @@ export const EVENT = {
     /* Doors open / close. Nov 21 is after the DST change, so Central is -06. */
     startsAt: "2026-11-21T07:00:00-06:00",
     endsAt: "2026-11-21T19:00:00-06:00",
-    registrationOpen: false,
-    registerUrl: "",
+    registrationOpen: true,
+    registerUrl: "https://portal.tidaltamu.com",
 };
 
 export const LINKS = {
@@ -42,10 +42,8 @@ export const STICKER = (name: string) => `/f26/stickers/${name}.webp`;
 
 /* In-page links every hero's top nav shares. */
 export const NAV = [
-    { label: "About", href: "#about" },
-    { label: "Schedule", href: "#schedule" },
-    { label: "Prizes", href: "#prizes" },
-    { label: "FAQ", href: "#faq" },
+    { label: "Sponsors", href: "#sponsors" },
+    { label: "Updates", href: "#under-construction" },
 ];
 
 /* Whole days until doors open, for the "N days to go" bits. */
