@@ -38,7 +38,7 @@ export const TRACKS = [
     { id: "faq", title: "b-sides" },
 ] as const;
 
-export const STICKER = (name: string) => `/f26/stickers/${name}.webp`;
+export const STICKER = (name: string) => `${import.meta.env.BASE_URL}f26/stickers/${name}.webp`;
 
 /* In-page links every hero's top nav shares. */
 export const NAV = [

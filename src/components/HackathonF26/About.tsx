@@ -96,7 +96,7 @@ const About = () => {
                             <div className="flex gap-4">
                                 <figure className="space__pic">
                                     <img
-                                        src="/f26/pebble-loading.gif"
+                                        src={`${import.meta.env.BASE_URL}f26/pebble-loading.gif`}
                                         alt="Pebble the penguin inside a loading window"
                                         width={339}
                                         height={203}

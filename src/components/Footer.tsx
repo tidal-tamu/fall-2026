@@ -45,7 +45,7 @@ export default function Footer() {
                     <div>
                         <a href={LINKS.site} target="_blank" rel="noopener noreferrer" className="inline-block">
                             <img
-                                src="/f26/tidal-wordmark.webp"
+                                src={`${import.meta.env.BASE_URL}f26/tidal-wordmark.webp`}
                                 alt="TIDAL"
                                 width={680}
                                 height={102}
