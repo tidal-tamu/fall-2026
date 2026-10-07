@@ -3,7 +3,7 @@ import { EVENT, NAV, fmtCentral } from "../event";
 import RegisterButton from "../RegisterButton";
 import CapedPenguin, { type CapeHandle } from "./caped/CapedPenguin";
 import { Fog } from "./caped/fog";
-import { GiantPenguin, SkyGrid, Sparkles } from "./caped/scenery";
+import { Clouds, GiantPenguin, Plane, SkyGrid, Sparkles } from "./caped/scenery";
 import { FAR, HEART, NEAR } from "./caped/skyline";
 import "./hero-caped.css";
 
@@ -226,6 +226,9 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                 </nav>
             </header>
 
+            <div ref={depth(3)} className="caped-layer caped-layer--clouds-back" aria-hidden="true">
+                <Clouds />
+            </div>
             <div ref={depth(4)} className="caped-layer caped-layer--sparkles" aria-hidden="true">
                 <Sparkles />
             </div>
@@ -234,6 +237,12 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                 <GiantPenguin />
             </div>
             <canvas ref={fogRef} className="caped-fog" aria-hidden="true" />
+            <div ref={depth(8)} className="caped-layer caped-layer--clouds-front" aria-hidden="true">
+                <Clouds front />
+            </div>
+            <div ref={depth(6)} className="caped-layer caped-layer--plane" aria-hidden="true">
+                <Plane />
+            </div>
 
             <div className="caped-city caped-city--far" aria-hidden="true">
                 <svg viewBox="-400 0 2400 420" preserveAspectRatio="xMidYMax slice">
@@ -271,6 +280,7 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
             </div>
 
             <div className="caped-content">
+                {/* <p className="caped-eyebrow caped-rv" style={{ "--d": ".2s" } as CSSProperties}>TEXAS A&amp;M · TIDAL PRESENTS</p> */}
                 <h1 ref={titleRef} className="caped-title">
                     <span className="sr-only">tidalBYTE &apos;26</span>
                     {WORD.map((c, i) => (
@@ -293,7 +303,7 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                     <span className="caped-pill caped-rv" style={{ "--d": "1.15s" } as CSSProperties}>{EVENT.hours} HOURS</span>
                 </div>
                 <div className="caped-cta caped-rv" style={{ "--d": "1.35s" } as CSSProperties}>
-                    <RegisterButton className="caped-apply" label="APPLY" soonTag={false} />
+                    <RegisterButton className="caped-apply" label="REGISTER" soonTag={false} />
                 </div>
             </div>
 

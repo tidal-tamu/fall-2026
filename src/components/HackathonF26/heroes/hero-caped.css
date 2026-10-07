@@ -7,15 +7,15 @@
 
 .caped {
     --H: max(100vh, 680px);
-    --ink: #262c32;
-    --ink-soft: #46525d;
-    --pastel: #c7dbec;
-    --pastel-deep: #a3bdd4;
+    --ink: #333f48;
+    --ink-soft: #53616b;
+    --pastel: #bfd2dd;
+    --pastel-deep: #a2b8c6;
     position: relative;
     height: 100%;
     overflow: hidden;
     isolation: isolate;
-    background: #b5c2cd;
+    background: #bcc8d2;
     color: var(--ink);
     font-family: "Space Mono", ui-monospace, monospace;
 }
@@ -30,7 +30,7 @@
     position: absolute;
     inset: 0;
     z-index: 0;
-    background: linear-gradient(180deg, #b5c2cd 0%, #c9d4dd 45%, #dde5eb 80%);
+    background: radial-gradient(55% 45% at 94% 2%, rgba(238, 245, 250, .95), rgba(238, 245, 250, 0) 70%), linear-gradient(180deg, #bcc8d2 0%, #c6d2dc 45%, #dce7f0 80%);
 }
 
 .caped-grid {
@@ -163,7 +163,7 @@ a.register-btn.caped-register:hover {
 /* ----------------------------------------------------------------- giant -- */
 .caped-giant-wrap {
     position: absolute;
-    top: calc(var(--H) * -0.008);
+    top: calc(var(--H) * -0.03);
     left: 50%;
     z-index: 2;
     width: calc(var(--H) * 1.18);
@@ -355,8 +355,8 @@ a.register-btn.caped-register:hover {
     z-index: 8;
     height: 14px;
     border-top: 2.5px solid var(--ink);
-    border-bottom: 2px solid #5b6670;
-    background: #c9d3db;
+    border-bottom: 2px solid #5a6777;
+    background: #b0c6ce;
 }
 
 .caped-road {
@@ -366,7 +366,7 @@ a.register-btn.caped-register:hover {
     left: 0;
     z-index: 8;
     height: 44px;
-    background: #76828c;
+    background: linear-gradient(180deg, #7b8a97, #8e9da9);
 }
 
 .caped-road::after {
@@ -377,7 +377,7 @@ a.register-btn.caped-register:hover {
     left: 0;
     height: 5px;
     margin-top: -2.5px;
-    background: repeating-linear-gradient(90deg, #ecd09e 0 140px, transparent 140px 250px);
+    background: repeating-linear-gradient(90deg, #e0c5ab 0 140px, transparent 140px 250px);
 }
 
 /* ------------------------------------------------------------------ copy -- */
@@ -400,11 +400,11 @@ a.register-btn.caped-register:hover {
 .caped-title {
     --k: 0.045em;
     --ink-sh:
-        var(--k) 0 0 #2f3a45, calc(var(--k) * -1) 0 0 #2f3a45, 0 var(--k) 0 #2f3a45, 0 calc(var(--k) * -1) 0 #2f3a45,
-        var(--k) var(--k) 0 #2f3a45, calc(var(--k) * -1) calc(var(--k) * -1) 0 #2f3a45,
-        var(--k) calc(var(--k) * -1) 0 #2f3a45, calc(var(--k) * -1) var(--k) 0 #2f3a45;
+        var(--k) 0 0 #3d4a52, calc(var(--k) * -1) 0 0 #3d4a52, 0 var(--k) 0 #3d4a52, 0 calc(var(--k) * -1) 0 #3d4a52,
+        var(--k) var(--k) 0 #3d4a52, calc(var(--k) * -1) calc(var(--k) * -1) 0 #3d4a52,
+        var(--k) calc(var(--k) * -1) 0 #3d4a52, calc(var(--k) * -1) var(--k) 0 #3d4a52;
     margin: 0.38em 0 0.48em;
-    color: #c3d4e4;
+    color: #bdd0da;
     font-family: "Press Start 2P", monospace;
     font-size: clamp(1.45rem, 7vw, calc(var(--H) * 0.1));
     font-weight: 400;
@@ -536,7 +536,7 @@ a.register-btn.caped-apply:hover {
 }
 
 @media (max-width: 760px) {
-    .caped *:not(.caped-sparkle):not(.caped-giant__blink),
+    .caped *:not(.caped-sparkle):not(.caped-giant__blink):not(.caped-plane):not(.caped-cloud),
     .caped *::before,
     .caped *::after {
         animation: none !important;
@@ -601,4 +601,43 @@ a.register-btn.caped-apply:hover {
         filter: none;
         transform: none;
     }
+}
+
+/* Drifting clouds and the small plane from the supplied hero design. */
+.caped-layer--clouds-back { z-index: 1; }
+.caped-layer--clouds-front { z-index: 4; opacity: .92; }
+.caped-layer--plane { z-index: 4; }
+.caped-cloud { position: absolute; left: 0; animation: caped-drift var(--cloud-duration) var(--cloud-delay) linear infinite; }
+.caped-cloud svg { display: block; width: 100%; height: auto; overflow: visible; }
+@keyframes caped-drift {
+    from { transform: translateX(-440px); }
+    to { transform: translateX(calc(100vw + 40px)); }
+}
+.caped-plane { position: absolute; left: 0; top: 0; animation: caped-fly 80s -22s linear infinite; }
+.caped-plane::before { content: ""; position: absolute; right: 100%; top: 10px; width: 200px; border-top: 1.5px solid rgba(255,255,255,.9); }
+@keyframes caped-fly {
+    from { transform: translate(-20vw, calc(var(--H) * .30)) rotate(-7deg); }
+    to { transform: translate(115vw, calc(var(--H) * .09)) rotate(-7deg); }
+}
+.caped-eyebrow, .caped-soon { font-size: 13px; letter-spacing: .32em; color: var(--ink-soft); }
+.caped-eyebrow { margin: 0; }
+.caped-soon { margin: clamp(14px, calc(var(--H) * .028), 28px) 0 0; letter-spacing: .3em; }
+@media (prefers-reduced-motion: reduce) {
+    .caped-cloud { left: 10%; transform: none; }
+    .caped-cloud:nth-child(2) { left: 78%; }
+    .caped-cloud:nth-child(3) { left: -12%; }
+    .caped-cloud:nth-child(4) { left: 52%; }
+    .caped-cloud:nth-child(5) { left: 92%; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .caped-plane { transform: translate(17vw, calc(var(--H) * .24)) rotate(-7deg); }
+}
+@media (max-width: 760px) {
+    .caped-cloud {
+        width: 160px !important;
+        animation-duration: calc(var(--cloud-duration) * 3);
+        animation-delay: calc(var(--cloud-delay) * 3);
+    }
+    .caped-layer--clouds-front .caped-cloud:nth-child(2) { display: none; }
+    .caped-eyebrow, .caped-soon { font-size: 11px; letter-spacing: .24em; }
 }

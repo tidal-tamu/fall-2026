@@ -9,7 +9,7 @@ import type { ReactElement } from "react";
 /* -------------------------------------------------------------------------- */
 
 export const GROUND = 420;
-export const INK = "#2c3238";
+export const INK = "#333f48";
 export const HEART = "M1 0h2v1h1V0h2v1h1v3h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1V4H0V1h1z";
 
 type El = ReactElement;
@@ -97,7 +97,7 @@ const heart = (s: Sheet, x: number, y: number, k: number, fill: string, beacon =
 
 /* ------------------------------------------------------------------- far -- */
 const FAR_WIN: Win = {
-    ww: 7, wh: 9, gx: 9, gy: 12, side: 12, bottom: 24, jit: 0, inset: 1, dim: "none", stroke: "#97a5b1",
+    ww: 7, wh: 9, gx: 9, gy: 12, side: 12, bottom: 24, jit: 0, inset: 1, dim: "none", stroke: "#9aabb8",
     sw: 0.9, lit: "#eef6fc", litChance: 0.38, steady: 0.3, minDur: 7, maxDur: 13,
 };
 
@@ -111,10 +111,10 @@ function buildFar() {
         let h = 170 + Math.pow(Math.min(Math.abs(cx - 800) / 1150, 1), 1.1) * 200 + r() * 70;
         if (Math.abs(cx - 800) < 280) h = Math.min(h, 160 + r() * 70); // keep the middle low for the hero
         const b = { x: r1(x), w: r1(w), h: r1(h) };
-        s.add(<path key={s.key()} d={poly(rect(b.x, GROUND - b.h, b.w, b.h + 6))} fill="#c4ced6" stroke="#85929e" strokeWidth={1.3} strokeLinejoin="round" />);
+        s.add(<path key={s.key()} d={poly(rect(b.x, GROUND - b.h, b.w, b.h + 6))} fill="#cad7e0" stroke="#8fa0ad" strokeWidth={1.3} strokeLinejoin="round" />);
         if (r() < 0.4) {
             const ax = r1(b.x + b.w * (0.3 + r() * 0.4));
-            s.add(<path key={s.key()} d={`M${ax},${GROUND - b.h} l0,-${(14 + r() * 18).toFixed(0)}`} stroke="#85929e" strokeWidth={1.3} />);
+            s.add(<path key={s.key()} d={`M${ax},${GROUND - b.h} l0,-${(14 + r() * 18).toFixed(0)}`} stroke="#8fa0ad" strokeWidth={1.3} />);
         }
         windows(s, b, FAR_WIN, r, 22);
         x += w - 6 + r() * 12;
@@ -126,10 +126,10 @@ export const FAR = buildFar();
 
 /* ------------------------------------------------------------------ near -- */
 const NEAR_WIN: Win = {
-    ww: 10, wh: 13, gx: 8, gy: 11, side: 14, bottom: 30, jit: 0, inset: 1.6, dim: "#56626c", stroke: INK,
+    ww: 10, wh: 13, gx: 8, gy: 11, side: 14, bottom: 30, jit: 0, inset: 1.6, dim: "#5f6f7b", stroke: INK,
     sw: 1.3, lit: "#d6ecfb", litChance: 0.6, steady: 0.22, minDur: 4.5, maxDur: 10,
 };
-const FILLS = ["#7b8792", "#8a96a0", "#6f7b86", "#95a1aa"];
+const FILLS = ["#82939f", "#8e9fab", "#768794", "#9aabb6"];
 
 type Building = Box & { t: "w" | "g" | "c"; antenna?: 1; tank?: 1; ac?: 1; sign?: 1; round?: 1 };
 
@@ -165,7 +165,7 @@ function roofProps(s: Sheet, b: Building, y: number, r: Rand) {
             <circle
                 key={s.key()}
                 className="caped-beacon"
-                cx={ax + 1} cy={y - 43} r={3.4} fill="#f2c9a0" stroke={INK} strokeWidth={1.4}
+                cx={ax + 1} cy={y - 43} r={3.4} fill="#efc9a6" stroke={INK} strokeWidth={1.4}
                 style={{ animationDelay: `${(-r() * 3).toFixed(2)}s` }}
             />,
         );
@@ -173,13 +173,13 @@ function roofProps(s: Sheet, b: Building, y: number, r: Rand) {
     if (b.tank) {
         const tx = b.x + b.w * 0.26;
         s.add(<path key={s.key()} d={`M${tx + 5},${y} L${tx + 7},${y - 14} M${tx + 27},${y} L${tx + 25},${y - 14} M${tx + 6},${y - 7} L${tx + 26},${y - 7}`} stroke={INK} strokeWidth={1.8} fill="none" />);
-        s.add(<path key={s.key()} d={poly(rect(tx, y - 38, 32, 24))} fill="#a9b4bd" stroke={INK} strokeWidth={2} />);
-        s.add(<path key={s.key()} d={`M${tx - 3},${y - 38} Q${tx + 16},${y - 52} ${tx + 35},${y - 38} Z`} fill="#a9b4bd" stroke={INK} strokeWidth={2} />);
+        s.add(<path key={s.key()} d={poly(rect(tx, y - 38, 32, 24))} fill="#b2c2cc" stroke={INK} strokeWidth={2} />);
+        s.add(<path key={s.key()} d={`M${tx - 3},${y - 38} Q${tx + 16},${y - 52} ${tx + 35},${y - 38} Z`} fill="#b2c2cc" stroke={INK} strokeWidth={2} />);
         s.add(<path key={s.key()} d={`M${tx + 4},${y - 30} L${tx + 28},${y - 30} M${tx + 4},${y - 22} L${tx + 28},${y - 22}`} stroke={INK} strokeWidth={1} strokeOpacity={0.5} fill="none" />);
     }
     if (b.ac) {
         const ux = b.x + b.w * 0.18;
-        s.add(<path key={s.key()} d={poly(rect(ux, y - 16, 26, 16))} fill="#b3bdc5" stroke={INK} strokeWidth={1.8} />);
+        s.add(<path key={s.key()} d={poly(rect(ux, y - 16, 26, 16))} fill="#b8c7d1" stroke={INK} strokeWidth={1.8} />);
         s.add(<circle key={s.key()} cx={ux + 9} cy={y - 8} r={5} fill="none" stroke={INK} strokeWidth={1.4} />);
         s.add(<path key={s.key()} d={`M${ux + 9},${y - 13} L${ux + 9},${y - 3} M${ux + 4},${y - 8} L${ux + 14},${y - 8}`} stroke={INK} strokeWidth={1} fill="none" />);
     }
@@ -187,9 +187,9 @@ function roofProps(s: Sheet, b: Building, y: number, r: Rand) {
         const sx = b.x + 10;
         const sw = b.w - 20;
         s.add(<path key={s.key()} d={`M${sx + 14},${y} L${sx + 14},${y - 12} M${sx + sw - 14},${y} L${sx + sw - 14},${y - 12}`} stroke={INK} strokeWidth={2} fill="none" />);
-        s.add(<path key={s.key()} d={poly(rect(sx, y - 46, sw, 34))} fill="#eef4f9" stroke={INK} strokeWidth={2.2} />);
+        s.add(<path key={s.key()} d={poly(rect(sx, y - 46, sw, 34))} fill="#f6f9fb" stroke={INK} strokeWidth={2.2} />);
         pixelText(s, sx + sw / 2 - 11, y - 22, 13, INK, "tidal");
-        heart(s, sx + sw - 22, y - 35, 2, "#6ea3d8", true);
+        heart(s, sx + sw - 22, y - 35, 2, "#7fa7c4", true);
     }
 }
 
@@ -229,7 +229,7 @@ function boxBuilding(s: Sheet, b: Building, fill: string, r: Rand) {
         const x0 = b.x + 10, x1 = b.x + b.w - 10, y0 = y + 20, y1 = GROUND - 30;
         const cols = Math.floor((x1 - x0) / cell), rows = Math.floor((y1 - y0) / cell);
         const ox = x0 + (x1 - x0 - cols * cell) / 2;
-        s.add(<path key={s.key()} d={poly(rect(ox, y0, cols * cell, rows * cell))} fill="#9aa6b0" stroke={INK} strokeWidth={1.6} />);
+        s.add(<path key={s.key()} d={poly(rect(ox, y0, cols * cell, rows * cell))} fill="#a5b5c0" stroke={INK} strokeWidth={1.6} />);
         for (let i = 0; i < rows; i++)
             for (let j = 0; j < cols; j++)
                 if (r() < 0.42) lit(s, ox + j * cell + 1.6, y0 + i * cell + 1.6, cell - 3.2, cell - 3.2, NEAR_WIN, r);
@@ -243,10 +243,10 @@ function boxBuilding(s: Sheet, b: Building, fill: string, r: Rand) {
 
     if (b.w > 100 && r() < 0.6) {
         const dx = b.x + b.w * 0.38;
-        s.add(<path key={s.key()} d={poly(rect(dx, GROUND - 22, 22, 26))} fill="#4a545d" stroke={INK} strokeWidth={1.8} />);
+        s.add(<path key={s.key()} d={poly(rect(dx, GROUND - 22, 22, 26))} fill="#50606c" stroke={INK} strokeWidth={1.8} />);
     }
     if (!b.round) {
-        s.add(<path key={s.key()} d={poly(rect(b.x - 4, y - 7, b.w + 8, 9))} fill="#aab5be" stroke={INK} strokeWidth={2.2} />);
+        s.add(<path key={s.key()} d={poly(rect(b.x - 4, y - 7, b.w + 8, 9))} fill="#b5c5d0" stroke={INK} strokeWidth={2.2} />);
         if (r() < 0.55) s.add(<path key={s.key()} d={`M${b.x - 11},${y - 7.5} L${b.x + 14},${y - 7}`} stroke={INK} strokeWidth={1.2} fill="none" />);
     }
 }
@@ -261,7 +261,7 @@ function cylinder(s: Sheet, b: Building, r: Rand) {
     }
     pts.push([b.x + b.w, GROUND + 6]);
     const outline = poly(pts);
-    s.add(<path key={s.key()} d={outline} fill="#a8b3bc" stroke={INK} strokeWidth={2.4} />);
+    s.add(<path key={s.key()} d={outline} fill="#a9bac5" stroke={INK} strokeWidth={2.4} />);
     s.add(
         <clipPath key={s.key()} id="caped-cyl">
             <path d={outline} />
@@ -270,7 +270,7 @@ function cylinder(s: Sheet, b: Building, r: Rand) {
 
     const inner = new Sheet();
     const bandH = 36;
-    inner.add(<path key={inner.key()} d={`M${b.x},${capY} Q${cx},${capY + ry * 2} ${b.x + b.w},${capY} L${b.x + b.w},${capY + bandH} Q${cx},${capY + bandH + ry * 2} ${b.x},${capY + bandH} Z`} fill="#4b5660" stroke={INK} strokeWidth={1.6} />);
+    inner.add(<path key={inner.key()} d={`M${b.x},${capY} Q${cx},${capY + ry * 2} ${b.x + b.w},${capY} L${b.x + b.w},${capY + bandH} Q${cx},${capY + bandH + ry * 2} ${b.x},${capY + bandH} Z`} fill="#4e5d68" stroke={INK} strokeWidth={1.6} />);
 
     const xs = [b.x, ...[-74, -56, -38, -19, 0, 19, 38, 56, 74].map((deg) => cx + rx * Math.sin((deg * Math.PI) / 180)), b.x + b.w];
     const step = 21, y0 = capY + bandH + 6, y1 = GROUND - 34;
@@ -292,8 +292,8 @@ function cylinder(s: Sheet, b: Building, r: Rand) {
     inner.add(<rect key={inner.key()} x={cx + rx * 0.4} y={top} width={rx * 0.6} height={b.h} fill="url(#caped-dots)" />);
 
     const bw = 40, bx = cx - bw / 2 - 14, by = y0 + 30, bh = 108;
-    inner.add(<path key={inner.key()} d={poly(rect(bx, by, bw, bh))} fill="#eef4f9" stroke={INK} strokeWidth={1.8} />);
-    heart(inner, bx + 10, by + 10, 3, "#6ea3d8");
+    inner.add(<path key={inner.key()} d={poly(rect(bx, by, bw, bh))} fill="#f6f9fb" stroke={INK} strokeWidth={1.8} />);
+    heart(inner, bx + 10, by + 10, 3, "#7fa7c4");
     pixelText(inner, bx + bw / 2, by + 58, 10, INK, "NOV");
     pixelText(inner, bx + bw / 2, by + 84, 17, INK, "21");
     s.add(
@@ -302,7 +302,7 @@ function cylinder(s: Sheet, b: Building, r: Rand) {
         </g>,
     );
 
-    s.add(<ellipse key={s.key()} cx={cx} cy={capY} rx={rx - 0.5} ry={ry} fill="#c3ccd4" stroke={INK} strokeWidth={2.2} />);
+    s.add(<ellipse key={s.key()} cx={cx} cy={capY} rx={rx - 0.5} ry={ry} fill="#c8d5de" stroke={INK} strokeWidth={2.2} />);
     s.add(<ellipse key={s.key()} cx={cx} cy={capY} rx={rx * 0.62} ry={ry * 0.55} fill="none" stroke={INK} strokeWidth={1.1} strokeOpacity={0.5} />);
 }
 

@@ -9,9 +9,9 @@ import { HEART, INK } from "./skyline";
 /*  Drawn with its feet at (0, 0), so it can stand on any roof.               */
 /* -------------------------------------------------------------------------- */
 
-const PENG = "#424242";
-const CREAM = "#f5e9da";
-const CAPE = "#a9cbe7";
+const PENG = "#44515a";
+const CREAM = "#f9e4cf";
+const CAPE = "#b4cadb";
 
 type Pt = [number, number];
 const r1 = (n: number) => Math.round(n * 10) / 10;
