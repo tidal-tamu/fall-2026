@@ -1,6 +1,6 @@
 /* -------------------------------------------------------------------------- */
-/*  Event facts the page repeats in several places (hero tagline, ticket,     */
-/*  receipt, profile, dock countdown). Change them here, not per section.      */
+/*  Event facts the page repeats in several places (hero pills, register      */
+/*  buttons, contact links). Change them here, not per section.               */
 /* -------------------------------------------------------------------------- */
 
 export const EVENT = {
@@ -26,29 +26,11 @@ export const LINKS = {
     mlhCoc: "https://static.mlh.io/docs/mlh-code-of-conduct.pdf",
 };
 
-/* The page as an album. Order here is scroll order, and the dock's
-   prev/next buttons walk this list. */
-export const TRACKS = [
-    { id: "top", title: "intro" },
-    { id: "invite", title: "the invite" },
-    { id: "about", title: "about" },
-    { id: "schedule", title: "schedule" },
-    { id: "prizes", title: "prizes" },
-    { id: "sponsors", title: "liner notes" },
-    { id: "faq", title: "b-sides" },
-] as const;
-
-export const STICKER = (name: string) => `${import.meta.env.BASE_URL}f26/stickers/${name}.webp`;
-
-/* In-page links every hero's top nav shares. */
+/* In-page links in the hero's top nav. */
 export const NAV = [
     { label: "Sponsors", href: "#sponsors" },
     { label: "Updates", href: "#under-construction" },
 ];
-
-/* Whole days until doors open, for the "N days to go" bits. */
-export const daysToDoors = (now = Date.now()) =>
-    Math.max(0, Math.ceil((Date.parse(EVENT.startsAt) - now) / 86_400_000));
 
 /* Format event times in College Station's zone, not the visitor's, so a
    hacker checking from another timezone still sees "7:00 AM". */

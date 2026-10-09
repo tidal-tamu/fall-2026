@@ -26,9 +26,7 @@ const YEAR = [..."'26"];
 const STATIC_SCENE_QUERY = "(max-width: 760px), (prefers-reduced-motion: reduce)";
 const prefersStaticScene = () => window.matchMedia(STATIC_SCENE_QUERY).matches;
 
-const holdStill = () =>
-    window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ||
-    document.documentElement.dataset.motion === "paused";
+const holdStill = () => window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 const pick = <T,>(xs: T[]) => xs[Math.floor(Math.random() * xs.length)];
 

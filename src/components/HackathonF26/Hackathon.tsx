@@ -4,13 +4,6 @@ import HeroCaped from "./heroes/HeroCaped";
 import LoadingScreen from "./LoadingScreen";
 import LinerNotes from "./LinerNotes";
 import UnderConstruction from "./UnderConstruction";
-import "./tidal-effects.css";
-import "./tidal-paper.css";
-import "./tidal-profile.css";
-import "./tidal-player.css";
-import "./tidal-dock.css";
-import "./tidal-hero.css";
-import "./tidal-accents.css"; // pastel blue layer; must stay last
 import "./temporary-caped.css";
 
 /* Temporary site: keep the hero and sponsor wall while the full event page
