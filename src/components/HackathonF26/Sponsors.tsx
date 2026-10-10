@@ -8,7 +8,7 @@ export const SPONSOR_RAIL_HEIGHT = 56;
 // Shared with the liner-notes sticker wall further down the page.
 export const sponsors: Sponsor[] = [
     { name: "Adobe", logo: sponsorLogo("adobe.png") },
-    { name: "Amazon Web Services", logo: sponsorLogo("aws.png") },
+    { name: "Stata", logo: sponsorLogo("stata.png") },
     { name: "Base44", logo: sponsorLogo("base44.png") },
     { name: "Diodes", logo: sponsorLogo("diodes.png") },
     { name: "ElevenLabs", logo: sponsorLogo("elevenlabs.png") },
