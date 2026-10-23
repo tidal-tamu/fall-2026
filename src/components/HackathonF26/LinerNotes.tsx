@@ -9,9 +9,7 @@ export default function LinerNotes() {
         <section id="sponsors" className="caped-sponsors" aria-labelledby="sponsors-title">
             <div className="caped-sponsors__inner">
                 <header className="caped-sponsors__head">
-                    <p className="caped-sponsors__eyebrow">THE HEROES BEHIND THE HERO</p>
                     <h2 id="sponsors-title">powered by</h2>
-                    <p>Thanks to the sponsors helping make tidalBYTE &apos;26 possible.</p>
                 </header>
 
                 <ul className="caped-sponsors__grid" aria-label="Sponsors">
