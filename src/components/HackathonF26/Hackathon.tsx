@@ -2,8 +2,7 @@ import { useState, useEffect } from "react";
 import { AnimatePresence } from "framer-motion";
 import HeroCaped from "./heroes/HeroCaped";
 import LoadingScreen from "./LoadingScreen";
-import LinerNotes from "./LinerNotes";
-import UnderConstruction from "./UnderConstruction";
+import ByteLevel from "./ByteLevel";
 import "./tidal-effects.css";
 import "./tidal-paper.css";
 import "./tidal-profile.css";
@@ -12,9 +11,6 @@ import "./tidal-dock.css";
 import "./tidal-hero.css";
 import "./tidal-accents.css"; // pastel blue layer; must stay last
 import "./temporary-caped.css";
-
-/* Temporary site: keep the hero and sponsor wall while the full event page
-   is being prepared. */
 
 const HackathonF26 = () => {
     const staticEntry = () =>
@@ -54,12 +50,12 @@ const HackathonF26 = () => {
             </AnimatePresence>
 
             <div className="w-full bg-paper text-ink">
-                <div id="top" className="relative h-screen overflow-hidden">
+                {/* Keep the original hero above the level's fixed sky layer. */}
+                <div id="top" className="relative isolate z-10 h-screen overflow-hidden">
                     <HeroCaped shouldAnimate={shouldAnimate} />
                 </div>
 
-                <LinerNotes />
-                <UnderConstruction />
+                <ByteLevel />
             </div>
         </>
     );

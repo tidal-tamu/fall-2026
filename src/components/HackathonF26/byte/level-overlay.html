@@ -1,0 +1,19 @@
+<!-- HUD -->
+<div id="hud" aria-label="Game HUD">
+  <div class="hud-l">
+    <canvas class="hud-face" id="hudFace" width="16" height="16" aria-hidden="true"></canvas>
+    <span class="hud-name">PEBBLE<small>LV 26</small></span>
+    <span class="hud-hearts" aria-hidden="true">
+      <svg viewBox="0 0 7 7"><path fill="#7fa7c4" d="M1 0h2v1h1V0h2v1h1v3h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1V4H0V1h1z"/></svg>
+      <svg viewBox="0 0 7 7"><path fill="#7fa7c4" d="M1 0h2v1h1V0h2v1h1v3h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1V4H0V1h1z"/></svg>
+      <svg viewBox="0 0 7 7"><path fill="#7fa7c4" d="M1 0h2v1h1V0h2v1h1v3h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1V4H0V1h1z"/></svg>
+    </span>
+  </div>
+  <div class="hud-stage" id="hudStage" aria-live="polite"><b>STAGE 1-1</b>meet pebble</div>
+  <div class="hud-r">
+    <div class="slots" id="slots" aria-label="Items collected"></div>
+    <span class="hud-clock" aria-hidden="true"><i></i><span id="hudClock">8:00 AM</span></span>
+  </div>
+</div>
+<div class="toast" id="toast" role="status"></div>
+

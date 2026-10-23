@@ -214,6 +214,17 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                             {item.label.toUpperCase()}
                         </a>
                     ))}
+                    <details className="caped-mobile-menu">
+                        <summary>MENU</summary>
+                        <nav aria-label="Mobile sections">
+                            {NAV.map((item) => (
+                                <a key={item.href} href={item.href}
+                                    onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>
+                                    {item.label}
+                                </a>
+                            ))}
+                        </nav>
+                    </details>
                     <RegisterButton
                         className="caped-register"
                         soonTag={false}

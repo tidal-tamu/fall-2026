@@ -1,0 +1,118 @@
+<div id="sky" aria-hidden="true"><div class="sun"></div><div class="moon"></div><div class="stars"></div><div class="clouds2"></div></div>
+
+<!-- ================= STAGE 1-1 · player select ================= -->
+<section id="about" class="sec about" aria-label="About">
+  <div class="about-frame">
+    <div class="select">
+      <div class="label">PLAYER 1 SELECT</div>
+      <div class="stagebox" aria-hidden="true">
+        <div class="spot"></div>
+        <div class="pedestal"></div>
+        <div class="big-pebble" id="bigPebble"></div>
+      </div>
+      <div class="win nameplate">
+        <div class="np-top"><b>PEBBLE</b><span>LV 26 · HERO</span></div>
+        <div class="stats">
+          <span>BRAVERY</span><span class="bar"><i style="--v:86%;--c:#e8b48f"></i></span>
+          <span>SNACKS</span><span class="bar"><i style="--v:100%;--c:#a9bf9f"></i></span>
+          <span>CODE</span><span class="bar"><i style="--v:62%;--c:#7fa7c4"></i></span>
+          <span>CAPE</span><span class="bar"><i style="--v:100%;--c:#93b5cc"></i></span>
+        </div>
+      </div>
+    </div>
+    <div class="about-copy">
+      <div class="about-panels">
+        <article class="panel on" id="about-pebble">
+          <div class="win"><span class="win-title">STAGE 1-1</span>
+            <h2 class="h2">meet pebble</h2>
+            <p>pebble is the tiny penguin hero holding this whole hackathon together. armed with a fish and a cape that's a little too big, pebble believes every great project starts as one small, slightly chaotic idea. keep scrolling — pebble's walking the street at the bottom of your screen with you.</p>
+            <div class="pix" data-scene="pebble"><canvas width="96" height="48"></canvas><span class="pix-bubble">hi! i'm pebble ♪</span></div>
+          </div>
+        </article>
+        <article class="panel" id="about-tidal" aria-hidden="true">
+          <div class="win"><span class="win-title">STAGE 1-1</span>
+            <h2 class="h2">the guild: tidal</h2>
+            <p>tidal is a student org at texas a&amp;m for people who like to make things — coders, designers, tinkerers and the hackathon-curious. we run build nights, workshops, and the occasional all-day sprint like this one.</p>
+            <div class="pix" data-scene="tidal"><canvas width="96" height="48"></canvas><span class="pix-bubble">we build stuff!</span></div>
+          </div>
+        </article>
+        <article class="panel" id="about-byte" aria-hidden="true">
+          <div class="win"><span class="win-title">STAGE 1-1</span>
+            <h2 class="h2">the mission: tidalBYTE</h2>
+            <p>tidalBYTE '26 is a 12-hour, beginner-friendly hackathon. show up nov 21 at msc 2304, team up (or don't), build something you're proud of, and leave with new friends, free food, and maybe a scooter.</p>
+            <div class="pix" data-scene="byte"><canvas width="96" height="48"></canvas><span class="pix-bubble">12 hrs. let's go!</span></div>
+          </div>
+        </article>
+      </div>
+      <div class="about-controls" role="group" aria-label="About topics">
+        <button type="button" data-panel="0" aria-pressed="true" aria-controls="about-pebble">pebble</button>
+        <button type="button" data-panel="1" aria-pressed="false" aria-controls="about-tidal">tidal</button>
+        <button type="button" data-panel="2" aria-pressed="false" aria-controls="about-byte">tidalBYTE</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= STAGE 1-2 · quest log (the schedule) ================= -->
+<section id="schedule" class="sec quests" aria-label="Schedule">
+  <div class="wrap">
+    <header class="center-head">
+      <div class="stage"><b>STAGE 1-2</b> quest log</div>
+      <h2 class="h2">today's quests</h2>
+      <p class="lede">the schedule for the day. times are a draft — the final quest log drops closer to nov 21.</p>
+    </header>
+    <div class="qlog-wrap">
+      <div class="giver" aria-hidden="true">
+        <div class="pix"><canvas id="giverCanvas" width="48" height="48"></canvas></div>
+        <span class="ex">!</span>
+        <small>quest giver:<br>pebble</small>
+      </div>
+      <div class="win qlog">
+        <span class="win-title">QUEST LOG</span>
+        <div class="qhead"><span><b>tidalBYTE '26</b></span><span>SAT · NOV 21 · MSC 2304</span><span id="qCount">13 QUESTS</span></div>
+        <ol class="qlist" id="qlist"></ol>
+        <div class="qfoot">
+          <span>keep a copy on your phone for the day</span>
+          <button class="gbtn" id="saveBtn" type="button">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h12l4 4v12H4zM8 4v5h7V4M7 20v-7h10v7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round"/></svg>
+            SAVE QUEST LOG</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<dialog class="save-dlg" id="saveDlg" aria-labelledby="saveTitle">
+  <div class="win save-card">
+    <div class="save-head"><span id="saveTitle">game saved ♪</span><button class="x" id="saveClose" type="button" aria-label="Close">✕</button></div>
+    <div class="save-img"><img id="saveImg" alt="tidalBYTE '26 quest log (schedule)"></div>
+    <div class="save-actions">
+      <a class="gbtn" id="saveDl" download="tidalbyte-26-quest-log.png" href="#">DOWNLOAD PNG</a>
+      <a class="open" id="saveOpen" href="#" target="_blank" rel="noopener">open full size ↗</a>
+    </div>
+  </div>
+</dialog>
+
+<!-- ================= STAGE 1-3 · inventory (prizes) ================= -->
+<section id="prizes" class="sec inventory" aria-label="Prizes">
+  <div class="wrap">
+    <header class="center-head">
+      <div class="stage"><b>STAGE 1-3</b> loot</div>
+      <h2 class="h2">player inventory</h2>
+      <p class="lede">the loot up for grabs. select an item to inspect it.</p>
+    </header>
+    <div class="win inv">
+      <span class="win-title">INVENTORY</span>
+      <div class="inv-grid" id="invGrid" role="group" aria-label="Prizes"></div>
+      <div class="detail" id="detail" aria-live="polite">
+        <div class="art" id="dArt"><span class="shine"></span></div>
+        <span class="rar" id="dRar"></span>
+        <h3 id="dName"></h3>
+        <span class="who" id="dWho"></span>
+        <p id="dDesc"></p>
+        <dl id="dStats"></dl>
+      </div>
+    </div>
+  </div>
+</section>
+

@@ -42,8 +42,10 @@ export const STICKER = (name: string) => `${import.meta.env.BASE_URL}f26/sticker
 
 /* In-page links every hero's top nav shares. */
 export const NAV = [
-    { label: "Sponsors", href: "#sponsors" },
-    { label: "Updates", href: "#under-construction" },
+    { label: "About", href: "#about" },
+    { label: "Schedule", href: "#schedule" },
+    { label: "Prizes", href: "#prizes" },
+    { label: "FAQ", href: "#faq" },
 ];
 
 /* Whole days until doors open, for the "N days to go" bits. */

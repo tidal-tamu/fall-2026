@@ -74,11 +74,7 @@ body {
 
 .caped-sponsors {
     padding: var(--temp-space-3xl) var(--temp-space-md);
-    border-top: 12px solid var(--temp-ink);
-    background-color: var(--temp-sky);
-    background-image:
-        linear-gradient(to bottom, var(--temp-sky-light), var(--temp-sky)),
-        repeating-linear-gradient(90deg, transparent 0 47px, var(--temp-window-shadow) 48px);
+    background: transparent;
     color: var(--temp-ink);
 }
 
