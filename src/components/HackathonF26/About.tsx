@@ -37,7 +37,7 @@ const INTERESTS: [string, string][] = [
 ];
 
 const COMMENTS = [
-    { from: "pebble", img: "pebble-headphones", when: "11/14/2026 11:59 PM", text: "see u in MSC 2304 !! save me a snack" },
+    { from: "pebble", img: "pebble-headphones", when: "11/14/2026 11:59 PM", text: "see u in MSC 2300 D&E !! save me a snack" },
     { from: "bun", img: "bunny", when: "11/02/2026 4:12 PM", text: "thanks for the add :3" },
 ];
 
