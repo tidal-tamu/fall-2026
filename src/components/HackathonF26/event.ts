@@ -6,7 +6,7 @@
 export const EVENT = {
     date: "November 21, 2026",
     day: "Saturday",
-    room: "MSC 2300 D&E",
+    room: "MSC 2300",
     city: "College Station, TX",
     hours: 12,
     /* Doors open / close. Nov 21 is after the DST change, so Central is -06. */

@@ -125,7 +125,7 @@ const HeroPaper = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => (
             </motion.h1>
 
             <motion.p className="paper-meta" {...rise(shouldAnimate, 0.46)}>
-                Saturday, November 21 · MSC 2300 D&E · for freshmen &amp; sophomores
+                Saturday, November 21 · MSC 2300 · for freshmen &amp; sophomores
             </motion.p>
 
             <motion.div className="paper-ctas" {...rise(shouldAnimate, 0.56)}>
