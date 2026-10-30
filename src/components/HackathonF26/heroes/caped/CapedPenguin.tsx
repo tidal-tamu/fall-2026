@@ -1,3 +1,4 @@
+import { cn } from "../../ui";
 import { forwardRef, useImperativeHandle, useRef, type CSSProperties } from "react";
 import { HEART, INK } from "./skyline";
 
@@ -75,7 +76,7 @@ const CapedPenguin = forwardRef<CapeHandle, Props>(({ x, y, on, onEnter, onLeave
 
     return (
         <g
-            className={`caped-hero ${on ? "is-on" : ""}`}
+            className={cn(`caped-hero ${on ? "is-on" : ""}`, "cursor-pointer")}
             transform={`translate(${x},${y})`}
             onPointerEnter={(e) => e.pointerType === "mouse" && onEnter()}
             onPointerLeave={(e) => e.pointerType === "mouse" && onLeave()}
@@ -83,7 +84,7 @@ const CapedPenguin = forwardRef<CapeHandle, Props>(({ x, y, on, onEnter, onLeave
         >
             <rect x={-110} y={-160} width={200} height={170} fill="transparent" pointerEvents="all" />
             <ellipse cx={0} cy={2} rx={36} ry={5} fill={INK} opacity={0.28} />
-            <g className="caped-hero__bob">
+            <g className="caped-hero__bob animate-hero-breathe">
                 <path ref={cape} d={idle.d} fill={CAPE} stroke={PENG} strokeWidth={2.6} strokeLinejoin="round" />
                 <path ref={dots} d={idle.d} fill="url(#caped-cape-dots)" />
                 <path ref={fold} d={idle.fold} fill="none" stroke="#eef6fc" strokeWidth={2.4} strokeLinecap="round" />
@@ -92,7 +93,10 @@ const CapedPenguin = forwardRef<CapeHandle, Props>(({ x, y, on, onEnter, onLeave
                 <path d="M-28 -16 C-34 -40 -32 -74 -22 -88 C-14 -99 -4 -99 -2 -88 C-1 -83 -2 -79 -4 -77 L6 -77 C4 -79 3 -83 4 -88 C6 -99 18 -100 26 -88 C36 -72 38 -44 32 -18 C28 -8 18 -9 0 -9 C-16 -9 -26 -8 -28 -16 Z" fill="#fbfcfd" />
                 <ellipse cx={-21} cy={-69} rx={6.5} ry={4.8} fill={CREAM} />
                 <ellipse cx={23} cy={-69} rx={6.5} ry={4.8} fill={CREAM} />
-                <g className="caped-hero__blink">
+                <g className={cn(
+                    "caped-hero__blink [transform-box:fill-box] [transform-origin:50%_50%]",
+                    "animate-hero-blink [animation-duration:5.3s] [animation-delay:-1.4s]",
+                )}>
                     <ellipse cx={-13} cy={-80} rx={3.6} ry={3.2} fill={PENG} />
                     <ellipse cx={15} cy={-80} rx={3.6} ry={3.2} fill={PENG} />
                 </g>
@@ -104,7 +108,7 @@ const CapedPenguin = forwardRef<CapeHandle, Props>(({ x, y, on, onEnter, onLeave
                 <path d={HEART} transform="translate(-2.2,-54.5) scale(1.15)" fill="#6ea3d8" stroke={PENG} strokeWidth={0.6} shapeRendering="crispEdges" />
                 {/* the fish, held aloft */}
                 <g transform="translate(51,-58) rotate(10)">
-                    <g className="caped-hero__fish">
+                    <g className={cn("caped-hero__fish", on && "animate-hero-fish")}>
                         <path d="M-9 7 Q0 3 9 7 L3 -8 L-3 -8 Z" fill="#cbe1ea" stroke={PENG} strokeWidth={2.4} strokeLinejoin="round" />
                         <path d="M0 -64 C12 -58 15 -38 11 -22 C9 -14 5 -9 2 -7 L-2 -7 C-5 -9 -9 -14 -11 -22 C-15 -38 -12 -58 0 -64 Z" fill="#cbe1ea" stroke={PENG} strokeWidth={2.6} strokeLinejoin="round" />
                         <path d="M-8 -41 Q0 -36 8 -41" fill="none" stroke={PENG} strokeWidth={1.8} strokeLinecap="round" />
@@ -117,7 +121,7 @@ const CapedPenguin = forwardRef<CapeHandle, Props>(({ x, y, on, onEnter, onLeave
             </g>
             {SPARKS.map((s) => (
                 <g key={s.dl} transform={`translate(${s.x},${s.y})`}>
-                    <g className="caped-hero__spark" style={{ "--s": s.s, "--dl": s.dl } as CSSProperties}>
+                    <g className={cn("caped-hero__spark [transform:scale(0)]", on && "animate-hero-spark")} style={{ "--s": s.s, "--dl": s.dl } as CSSProperties}>
                         <use href="#caped-spark" x={-12} y={-12} fill={s.fill} stroke={INK} strokeWidth={s.sw} />
                     </g>
                 </g>

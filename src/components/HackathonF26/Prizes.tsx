@@ -1,268 +1,282 @@
-import { useCallback, useEffect, useRef, useState } from "react";
-import { useReducedMotion } from "framer-motion";
-import { FaHeart, FaRegHeart } from "react-icons/fa";
-import SectionHeader from "./SectionHeader";
-import Sticker from "./Sticker";
-import { STICKER } from "./event";
+import { cn, ui, headingStyle } from "./ui";
+import { Fragment, useRef, useState, type CSSProperties, type KeyboardEvent } from "react";
+import PrizeArt from "./PrizeArt";
 
-/* -------------------------------------------------------------------------- */
-/*  Prizes as an old CD player (theme pitch: "old CD player interface",        */
-/*  "2000s streaming websites"). Picking a track plays it; the disc spins and  */
-/*  the player walks the tracklist until you pause.                            */
-/* -------------------------------------------------------------------------- */
-
-/* Categories from the team's draft. Amounts stay TBD until the budget is set. */
-const TRACKLIST = [
-    { title: "first place", kind: "grand prize", prize: "TBD" },
-    { title: "second place", kind: "grand prize", prize: "TBD" },
-    { title: "third place", kind: "grand prize", prize: "TBD" },
-    { title: "best design", kind: "track prize", prize: "TBD" },
-    { title: "best beginner", kind: "track prize", prize: "TBD" },
-    { title: "best solo", kind: "track prize", prize: "TBD" },
-];
-
-const TRACK_MS = 6000;
-const pad = (n: number) => String(n).padStart(2, "0");
-const clock = (ms: number) => `0:${pad(Math.floor(ms / 1000))}`;
-
-const Icon = ({ d }: { d: string }) => (
-    <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" focusable="false">
-        <path d={d} fill="currentColor" />
-    </svg>
-);
-
-const PATHS = {
-    prev: "M6 5h2.5v14H6zM20 5v14L9.5 12z",
-    next: "M15.5 5H18v14h-2.5zM4 5l10.5 7L4 19z",
-    play: "M7 4.5v15L19.5 12z",
-    pause: "M6.5 5h4v14h-4zM13.5 5h4v14h-4z",
-    repeat: "M7 7h9.5V4.5L21 8.5l-4.5 4V10H8.5v3H6V8a1 1 0 0 1 1-1zm10 10H7.5v2.5L3 15.5l4.5-4V14h8v-3H18v5a1 1 0 0 1-1 1z",
-};
-
-const Prizes = () => {
-    const reduce = useReducedMotion();
-    const [index, setIndex] = useState(0);
-    const [playing, setPlaying] = useState(false);
-    const [repeat, setRepeat] = useState(false);
-    const [liked, setLiked] = useState<Set<number>>(() => new Set());
-
-    // Progress is painted straight onto the DOM each frame; routing it
-    // through state would re-render the whole section at 60fps.
-    const progressRef = useRef(0);
-    const barRef = useRef<HTMLSpanElement>(null);
-    const elapsedRef = useRef<HTMLSpanElement>(null);
-    const remainRef = useRef<HTMLSpanElement>(null);
-    const repeatRef = useRef(repeat);
-    repeatRef.current = repeat;
-
-    const paint = useCallback(() => {
-        const p = progressRef.current;
-        if (barRef.current) barRef.current.style.setProperty("--p", String(p));
-        if (elapsedRef.current) elapsedRef.current.textContent = clock(p * TRACK_MS);
-        if (remainRef.current) remainRef.current.textContent = `-${clock((1 - p) * TRACK_MS)}`;
-    }, []);
-
-    useEffect(() => {
-        if (!playing) return;
-        let raf = 0;
-        let last = performance.now();
-        const step = (t: number) => {
-            progressRef.current += (t - last) / TRACK_MS;
-            last = t;
-            if (progressRef.current >= 1) {
-                progressRef.current = 0;
-                if (!repeatRef.current) setIndex((i) => (i + 1) % TRACKLIST.length);
+const prizes = [
+    {
+        "rank": "1ST PLACE",
+        "name": "electric scooters",
+        "rarity": "LEGENDARY",
+        "color": "#efd3b8",
+        "recipient": "for the 1st place team",
+        "description": "zip across campus faster than a penguin in a cape. one for every teammate.",
+        "stats": [
+            {
+                "label": "QTY",
+                "value": "\u00d74 \u00b7 up to 4"
+            },
+            {
+                "label": "TYPE",
+                "value": "transport"
+            },
+            {
+                "label": "SPEED",
+                "value": "very"
             }
-            paint();
-            raf = requestAnimationFrame(step);
-        };
-        raf = requestAnimationFrame(step);
-        return () => cancelAnimationFrame(raf);
-    }, [playing, paint]);
+        ]
+    },
+    {
+        "rank": "2ND PLACE",
+        "name": "mechanical keyboards",
+        "rarity": "EPIC",
+        "color": "#d9d6e3",
+        "recipient": "for the 2nd place team",
+        "description": "clicky, thocky and hot-swappable. your code will sound as good as it looks.",
+        "stats": [
+            {
+                "label": "QTY",
+                "value": "\u00d74 \u00b7 up to 4"
+            },
+            {
+                "label": "TYPE",
+                "value": "gear"
+            },
+            {
+                "label": "THOCK",
+                "value": "maximum"
+            }
+        ]
+    },
+    {
+        "rank": "3RD PLACE",
+        "name": "instant cameras",
+        "rarity": "RARE",
+        "color": "#c6d8e2",
+        "recipient": "for the 3rd place team",
+        "description": "snap your team photo the second you hit submit. comes with a pack of film each.",
+        "stats": [
+            {
+                "label": "QTY",
+                "value": "\u00d74 \u00b7 up to 4"
+            },
+            {
+                "label": "TYPE",
+                "value": "gear"
+            },
+            {
+                "label": "BONUS",
+                "value": "film pack"
+            }
+        ]
+    },
+    {
+        "rank": "BEST BEGINNER HACK",
+        "name": "drawing tablets",
+        "rarity": "SPECIAL",
+        "color": "#cdd8cb",
+        "recipient": "best beginner hack",
+        "description": "for the team that's new to this and built something great anyway.",
+        "stats": [
+            {
+                "label": "QTY",
+                "value": "\u00d74 \u00b7 up to 4"
+            },
+            {
+                "label": "TYPE",
+                "value": "creative"
+            },
+            {
+                "label": "FOR",
+                "value": "first-timers"
+            }
+        ]
+    },
+    {
+        "rank": "BEST DESIGN",
+        "name": "retro handhelds",
+        "rarity": "SPECIAL",
+        "color": "#cdd8cb",
+        "recipient": "best design",
+        "description": "for the hack with the nicest pixels, flows and feels.",
+        "stats": [
+            {
+                "label": "QTY",
+                "value": "\u00d74 \u00b7 up to 4"
+            },
+            {
+                "label": "TYPE",
+                "value": "collectible"
+            },
+            {
+                "label": "STYLE",
+                "value": "pixel-perfect"
+            }
+        ]
+    },
+    {
+        "rank": "PEBBLE'S PICK",
+        "name": "giant pebble plush",
+        "rarity": "MYTHIC",
+        "color": "#f9e4cf",
+        "recipient": "pebble's pick",
+        "description": "pebble picks one project personally. no appeals. there is a fish involved.",
+        "stats": [
+            {
+                "label": "QTY",
+                "value": "\u00d71 \u00b7 very huggable"
+            },
+            {
+                "label": "TYPE",
+                "value": "plush"
+            },
+            {
+                "label": "JUDGE",
+                "value": "pebble"
+            }
+        ]
+    }
+] as const;
 
-    const cue = (i: number, autoplay = true) => {
-        setIndex((i + TRACKLIST.length) % TRACKLIST.length);
-        progressRef.current = 0;
-        paint();
-        if (autoplay) setPlaying(true);
-    };
-
-    const toggleLike = () =>
-        setLiked((prev) => {
-            const next = new Set(prev);
-            if (next.has(index)) next.delete(index);
-            else next.add(index);
-            return next;
-        });
-
-    const track = TRACKLIST[index];
-    const spinning = playing && !reduce;
-
+export default function Prizes() {
+    const [selected, setSelected] = useState(0);
+    const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+    const prize = prizes[selected];
+    function navigate(event: KeyboardEvent<HTMLButtonElement>, index: number) {
+        const grid = event.currentTarget.parentElement;
+        if (!grid)
+            return;
+        const columns = getComputedStyle(grid).gridTemplateColumns.split(" ").length;
+        const offsets: Record<string, number> = { ArrowRight: 1, ArrowLeft: -1, ArrowDown: columns, ArrowUp: -columns };
+        const offset = offsets[event.key];
+        if (offset === undefined)
+            return;
+        event.preventDefault();
+        const next = index + offset;
+        if (next >= 0 && next < prizes.length) {
+            setSelected(next);
+            buttons.current[next]?.focus();
+        }
+    }
     return (
-        <section id="prizes" className="section bg-shade-100">
-            <div className="mx-auto max-w-6xl">
-                <SectionHeader
-                    track="04"
-                    file="prizes.cda"
-                    title="the prizes"
-                    dek="six tracks on the album. press play, or pick one. amounts drop closer to the day."
-                />
-
-                <div className="mt-16 grid items-start gap-14 lg:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] lg:gap-16">
-                    {/* ------------------------------------------ player -- */}
-                    <div className="relative">
-                        <div className="player">
-                            <div className="disc">
-                                <div className={`disc__spin ${spinning ? "is-spinning" : ""}`}>
-                                    <svg className="disc__ring" viewBox="0 0 200 200" aria-hidden="true">
-                                        <defs>
-                                            <path
-                                                id="disc-arc"
-                                                d="M100,100 m-62,0 a62,62 0 1,1 124,0 a62,62 0 1,1 -124,0"
-                                            />
-                                        </defs>
-                                        <text>
-                                            <textPath href="#disc-arc" xlinkHref="#disc-arc">
-                                                tidalBYTE &apos;26 ✦ the prizes ✦ side a ✦ 12:00:00 ✦
-                                            </textPath>
-                                        </text>
-                                    </svg>
-                                    <img
-                                        src={STICKER("bunny")}
-                                        alt=""
-                                        aria-hidden="true"
-                                        className="disc__sticker"
-                                        loading="lazy"
-                                    />
-                                </div>
-                                <span className="disc__hub" aria-hidden="true" />
-                            </div>
-
-                            <div className="lcd" aria-live="polite">
-                                <span className="lcd__row">
-                                    <span>TRK {pad(index + 1)}</span>
-                                    <span>{playing ? "▶ PLAY" : "❚❚ PAUSE"}</span>
-                                </span>
-                                <span className="lcd__title">{track.title}</span>
-                            </div>
-
-                            <div className="player__progress" aria-hidden="true">
-                                <span ref={elapsedRef}>0:00</span>
-                                <span ref={barRef} className="player__bar">
-                                    <span className="player__fill" />
-                                    <span className="player__knob" />
-                                </span>
-                                <span ref={remainRef}>-0:06</span>
-                            </div>
-
-                            <div className="player__controls">
-                                <button
-                                    type="button"
-                                    className={`player__btn ${repeat ? "is-on" : ""}`}
-                                    aria-pressed={repeat}
-                                    aria-label="Repeat track"
-                                    onClick={() => setRepeat((r) => !r)}
-                                >
-                                    <Icon d={PATHS.repeat} />
-                                </button>
-                                <button
-                                    type="button"
-                                    className="player__btn"
-                                    aria-label="Previous prize"
-                                    onClick={() => cue(index - 1, playing)}
-                                >
-                                    <Icon d={PATHS.prev} />
-                                </button>
-                                <button
-                                    type="button"
-                                    className="player__btn player__btn--main"
-                                    aria-label={playing ? "Pause" : "Play"}
-                                    onClick={() => setPlaying((p) => !p)}
-                                >
-                                    <Icon d={playing ? PATHS.pause : PATHS.play} />
-                                </button>
-                                <button
-                                    type="button"
-                                    className="player__btn"
-                                    aria-label="Next prize"
-                                    onClick={() => cue(index + 1, playing)}
-                                >
-                                    <Icon d={PATHS.next} />
-                                </button>
-                                <button
-                                    type="button"
-                                    className={`player__btn ${liked.has(index) ? "is-on" : ""}`}
-                                    aria-pressed={liked.has(index)}
-                                    aria-label={`Like ${track.title}`}
-                                    onClick={toggleLike}
-                                >
-                                    {liked.has(index) ? <FaHeart aria-hidden="true" /> : <FaRegHeart aria-hidden="true" />}
-                                </button>
-                            </div>
-                        </div>
-
-                        <Sticker
-                            src={STICKER("pebble-headphones")}
-                            width={120}
-                            rotate={-12}
-                            delay={0.3}
-                            className="absolute -left-4 -top-12 z-10 md:-left-10 md:[--sticker-w:150px]"
-                        />
+        <section id="prizes" className={cn(
+            ui.section,
+            "inventory py-[120px]",
+        )} aria-label="Prizes">
+            <div className={ui.wrap}>
+                <header className="center-head mb-[38px] text-center">
+                    <div className={ui.stage}><b className={cn(
+                        "px-[9px] whitespace-nowrap font-normal bg-game-ink text-game-light pt-[7px] pb-1.5",
+                        "rounded-[5px]",
+                    )}>STAGE 1-3</b> loot</div>
+                    <h2 className={ui.heading} style={headingStyle}>player inventory</h2>
+                    <p className={cn(
+                        ui.intro,
+                        "my-0 mx-auto",
+                    )}>the loot up for grabs. select an item to inspect it.</p>
+                </header>
+                <div className={cn(
+                    ui.window,
+                    "inv px-[30px] gap-7 grid [grid-template-columns:minmax(0,_1.05fr)_minmax(0,_1fr)] pt-[38px]",
+                    "pb-[30px] max-[900px]:grid-cols-1 max-[760px]:px-4 max-[760px]:pt-[34px] max-[760px]:pb-[18px]",
+                )}>
+                    <span className={ui.windowTitle}>INVENTORY</span>
+                    <div className="inv-grid gap-3.5 grid grid-cols-3 [align-content:start] max-[760px]:gap-2.5" role="group" aria-label="Prizes">
+                        {prizes.map((item, index) => (<button
+                            key={item.rank}
+                            ref={element => { buttons.current[index] = element; }}
+                            className={cn(
+                                "islot p-[10%] relative [aspect-ratio:1] rounded-xl border-[2.5px] border-solid border-game-ink",
+                                "cursor-pointer",
+                                selected === index
+                                    ? "bg-game-cream shadow-[inset_0_-5px_0_#efd3b8,0_0_0_3px_#fbfdff,0_0_0_6px_#333f48]"
+                                    : "bg-game-sky shadow-[inset_0_-5px_0_#cfdde9]",
+                                "[transition:transform_.2s_cubic-bezier(.34,1.56,.64,1),_background_.2s]",
+                                "hover:[transform:translateY(-3px)] focus-visible:[outline:2px_dashed_#333f48]",
+                                "focus-visible:[outline-offset:6px]",
+                            )}
+                            type="button"
+                            aria-pressed={selected === index}
+                            aria-label={`${item.rank}: ${item.name}`}
+                            style={{ "--rc": item.color } as CSSProperties}
+                            onClick={() => setSelected(index)}
+                            onKeyDown={event => navigate(event, index)}
+                        >
+                            <PrizeArt className="block w-full h-full overflow-visible" index={index} />
+                            <span className={cn(
+                                "gem absolute right-1.5 top-1.5 w-2.5 h-2.5 rounded-[50%] border-2 border-solid border-game-ink",
+                                "bg-[var(--rc)]",
+                            )} aria-hidden="true" />
+                        </button>))}
+                        {[0, 1, 2].map(index => <div key={index} className={cn(
+                            "islot locked p-[10%] relative [aspect-ratio:1] rounded-xl border-[2.5px] border-dashed",
+                            "border-[#9fb1be] bg-[#eef3f7] cursor-default shadow-[none]",
+                            "[transition:transform_.2s_cubic-bezier(.34,1.56,.64,1),_background_.2s] grid place-items-center",
+                            "hover:transform-none focus-visible:[outline:2px_dashed_#333f48]",
+                            "focus-visible:[outline-offset:6px]",
+                        )} aria-hidden="true">
+                            <span className="font-pixel text-[12px] text-[#9fb1be]">?</span>
+                        </div>)}
+                        <p className={cn(
+                            "inv-note mx-0 [grid-column:1_/_-1] mt-1.5 mb-0 font-pixel text-[8px] leading-[1.8]",
+                            "text-game-muted",
+                        )}>? = more loot unlocks closer to nov 21</p>
                     </div>
-
-                    {/* --------------------------------------- tracklist -- */}
-                    <div>
-                        <div className="tracklist__head label" aria-hidden="true">
-                            <span>#</span>
-                            <span>title</span>
-                            <span>prize</span>
+                    <div
+                        key={selected}
+                        className={cn(
+                            "detail flash px-[22px] relative flex flex-col rounded-xl border-[2.5px] border-solid",
+                            "border-game-ink bg-[#eef4f8] pt-[22px] pb-5 min-h-full",
+                        )}
+                        aria-live="polite"
+                        style={{ "--rc": prize.color } as CSSProperties}
+                    >
+                        <div className={cn(
+                            "art relative h-[210px] rounded-[10px]",
+                            "[background:radial-gradient(circle_at_50%_70%,_#fbfdff_0_30%,_transparent_62%),_#dfe8ef] grid",
+                            "place-items-center overflow-hidden max-[760px]:h-[170px]",
+                        )}>
+                            <PrizeArt className={cn(
+                                "w-[min(180px,_80%)] h-auto [aspect-ratio:1] overflow-visible",
+                                "animate-prize-float max-[760px]:w-[140px]",
+                            )} index={selected} label={prize.name} />
+                            <span className={cn(
+                                "shine animate-prize-shine absolute top-0 right-0 bottom-0 left-0",
+                                "bg-[linear-gradient(115deg,_transparent_30%,_rgba(255,255,255,.7)_45%,_transparent_60%)]",
+                                "[transform:translateX(-100%)]",
+                            )} />
                         </div>
-                        <ol className="tracklist">
-                            {TRACKLIST.map((t, i) => {
-                                const active = i === index;
-                                return (
-                                    <li key={t.title}>
-                                        <button
-                                            type="button"
-                                            className={`tracklist__row ${active ? "is-active" : ""}`}
-                                            aria-current={active ? "true" : undefined}
-                                            onClick={() => cue(i)}
-                                        >
-                                            <span className="tracklist__no">
-                                                {active && playing && !reduce ? (
-                                                    <span className="eq" aria-hidden="true">
-                                                        <i />
-                                                        <i />
-                                                        <i />
-                                                    </span>
-                                                ) : (
-                                                    pad(i + 1)
-                                                )}
-                                            </span>
-                                            <span className="tracklist__title">
-                                                {t.title}
-                                                <small>{t.kind}</small>
-                                            </span>
-                                            <span className="tracklist__prize">
-                                                {liked.has(i) && (
-                                                    <FaHeart aria-label="liked" className="mr-2 inline text-[10px]" />
-                                                )}
-                                                {t.prize}
-                                            </span>
-                                        </button>
-                                    </li>
-                                );
-                            })}
-                        </ol>
-                        <p className="mt-6 text-[12px] leading-relaxed text-shade-600">
-                            ✦ prize amounts are announced closer to the event. sponsor challenges may
-                            add bonus tracks.
+                        <span className={cn(
+                            "rar px-2 self-start mt-[18px] font-pixel text-[8px] pt-1.5 pb-[5px] rounded-[5px] border-2",
+                            "border-solid border-game-ink bg-[var(--rc)]",
+                        )}>{prize.rarity} · {prize.rank}</span>
+                        <h3 className={cn(
+                            "mx-0 mt-3 mb-1 font-pixel font-normal text-[clamp(14px,_1.5vw,_17px)] leading-[1.5]",
+                            "text-game-ink",
+                        )}>
+                            {prize.name}
+                        </h3>
+                        <span className="who text-[13px] font-bold text-game-muted">
+                            {prize.recipient}
+                        </span>
+                        <p className="mx-0 mt-2.5 mb-4 text-[14.5px] leading-[1.7] text-[#3f4d57]">
+                            {prize.description}
                         </p>
+                        <dl className={cn(
+                            "mx-0 mt-auto mb-0 grid [grid-template-columns:auto_1fr] gap-y-1.5 gap-x-3.5 font-pixel",
+                            "text-[8px] leading-[1.6]",
+                        )}>
+                            {prize.stats.map(({ label, value }) => <Fragment key={label}>
+                                <dt className="text-game-muted">
+                                    {label}
+                                </dt>
+                                <dd className="m-0 text-game-ink">
+                                    {value}
+                                </dd>
+                            </Fragment>)}
+                        </dl>
                     </div>
                 </div>
             </div>
         </section>
     );
-};
-
-export default Prizes;
+}

@@ -60,7 +60,7 @@ function lit(s: Sheet, x: number, y: number, w: number, h: number, o: Win, r: Ra
     s.add(
         <rect
             key={s.key()}
-            className="caped-flick"
+            className="caped-flick animate-city-window"
             x={r1(x)} y={r1(y)} width={r1(w)} height={r1(h)} rx={1.2} fill={o.lit}
             style={{ animationDuration: `${d.toFixed(2)}s`, animationDelay: `${(-r() * d).toFixed(2)}s` }}
         />,
@@ -87,7 +87,7 @@ const heart = (s: Sheet, x: number, y: number, k: number, fill: string, beacon =
     s.add(
         <path
             key={s.key()}
-            className={beacon ? "caped-beacon" : undefined}
+            className={beacon ? "caped-beacon animate-city-beacon" : undefined}
             d={HEART}
             fill={fill}
             transform={`translate(${x},${y}) scale(${k})`}
@@ -164,7 +164,7 @@ function roofProps(s: Sheet, b: Building, y: number, r: Rand) {
         s.add(
             <circle
                 key={s.key()}
-                className="caped-beacon"
+                className="caped-beacon animate-city-beacon"
                 cx={ax + 1} cy={y - 43} r={3.4} fill="#efc9a6" stroke={INK} strokeWidth={1.4}
                 style={{ animationDelay: `${(-r() * 3).toFixed(2)}s` }}
             />,

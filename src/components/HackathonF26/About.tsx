@@ -1,279 +1,242 @@
-import { useState } from "react";
-import { FaDiscord, FaEnvelope, FaShareSquare, FaUserPlus } from "react-icons/fa";
-import SectionHeader from "./SectionHeader";
-import { EVENT, LINKS, STICKER } from "./event";
+import { cn, ui, headingStyle } from "./ui";
+import { useRef, useState, type CSSProperties } from "react";
+import { useInView } from "framer-motion";
+import { PebbleArt } from "./PebbleArt";
+import PixelCanvas from "./PixelArt";
+import { EVENT, fmtCentral } from "./event";
 
-/* -------------------------------------------------------------------------- */
-/*  About, as tidalBYTE's MySpace profile (theme pitch: "early blogspot /      */
-/*  MySpace minimal"). The Top 8 is the mascot roster, in grayscale.           */
-/* -------------------------------------------------------------------------- */
+function aboutPanel(active: boolean) {
+    return cn(
+        "panel relative [grid-area:1_/_1]",
+        "[transition:opacity_.6s_cubic-bezier(.16,1,.3,1),_transform_.8s_cubic-bezier(.16,1,.3,1),_filter_.6s_ease]",
+        active
+            ? "on visible opacity-100 pointer-events-auto transform-none [filter:blur(0)]"
+            : "invisible opacity-0 pointer-events-none [transform:translateY(26px)_scale(.98)] [filter:blur(10px)] motion-reduce:filter-none",
+    );
+}
 
-const TOP_8 = [
-    { name: "pebble", img: "pebble-headphones" },
-    { name: "lil pebble", img: "pebble-bow" },
-    { name: "moo", img: "cow" },
-    { name: "mochi", img: "cat" },
-    { name: "prof. whiskers", img: "cat-prof" },
-    { name: "dizzy", img: "panda" },
-    { name: "bun", img: "bunny" },
-];
-
-const DETAILS: [string, string][] = [
-    ["Status:", EVENT.registrationOpen ? "registration open!" : "registration opens soon"],
-    ["Here for:", "building, learning, free food"],
-    ["Date:", `${EVENT.day}, ${EVENT.date}`],
-    ["Room:", EVENT.room],
-    ["Length:", `${EVENT.hours} hours`],
-    ["Teams:", "up to 4, or come solo"],
-    ["Built for:", "freshmen & sophomores"],
-    ["Experience:", "none needed"],
-];
-
-const INTERESTS: [string, string][] = [
-    ["General:", "building things, free food, data science & AI/ML, side quests"],
-    ["Music:", "whatever's on the aux at 2 PM"],
-    ["Movies:", "Hackers (1995), The Social Network"],
-    ["Heroes:", "first-time hackers"],
-];
-
-const COMMENTS = [
-    { from: "pebble", img: "pebble-headphones", when: "11/14/2026 11:59 PM", text: "see u in MSC 2304 !! save me a snack" },
-    { from: "bun", img: "bunny", when: "11/02/2026 4:12 PM", text: "thanks for the add :3" },
-];
-
-const SITE_URL = "https://f26.tidaltamu.com";
-
-const About = () => {
-    const [copied, setCopied] = useState(false);
-
-    const share = async () => {
-        try {
-            if (navigator.share) {
-                await navigator.share({ title: "tidalBYTE '26", url: SITE_URL });
-                return;
-            }
-            await navigator.clipboard.writeText(SITE_URL);
-            setCopied(true);
-            setTimeout(() => setCopied(false), 2000);
-        } catch {
-            // share sheet dismissed, or clipboard blocked: nothing to do
-        }
-    };
-
-    const contacts = [
-        { label: "Send Message", icon: FaEnvelope, href: `mailto:${LINKS.email}` },
-        { label: "Add to Friends", icon: FaUserPlus, href: LINKS.instagram },
-        { label: "Instant Message", icon: FaDiscord, href: LINKS.discord },
-    ];
-
+export default function About() {
+    const [selected, setSelected] = useState(0);
+    const section = useRef<HTMLElement>(null);
+    const seen = useInView(section, { once: true, amount: 0.15 });
+    const eventDay = fmtCentral(EVENT.startsAt, { month: "short", day: "numeric" }).toLowerCase();
     return (
-        <section id="about" className="section">
-            <div className="mx-auto max-w-6xl">
-                <SectionHeader
-                    track="02"
-                    file="about.html"
-                    title="about"
-                    dek="tidalBYTE's corner of the internet, best viewed at 1024×768."
-                />
-
-                <div className="space mt-14">
-                    <div className="space__bar">
-                        <span className="font-pixel text-[9px] md:text-[10px]">tidalspace</span>
-                        <nav aria-label="Profile shortcuts" className="space__nav">
-                            <a href="#top">home</a>
-                            <a href="#invite">invite</a>
-                            <a href="#schedule">schedule</a>
-                            <a href="#prizes">prizes</a>
-                            <a href="#faq">faq</a>
-                        </nav>
+        <section id="about" ref={section} className={cn(`sec about group/about${seen ? " seen" : ""}`, "py-[120px] px-0 relative isolate [scroll-margin-top:82px]")} aria-label="About">
+            <div className={cn(
+                "about-frame py-0 px-[max(5vw,_24px)] gap-[4vw] relative grid",
+                "[grid-template-columns:minmax(0,_1fr)_minmax(0,_1fr)] items-center max-[760px]:py-0",
+                "max-[760px]:px-4 max-[760px]:gap-8 max-[760px]:grid-cols-1",
+                "max-[760px]:[grid-template-rows:auto_1fr] max-[760px]:[align-items:start]",
+            )}>
+                <div className={cn(
+                    "select relative justify-self-center w-[min(430px,_100%)] flex flex-col items-center",
+                    "max-[760px]:w-[min(250px,_66vw)]",
+                )}>
+                    <div className={cn(
+                        "label font-pixel text-[11px] text-game-muted mb-1",
+                        "animate-player-label uppercase tracking-[0.22em] max-[760px]:hidden",
+                    )}>PLAYER 1 SELECT</div>
+                    <div className="stagebox relative w-full [aspect-ratio:1_/_.92]" aria-hidden="true">
+                        <div className={cn(
+                            "spot absolute left-[14%] right-[14%] top-0 bottom-[8%]",
+                            "[clip-path:polygon(38%_0,_62%_0,_100%_100%,_0_100%)]",
+                            "bg-[linear-gradient(180deg,_rgba(255,_255,_255,_.85),_rgba(255,_255,_255,_0)_90%)]",
+                        )} />
+                        <div className={cn(
+                            "pedestal absolute left-[12%] right-[12%] bottom-[2%] h-[17%] rounded-[50%] bg-game-blue",
+                            "border-[3px] border-solid border-game-ink shadow-[inset_0_-10px_0_#a2b8c6] after:content-['']",
+                            "after:absolute after:left-[12%] after:right-[12%] after:top-[18%] after:h-[34%]",
+                            "after:rounded-[50%] after:border-2 after:border-dashed after:border-game-window after:opacity-90",
+                        )} />
+                        <div className={cn(
+                            "big-pebble absolute left-1/2 bottom-[10%] w-[72%] -translate-x-1/2",
+                            "animate-pebble-idle [transform-origin:50%_100%]",
+                        )}>
+                            <PebbleArt />
+                        </div>
                     </div>
-
-                    <div className="space__body">
-                        {/* ------------------------------------------ left -- */}
-                        <div className="space-y-5">
-                            <h3 className="space__name">tidalBYTE</h3>
-
-                            <div className="flex gap-4">
-                                <figure className="space__pic">
-                                    <img
-                                        src={`${import.meta.env.BASE_URL}f26/pebble-loading.gif`}
-                                        alt="Pebble the penguin inside a loading window"
-                                        width={339}
-                                        height={203}
-                                        loading="lazy"
-                                    />
-                                </figure>
-                                <div className="space__vitals">
-                                    <p className="italic">
-                                        &ldquo;one room. twelve hours. zero experience needed.&rdquo;
-                                    </p>
-                                    <p>
-                                        hackathon
-                                        <br />
-                                        {EVENT.hours} hours long
-                                        <br />
-                                        College Station,
-                                        <br />
-                                        TEXAS
-                                    </p>
-                                    <p className="space__online">
-                                        <span className="space__dot" aria-hidden="true" />
-                                        Online Now!
-                                    </p>
-                                </div>
-                            </div>
-
-                            <div className="space__small space-y-1">
-                                <p>
-                                    <b>Mood:</b> caffeinated (^_^)
-                                </p>
-                                <p>
-                                    <b>View My:</b> <a href="#schedule">Schedule</a> |{" "}
-                                    <a href="#prizes">Prizes</a>
-                                </p>
-                            </div>
-
-                            <div className="space__box">
-                                <h4 className="space__boxhead">Contacting tidalBYTE</h4>
-                                <div className="space__contact">
-                                    {contacts.map(({ label, icon: Icon, href }) => (
-                                        <a
-                                            key={label}
-                                            href={href}
-                                            target={href.startsWith("mailto") ? undefined : "_blank"}
-                                            rel="noopener noreferrer"
-                                        >
-                                            <Icon aria-hidden="true" /> {label}
-                                        </a>
-                                    ))}
-                                    <button type="button" onClick={share}>
-                                        <FaShareSquare aria-hidden="true" />{" "}
-                                        {copied ? "Link copied!" : "Forward to Friend"}
-                                    </button>
-                                </div>
-                            </div>
-
-                            <div className="space__box">
-                                <h4 className="space__boxhead">tidalBYTE&apos;s URL</h4>
-                                <p className="space__small px-3 py-2.5">{SITE_URL}</p>
-                            </div>
-
-                            <div className="space__box">
-                                <h4 className="space__boxhead">tidalBYTE&apos;s Details</h4>
-                                <table className="space__details">
-                                    <tbody>
-                                        {DETAILS.map(([k, v]) => (
-                                            <tr key={k}>
-                                                <th scope="row">{k}</th>
-                                                <td>{v}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div className="space__box">
-                                <h4 className="space__boxhead">tidalBYTE&apos;s Interests</h4>
-                                <table className="space__details">
-                                    <tbody>
-                                        {INTERESTS.map(([k, v]) => (
-                                            <tr key={k}>
-                                                <th scope="row">{k}</th>
-                                                <td>{v}</td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
+                    <div className={cn(
+                        ui.window,
+                        "nameplate px-5 z-[2] w-full mt-[-6px] pt-[18px] pb-4 max-[760px]:px-3.5 max-[760px]:pt-3",
+                        "max-[760px]:pb-2.5",
+                    )}>
+                        <div className="np-top gap-2.5 flex justify-between items-baseline font-pixel text-game-ink">
+                            <b className="font-normal text-[15px] max-[760px]:text-[12px]">PEBBLE</b>
+                            <span className="text-[9px] text-game-muted">LV 26 · HERO</span>
                         </div>
-
-                        {/* ----------------------------------------- right -- */}
-                        <div className="space-y-5">
-                            <p className="space__network">
-                                tidalBYTE is in your extended network
-                            </p>
-
-                            <div className="space__box">
-                                <h4 className="space__boxhead">tidalBYTE&apos;s Blurbs</h4>
-                                <div className="space__blurb">
-                                    <h5>About me:</h5>
-                                    <p>
-                                        tidalBYTE is TIDAL&apos;s fall hackathon at Texas A&amp;M:
-                                        twelve hours in {EVENT.room} to build something with data
-                                        science and AI/ML, or anything else you can dream up.
-                                        It&apos;s built for freshmen and sophomores, so expect
-                                        workshops, mentors on standby, free food, and prizes at the
-                                        end. No experience needed. Just bring your curiosity and
-                                        your laptop.
-                                    </p>
-                                    <h5>Who I&apos;d like to meet:</h5>
-                                    <p>
-                                        First-timers. People who have never opened a terminal and
-                                        people who never close theirs. Designers, artists, data
-                                        nerds, and anyone who wants to make something in a day.
-                                        Bring a team of up to four, or come solo and we&apos;ll help
-                                        you find one.
-                                    </p>
+                        <div className={cn(
+                            "stats grid [grid-template-columns:auto_1fr] gap-y-[9px] gap-x-3 items-center mt-3.5 font-pixel",
+                            "text-[8px] text-game-muted max-[760px]:hidden",
+                        )}>
+                            <span>BRAVERY</span>
+                            <span className="bar h-[11px] border-2 border-solid border-game-ink rounded-md bg-game-sky overflow-hidden">
+                                <i className={cn(
+                                    "block h-full w-[var(--v)]",
+                                    "[background:repeating-linear-gradient(90deg,_var(--c)_0_7px,_color-mix(in_srgb,_var(--c),_#fff_35%)_7px_9px)]",
+                                    "[transform-origin:left] [transform:scaleX(0)] group-[.seen]/about:transform-none",
+                                    "[transition:transform_1.1s_cubic-bezier(.16,1,.3,1)_.2s]",
+                                )} style={{ "--v": "86%", "--c": "#e8b48f" } as CSSProperties} />
+                            </span>
+                            <span>SNACKS</span>
+                            <span className="bar h-[11px] border-2 border-solid border-game-ink rounded-md bg-game-sky overflow-hidden">
+                                <i className={cn(
+                                    "block h-full w-[var(--v)]",
+                                    "[background:repeating-linear-gradient(90deg,_var(--c)_0_7px,_color-mix(in_srgb,_var(--c),_#fff_35%)_7px_9px)]",
+                                    "[transform-origin:left] [transform:scaleX(0)] group-[.seen]/about:transform-none",
+                                    "[transition:transform_1.1s_cubic-bezier(.16,1,.3,1)_.2s]",
+                                )} style={{ "--v": "100%", "--c": "#a9bf9f" } as CSSProperties} />
+                            </span>
+                            <span>CODE</span>
+                            <span className="bar h-[11px] border-2 border-solid border-game-ink rounded-md bg-game-sky overflow-hidden">
+                                <i className={cn(
+                                    "block h-full w-[var(--v)]",
+                                    "[background:repeating-linear-gradient(90deg,_var(--c)_0_7px,_color-mix(in_srgb,_var(--c),_#fff_35%)_7px_9px)]",
+                                    "[transform-origin:left] [transform:scaleX(0)] group-[.seen]/about:transform-none",
+                                    "[transition:transform_1.1s_cubic-bezier(.16,1,.3,1)_.2s]",
+                                )} style={{ "--v": "62%", "--c": "#7fa7c4" } as CSSProperties} />
+                            </span>
+                            <span>CAPE</span>
+                            <span className="bar h-[11px] border-2 border-solid border-game-ink rounded-md bg-game-sky overflow-hidden">
+                                <i className={cn(
+                                    "block h-full w-[var(--v)]",
+                                    "[background:repeating-linear-gradient(90deg,_var(--c)_0_7px,_color-mix(in_srgb,_var(--c),_#fff_35%)_7px_9px)]",
+                                    "[transform-origin:left] [transform:scaleX(0)] group-[.seen]/about:transform-none",
+                                    "[transition:transform_1.1s_cubic-bezier(.16,1,.3,1)_.2s]",
+                                )} style={{ "--v": "100%", "--c": "#93b5cc" } as CSSProperties} />
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div className="about-copy relative w-[min(540px,_100%)]">
+                    <div className="about-panels relative grid">
+                        <article
+                            className={aboutPanel(selected === 0)}
+                            id="about-pebble"
+                            aria-hidden={selected !== 0}
+                        >
+                            <div className={cn(
+                                ui.window,
+                                "px-[30px] pt-8 pb-[26px] max-[760px]:px-[18px] max-[760px]:pt-[26px] max-[760px]:pb-[18px]",
+                            )}>
+                                <span className={ui.windowTitle}>STAGE 1-1</span>
+                                <h2 className={ui.heading} style={headingStyle}>meet pebble</h2>
+                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">pebble is the tiny penguin hero holding this whole hackathon together. armed with a fish and a cape that's a little too big, pebble believes every great project starts as one small, slightly chaotic idea. keep scrolling — pebble's walking the street at the bottom of your screen with you.</p>
+                                <div className={cn(
+                                    ui.pixelFrame,
+                                    "max-[760px]:hidden",
+                                )}>
+                                    <PixelCanvas className="block w-full h-auto [image-rendering:crisp-edges]" scene="pebble" width={96} height={48} />
+                                    <span className={cn(
+                                        "pix-bubble px-[11px] absolute top-[9%] left-1/2 -translate-x-1/2 whitespace-nowrap font-pixel",
+                                        "text-[clamp(9px,_1vw,_11px)] text-game-ink bg-game-window border-[2.5px] border-solid",
+                                        "border-game-ink rounded-md pt-[9px] pb-2 shadow-[3px_3px_0_#333f48] after:content-['']",
+                                        "after:absolute after:left-[58%] after:bottom-[-10px] after:w-3 after:h-2.5 after:bg-game-window",
+                                        "after:[border-right-width:2.5px] after:[border-right-style:solid]",
+                                        "after:[border-right-color:#333f48] after:[border-bottom-width:2.5px]",
+                                        "after:[border-bottom-style:solid] after:[border-bottom-color:#333f48]",
+                                        "after:[transform:skewX(-30deg)]",
+                                    )}>hi! i'm pebble ♪</span>
                                 </div>
                             </div>
-
-                            <div className="space__box">
-                                <h4 className="space__boxhead">tidalBYTE&apos;s Friend Space</h4>
-                                <p className="space__small px-3 pt-3 font-bold">
-                                    tidalBYTE has <span className="text-hint-deep">8</span> friends.
-                                </p>
-                                <ul className="space__friends">
-                                    {TOP_8.map((f) => (
-                                        <li key={f.name}>
-                                            <span className="space__friendname">{f.name}</span>
-                                            <span className="space__friendpic">
-                                                <img
-                                                    src={STICKER(f.img)}
-                                                    alt=""
-                                                    loading="lazy"
-                                                    decoding="async"
-                                                />
-                                            </span>
-                                        </li>
-                                    ))}
-                                    <li>
-                                        <span className="space__friendname">you?</span>
-                                        <a href="#invite" className="space__friendpic space__friendpic--you">
-                                            <span aria-hidden="true">?</span>
-                                            <span className="sr-only">Your spot: see the invite</span>
-                                        </a>
-                                    </li>
-                                </ul>
-                                <p className="space__small px-3 pb-3 text-right">
-                                    <a href={LINKS.instagram} target="_blank" rel="noopener noreferrer">
-                                        View All of tidalBYTE&apos;s Friends
-                                    </a>
-                                </p>
+                        </article>
+                        <article
+                            className={aboutPanel(selected === 1)}
+                            id="about-tidal"
+                            aria-hidden={selected !== 1}
+                        >
+                            <div className={cn(
+                                ui.window,
+                                "px-[30px] pt-8 pb-[26px] max-[760px]:px-[18px] max-[760px]:pt-[26px] max-[760px]:pb-[18px]",
+                            )}>
+                                <span className={ui.windowTitle}>STAGE 1-1</span>
+                                <h2 className={ui.heading} style={headingStyle}>the guild: tidal</h2>
+                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">tidal is a student org at texas a&amp;m for people who like to make things — coders, designers, tinkerers and the hackathon-curious. we run build nights, workshops, and the occasional all-day sprint like this one.</p>
+                                <div className={cn(
+                                    ui.pixelFrame,
+                                    "max-[760px]:hidden",
+                                )}>
+                                    <PixelCanvas className="block w-full h-auto [image-rendering:crisp-edges]" scene="tidal" width={96} height={48} />
+                                    <span className={cn(
+                                        "pix-bubble px-[11px] absolute top-[9%] left-1/2 -translate-x-1/2 whitespace-nowrap font-pixel",
+                                        "text-[clamp(9px,_1vw,_11px)] text-game-ink bg-game-window border-[2.5px] border-solid",
+                                        "border-game-ink rounded-md pt-[9px] pb-2 shadow-[3px_3px_0_#333f48] after:content-['']",
+                                        "after:absolute after:left-[58%] after:bottom-[-10px] after:w-3 after:h-2.5 after:bg-game-window",
+                                        "after:[border-right-width:2.5px] after:[border-right-style:solid]",
+                                        "after:[border-right-color:#333f48] after:[border-bottom-width:2.5px]",
+                                        "after:[border-bottom-style:solid] after:[border-bottom-color:#333f48]",
+                                        "after:[transform:skewX(-30deg)]",
+                                    )}>we build stuff!</span>
+                                </div>
                             </div>
-
-                            <div className="space__box">
-                                <h4 className="space__boxhead">tidalBYTE&apos;s Friends Comments</h4>
-                                <ul className="divide-y divide-rule">
-                                    {COMMENTS.map((c) => (
-                                        <li key={c.from} className="space__comment">
-                                            <div className="space__commenter">
-                                                <span className="space__friendname">{c.from}</span>
-                                                <img src={STICKER(c.img)} alt="" loading="lazy" />
-                                            </div>
-                                            <div className="space__small">
-                                                <p className="font-bold text-shade-600">{c.when}</p>
-                                                <p className="mt-1.5">{c.text}</p>
-                                            </div>
-                                        </li>
-                                    ))}
-                                </ul>
+                        </article>
+                        <article
+                            className={aboutPanel(selected === 2)}
+                            id="about-byte"
+                            aria-hidden={selected !== 2}
+                        >
+                            <div className={cn(
+                                ui.window,
+                                "px-[30px] pt-8 pb-[26px] max-[760px]:px-[18px] max-[760px]:pt-[26px] max-[760px]:pb-[18px]",
+                            )}>
+                                <span className={ui.windowTitle}>STAGE 1-1</span>
+                                <h2 className={ui.heading} style={headingStyle}>the mission: tidalBYTE</h2>
+                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">tidalBYTE '26 is a {EVENT.hours}-hour, beginner-friendly hackathon. show up {eventDay} at {EVENT.room.toLowerCase()}, team up (or don't), build something you're proud of, and leave with new friends, free food, and maybe a scooter.</p>
+                                <div className={cn(
+                                    ui.pixelFrame,
+                                    "max-[760px]:hidden",
+                                )}>
+                                    <PixelCanvas className="block w-full h-auto [image-rendering:crisp-edges]" scene="byte" width={96} height={48} />
+                                    <span className={cn(
+                                        "pix-bubble px-[11px] absolute top-[9%] left-1/2 -translate-x-1/2 whitespace-nowrap font-pixel",
+                                        "text-[clamp(9px,_1vw,_11px)] text-game-ink bg-game-window border-[2.5px] border-solid",
+                                        "border-game-ink rounded-md pt-[9px] pb-2 shadow-[3px_3px_0_#333f48] after:content-['']",
+                                        "after:absolute after:left-[58%] after:bottom-[-10px] after:w-3 after:h-2.5 after:bg-game-window",
+                                        "after:[border-right-width:2.5px] after:[border-right-style:solid]",
+                                        "after:[border-right-color:#333f48] after:[border-bottom-width:2.5px]",
+                                        "after:[border-bottom-style:solid] after:[border-bottom-color:#333f48]",
+                                        "after:[transform:skewX(-30deg)]",
+                                    )}>12 hrs. let's go!</span>
+                                </div>
                             </div>
-                        </div>
+                        </article>
+                    </div>
+                    <div className="about-controls gap-2.5 flex flex-wrap mt-[22px]" role="group" aria-label="About topics">
+                        <button className={cn(
+                            "py-2.5 px-3.5 border-2 border-solid border-game-ink rounded-lg bg-game-window text-game-ink",
+                            "[font-family:inherit] text-[12px] leading-[1.5] cursor-pointer",
+                            "aria-pressed:bg-game-blue aria-pressed:shadow-[2px_2px_0_#333f48]",
+                            "focus-visible:[outline:2px_dashed_#333f48] focus-visible:[outline-offset:4px]",
+                        )}
+                            type="button"
+                            onClick={() => setSelected(0)}
+                            aria-pressed={selected === 0}
+                            aria-controls="about-pebble"
+                        >pebble</button>
+                        <button className={cn(
+                            "py-2.5 px-3.5 border-2 border-solid border-game-ink rounded-lg bg-game-window text-game-ink",
+                            "[font-family:inherit] text-[12px] leading-[1.5] cursor-pointer",
+                            "aria-pressed:bg-game-blue aria-pressed:shadow-[2px_2px_0_#333f48]",
+                            "focus-visible:[outline:2px_dashed_#333f48] focus-visible:[outline-offset:4px]",
+                        )}
+                            type="button"
+                            onClick={() => setSelected(1)}
+                            aria-pressed={selected === 1}
+                            aria-controls="about-tidal"
+                        >tidal</button>
+                        <button className={cn(
+                            "py-2.5 px-3.5 border-2 border-solid border-game-ink rounded-lg bg-game-window text-game-ink",
+                            "[font-family:inherit] text-[12px] leading-[1.5] cursor-pointer",
+                            "aria-pressed:bg-game-blue aria-pressed:shadow-[2px_2px_0_#333f48]",
+                            "focus-visible:[outline:2px_dashed_#333f48] focus-visible:[outline-offset:4px]",
+                        )}
+                            type="button"
+                            onClick={() => setSelected(2)}
+                            aria-pressed={selected === 2}
+                            aria-controls="about-byte"
+                        >tidalBYTE</button>
                     </div>
                 </div>
             </div>
         </section>
     );
-};
-
-export default About;
+}

@@ -1,218 +1,226 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { cn, ui, headingStyle } from "./ui";
+import { useEffect, useRef, useState } from "react";
 import { useInView, useReducedMotion } from "framer-motion";
-import SectionHeader from "./SectionHeader";
-import Sticker from "./Sticker";
-import { EVENT, STICKER, fmtCentral } from "./event";
+import { QUESTS, EVENT, fmtCentral } from "./event";
+import PixelCanvas from "./PixelArt";
+import { createQuestLog } from "./QuestLog";
 
-/* -------------------------------------------------------------------------- */
-/*  The schedule as a Receiptify-style receipt that "prints" into view.        */
-/* -------------------------------------------------------------------------- */
+const questTags = {
+    main: "bg-game-peach",
+    side: "bg-game-blue",
+    food: "bg-game-sage",
+    boss: "bg-game-ink text-game-cream",
+} as const;
 
-/* Mirrors last fall's one-day run of show (doors at 7, out by 7). Pencilled in
-   until the F26 schedule is locked. `at` is Central time, 24h. */
-const RUN_OF_SHOW = [
-    { at: "07:00", item: "doors open + check-in", note: "breakfast is on us" },
-    { at: "07:30", item: "opening ceremony", note: "team matchmaking after" },
-    { at: "08:00", item: "hacking begins" },
-    { at: "08:00", item: "workshop 01" },
-    { at: "09:00", item: "workshop 02" },
-    { at: "10:00", item: "workshop 03" },
-    { at: "13:00", item: "lunch" },
-    { at: "16:30", item: "submissions due", note: "pencils down" },
-    { at: "17:00", item: "judging" },
-    { at: "18:30", item: "closing + awards" },
-    { at: "19:00", item: "doors close" },
-];
+type Quest = (typeof QUESTS)[number];
 
-const DAY = EVENT.startsAt.slice(0, 10);
-const OFFSET = EVENT.startsAt.slice(19);
-const isoAt = (at: string) => `${DAY}T${at}:00${OFFSET}`;
-const timeLabel = (at: string) =>
-    fmtCentral(isoAt(at), { hour: "numeric", minute: "2-digit" }).replace(/\s/, " ");
-
-const DATE_LINE = fmtCentral(EVENT.startsAt, {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-}).toUpperCase();
-
-const gcalStamp = (iso: string) => new Date(iso).toISOString().replace(/[-:]|\.\d{3}/g, "");
-const CALENDAR_URL =
-    "https://calendar.google.com/calendar/render?action=TEMPLATE" +
-    `&text=${encodeURIComponent("tidalBYTE '26")}` +
-    `&dates=${gcalStamp(EVENT.startsAt)}/${gcalStamp(EVENT.endsAt)}` +
-    `&location=${encodeURIComponent(`${EVENT.room}, Texas A&M, ${EVENT.city}`)}` +
-    `&details=${encodeURIComponent("TIDAL's 12-hour fall hackathon. https://f26.tidaltamu.com")}`;
-
-/* The line that is happening right now, on the day itself. */
-function useCurrentSlot() {
-    const [now, setNow] = useState(() => Date.now());
-    useEffect(() => {
-        const t = setInterval(() => setNow(Date.now()), 30_000);
-        return () => clearInterval(t);
-    }, []);
-    return useMemo(() => {
-        if (now < Date.parse(isoAt(RUN_OF_SHOW[0].at)) || now >= Date.parse(EVENT.endsAt)) {
-            return null;
-        }
-        let current: string | null = null;
-        for (const r of RUN_OF_SHOW) if (Date.parse(isoAt(r.at)) <= now) current = r.at;
-        return current;
-    }, [now]);
+function QuestRow({ quest, index }: {
+    quest: Quest;
+    index: number;
+}) {
+    const row = useRef<HTMLLIElement>(null);
+    const visible = useInView(row, { once: true, margin: "0px 0px -8% 0px" });
+    const reduce = useReducedMotion();
+    return (
+        <li
+            ref={row}
+            className={cn(`q${quest.highlight ? " main" : ""}${visible || reduce ? " in" : ""}`, "py-[11px] gap-3.5 relative grid [grid-template-columns:76px_30px_minmax(0,_1fr)_auto]",
+                "items-center pr-3 pl-[30px] rounded-[10px]",
+                visible || reduce ? "opacity-100 transform-none" : "opacity-0 [transform:translateX(-14px)]",
+                "[transition:opacity_.5s_ease,_transform_.6s_cubic-bezier(.16,1,.3,1),_background_.2s]",
+                "before:content-['▶'] before:absolute before:left-[9px] before:top-1/2 before:[translate:0_-50%]",
+                "before:text-[11px] before:text-game-ink before:opacity-0 before:[transition:opacity_.15s]",
+                "hover:before:opacity-100",
+                quest.highlight ? "bg-[#f9ebdc] hover:bg-[#f6e1cc]" : "hover:bg-[#eef4f8] focus-within:bg-[#eef4f8]",
+                "hover:before:animate-quest-pointer max-[760px]:py-2.5",
+                "max-[760px]:gap-2.5 max-[760px]:[grid-template-columns:58px_minmax(0,_1fr)_auto]",
+                "max-[760px]:pr-2 max-[760px]:pl-[22px]")}
+            tabIndex={0}
+            style={{ transitionDelay: `${index % 4 * 70}ms` }}
+        >
+            <span className="q-time font-pixel text-[11px] text-game-ink tabular-nums max-[760px]:text-[9px]">
+                {quest.time}
+            </span>
+            <PixelCanvas className="w-[30px] h-[30px] [image-rendering:pixelated] max-[760px]:hidden" sprite={quest.icon} width={16} height={16} />
+            <span className="q-name text-[15px] font-bold text-[#2c363e] leading-[1.35] max-[760px]:text-[14px]">
+                {quest.name}
+                {quest.note && <small className="block font-normal text-[13px] text-[#5e6b75] mt-0.5">
+                    {quest.note}
+                </small>}
+            </span>
+            <span className={cn(`tag ${quest.kind}`, questTags[quest.kind], "px-[7px] font-pixel text-[7.5px] tracking-[.03em] pt-1.5 pb-[5px] rounded-[5px] border-2",
+                "border-solid border-game-ink whitespace-nowrap")}>
+                {quest.kind.toUpperCase()}
+            </span>
+        </li>
+    );
 }
 
-const SafetyPin = () => (
-    <svg className="receipt__pin" viewBox="0 0 132 40" aria-hidden="true">
-        <g fill="none" strokeLinecap="round" strokeLinejoin="round">
-            <path d="M22 13 L104 9" stroke="#85827A" strokeWidth="3" />
-            <path d="M22 27 L100 15" stroke="#5C5A54" strokeWidth="3" />
-            <path d="M22 13 A7 7 0 1 0 22 27" stroke="#5C5A54" strokeWidth="3" />
-            <circle cx="16" cy="20" r="3.2" stroke="#85827A" strokeWidth="2" />
-            <path
-                d="M98 4 H118 A7 7 0 0 1 118 18 H98 Z"
-                fill="#E4E2DD"
-                stroke="#383632"
-                strokeWidth="2.2"
-            />
-            <path d="M101 8 H116" stroke="#FFFFFF" strokeWidth="1.6" />
-        </g>
-    </svg>
-);
-
-const Schedule = () => {
-    const current = useCurrentSlot();
-    const reduce = useReducedMotion();
-    const receiptRef = useRef<HTMLDivElement>(null);
-    const printed = useInView(receiptRef, { once: true, margin: "0px 0px -15% 0px" });
-
+function SaveQuestLog() {
+    const dialog = useRef<HTMLDialogElement>(null);
+    const imageUrl = useRef<string>();
+    const mounted = useRef(false);
+    const [url, setUrl] = useState<string>();
+    const [saving, setSaving] = useState(false);
+    const [error, setError] = useState("");
+    useEffect(() => {
+        mounted.current = true;
+        return () => {
+            mounted.current = false;
+            if (imageUrl.current)
+                URL.revokeObjectURL(imageUrl.current);
+        };
+    }, []);
+    async function save() {
+        setSaving(true);
+        setError("");
+        try {
+            const blob = await createQuestLog();
+            if (!mounted.current)
+                return;
+            if (!blob)
+                throw new Error("Image export is unavailable. Please try again.");
+            if (imageUrl.current)
+                URL.revokeObjectURL(imageUrl.current);
+            imageUrl.current = URL.createObjectURL(blob);
+            setUrl(imageUrl.current);
+            dialog.current?.showModal();
+        }
+        catch (cause) {
+            if (mounted.current)
+                setError(cause instanceof Error ? cause.message : "Could not save the quest log. Please try again.");
+        }
+        finally {
+            if (mounted.current)
+                setSaving(false);
+        }
+    }
     return (
-        <section id="schedule" className="section bg-shade-100">
-            <div className="mx-auto grid max-w-6xl items-start gap-16 lg:grid-cols-[minmax(0,1fr)_400px] lg:gap-20">
-                <div className="lg:sticky lg:top-24">
-                    <SectionHeader
-                        track="03"
-                        file="schedule.rcpt"
-                        title="the schedule"
-                        dek={`${EVENT.day.toLowerCase()}, ${EVENT.date.toLowerCase()}. twelve hours, itemized.`}
-                    />
-
-                    <ul className="mt-10 max-w-md space-y-3 text-[13px] leading-relaxed text-shade-600">
-                        <li className="flex gap-3">
-                            <span aria-hidden="true">✦</span>
-                            workshops run alongside hacking. drop in, drop out.
-                        </li>
-                        <li className="flex gap-3">
-                            <span aria-hidden="true">✦</span>
-                            times are pencilled in and may shift a little before the day.
-                        </li>
-                        <li className="flex gap-3">
-                            <span aria-hidden="true">✦</span>
-                            on the day, the line that&apos;s happening now gets highlighted.
-                        </li>
-                    </ul>
-
-                    <a
-                        href={CALENDAR_URL}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="receipt-link mt-9"
-                    >
-                        + add to google calendar
-                    </a>
-                </div>
-
-                <div className="relative mx-auto w-full max-w-[400px]">
-                    <SafetyPin />
-                    <div className="receipt-shadow">
-                        <div
-                            ref={receiptRef}
-                            className={`receipt ${printed || reduce ? "is-printed" : ""}`}
-                        >
-                            <p className="receipt__brand font-pixel">tidalBYTE&apos;26</p>
-                            <p className="receipt__center">RECEIPTIFY · SIDE A</p>
-
-                            <div className="receipt__meta">
-                                <p>ORDER #1121 FOR: YOU ✦</p>
-                                <p>{DATE_LINE}</p>
-                                <p>
-                                    {EVENT.room} · {EVENT.city.toUpperCase()}
-                                </p>
-                            </div>
-
-                            <table className="receipt__table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">QTY</th>
-                                        <th scope="col">ITEM</th>
-                                        <th scope="col">TIME</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {RUN_OF_SHOW.map((r, i) => (
-                                        <tr
-                                            key={r.item}
-                                            className={r.at === current ? "is-now" : undefined}
-                                        >
-                                            <td>{String(i + 1).padStart(2, "0")}</td>
-                                            <td>
-                                                {r.item}
-                                                {r.at === current && (
-                                                    <span className="receipt__now"> ◀ now</span>
-                                                )}
-                                                {r.note && (
-                                                    <span className="receipt__note">{r.note}</span>
-                                                )}
-                                            </td>
-                                            <td>{timeLabel(r.at)}</td>
-                                        </tr>
-                                    ))}
-                                </tbody>
-                            </table>
-
-                            <dl className="receipt__totals">
-                                <div>
-                                    <dt>ITEM COUNT:</dt>
-                                    <dd>{RUN_OF_SHOW.length}</dd>
-                                </div>
-                                <div>
-                                    <dt>TOTAL:</dt>
-                                    <dd>{EVENT.hours}:00:00</dd>
-                                </div>
-                            </dl>
-
-                            <div className="receipt__meta receipt__meta--card">
-                                <p>CARD #: **** **** **** 2026</p>
-                                <p>AUTH CODE: 112126</p>
-                                <p>CARDHOLDER: YOU</p>
-                            </div>
-
-                            <p className="receipt__center receipt__thanks">
-                                THANK YOU FOR HACKING!
-                            </p>
-                            <span className="barcode barcode--receipt" aria-hidden="true" />
-                            <p className="receipt__center">f26.tidaltamu.com</p>
-                        </div>
+        <>
+            <div className={cn(
+                "qfoot px-2.5 gap-3.5 flex flex-wrap items-center justify-between mt-3.5 pt-4 pb-0",
+                "[border-top-width:2.5px] [border-top-style:dashed] [border-top-color:#c6d8e2]",
+            )}>
+                <span className="text-[12px] text-[#6f7f8b]">keep a copy on your phone for the day</span>
+                <button className={ui.button} type="button" disabled={saving} onClick={save}>
+                    <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
+                        <path
+                            d="M4 4h12l4 4v12H4zM8 4v5h7V4M7 20v-7h10v7"
+                            fill="none"
+                            stroke="currentColor"
+                            strokeWidth="2.2"
+                            strokeLinejoin="round"
+                        />
+                    </svg>
+                    {saving ? "SAVING…" : "SAVE QUEST LOG"}
+                </button>
+                {error && <p className="mt-0" role="alert">
+                    {error}
+                </p>}
+            </div>
+            <dialog
+                ref={dialog}
+                className={cn(
+                    "open:animate-dialog-open save-dlg p-0 border-0 border-none border-current bg-transparent w-[min(560px,_92vw)]",
+                    "max-h-[94vh] overflow-visible backdrop:bg-[rgba(38,_49,_58,_.55)]",
+                    "backdrop:[backdrop-filter:blur(3px)]",
+                )}
+                aria-labelledby="saveTitle"
+                onClick={event => {
+                    if (event.target === event.currentTarget)
+                        dialog.current?.close();
+                }}
+            >
+                <div className={cn(
+                    ui.window,
+                    "save-card px-[18px] gap-3.5 flex flex-col max-h-[90vh] pt-[22px] pb-[18px]",
+                )}>
+                    <div className="save-head flex justify-between items-center font-pixel text-[11px] text-game-ink">
+                        <span id="saveTitle">game saved ♪</span>
+                        <button className={cn(
+                            "x w-[38px] h-[38px] rounded-[50%] border-[2.5px] border-solid border-game-ink bg-game-window",
+                            "cursor-pointer text-[14px] text-game-ink",
+                        )} type="button" aria-label="Close" onClick={() => dialog.current?.close()}>✕</button>
                     </div>
+                    <div className={cn(
+                        "save-img min-h-0 overflow-auto rounded-[10px] border-2 border-solid border-[#c9d6df]",
+                        "bg-[#e6eef3]",
+                    )}>
+                        {url && <img className="block w-full h-auto" src={url} alt="tidalBYTE '26 quest log (schedule)" />}
+                    </div>
+                    <div className="save-actions flex flex-wrap items-center justify-center gap-y-3.5 gap-x-5">
+                        <a className={ui.button} download="tidalbyte-26-quest-log.png" href={url}>DOWNLOAD PNG</a>
+                        <a className="open text-[13px] font-bold text-game-ink [text-underline-offset:4px]" href={url} target="_blank" rel="noopener noreferrer">open full size ↗</a>
+                    </div>
+                </div>
+            </dialog>
+        </>
+    );
+}
 
-                    <Sticker
-                        src={STICKER("bunny")}
-                        width={84}
-                        rotate={14}
-                        delay={0.5}
-                        className="absolute -right-2 -top-16 z-10 md:-right-12 md:top-10 md:[--sticker-w:104px]"
-                    />
-                    <Sticker
-                        src={STICKER("cat")}
-                        width={96}
-                        rotate={-10}
-                        delay={0.8}
-                        className="absolute -bottom-12 -left-3 z-10 md:-left-28 md:bottom-20"
-                    />
+export default function Schedule() {
+    const dateLine = fmtCentral(EVENT.startsAt, { weekday: "short", month: "short", day: "numeric" }).toUpperCase().replace(",", " ·");
+    return (
+        <section id="schedule" className={cn(
+            ui.section,
+            "quests py-[120px]",
+        )} aria-label="Schedule">
+            <div className={ui.wrap}>
+                <header className="center-head mb-[38px] text-center">
+                    <div className={ui.stage}><b className={cn(
+                        "px-[9px] whitespace-nowrap font-normal bg-game-ink text-game-light pt-[7px] pb-1.5",
+                        "rounded-[5px]",
+                    )}>STAGE 1-2</b> quest log</div>
+                    <h2 className={ui.heading} style={headingStyle}>today's quests</h2>
+                    <p className={cn(
+                        ui.intro,
+                        "my-0 mx-auto",
+                    )}>the schedule for the day. times are a draft — the final quest log drops closer to nov 21.</p>
+                </header>
+                <div className={cn(
+                    "qlog-wrap gap-7 grid [grid-template-columns:190px_minmax(0,_760px)] justify-center [align-items:start]",
+                    "max-[900px]:grid-cols-1",
+                )}>
+                    <div className={cn(
+                        "giver gap-2.5 sticky top-[120px] flex flex-col items-center max-[900px]:static",
+                        "max-[900px]:flex-row max-[900px]:justify-center",
+                    )} aria-hidden="true">
+                        <div className={cn(
+                            ui.pixelFrame,
+                            "w-[190px] max-[900px]:w-[150px]",
+                        )}>
+                            <PixelCanvas className="block w-full h-auto [image-rendering:crisp-edges]" scene="giver" width={48} height={48} />
+                        </div>
+                        <span className={cn(
+                            "ex absolute top-[-18px] left-1/2 -translate-x-1/2 font-pixel text-[22px] text-[#f2c9a0]",
+                            "[text-shadow:2px_0_0_#333f48,_-2px_0_0_#333f48,_0_2px_0_#333f48,_0_-2px_0_#333f48,_3px_3px_0_#333f48]",
+                            "animate-quest-hop",
+                        )}>!</span>
+                        <small className="font-pixel text-[8px] leading-[1.7] text-game-muted text-center max-[900px]:text-left">quest giver:<br />pebble</small>
+                    </div>
+                    <div className={cn(
+                        ui.window,
+                        "qlog px-[26px] pt-[34px] pb-6 max-[760px]:px-3 max-[760px]:pt-[30px] max-[760px]:pb-[18px]",
+                    )}>
+                        <span className={ui.windowTitle}>QUEST LOG</span>
+                        <div className={cn(
+                            "qhead px-2.5 flex flex-wrap justify-between gap-y-2 gap-x-4 pt-0 pb-3.5",
+                            "[border-bottom-width:2.5px] [border-bottom-style:dashed] [border-bottom-color:#c6d8e2]",
+                            "font-pixel text-[9px] leading-[1.7] text-game-muted",
+                        )}>
+                            <span>
+                                <b className="font-normal text-game-ink">tidalBYTE '26</b>
+                            </span>
+                            <span>{dateLine} · {EVENT.room}</span>
+                            <span>{QUESTS.length} QUESTS</span>
+                        </div>
+                        <ol className="qlist p-0 mx-0 list-none mt-2 mb-0">
+                            {QUESTS.map((quest, index) => <QuestRow key={`${quest.time}-${quest.name}`} quest={quest} index={index} />)}
+                        </ol>
+                        <SaveQuestLog />
+                    </div>
                 </div>
             </div>
         </section>
     );
-};
-
-export default Schedule;
+}
