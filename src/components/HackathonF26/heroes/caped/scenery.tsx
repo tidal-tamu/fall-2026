@@ -1,3 +1,4 @@
+import { cn } from "../../ui";
 import type { CSSProperties } from "react";
 import { INK, rng } from "./skyline";
 
@@ -21,7 +22,11 @@ const GRID = (() => {
 })();
 
 export const SkyGrid = () => (
-    <svg className="caped-grid" viewBox="0 0 1600 1000" preserveAspectRatio="none" aria-hidden="true">
+    <svg className={cn(
+        "caped-grid absolute top-0 right-0 bottom-0 left-0 w-full h-full",
+        "[-webkit-mask-image:linear-gradient(180deg,_#000_0%,_rgba(0,_0,_0,_0.6)_40%,_transparent_72%)]",
+        "[mask-image:linear-gradient(180deg,_#000_0%,_rgba(0,_0,_0,_0.6)_40%,_transparent_72%)]",
+    )} viewBox="0 0 1600 1000" preserveAspectRatio="none" aria-hidden="true">
         <path d={GRID} fill="none" stroke="#fff" strokeOpacity={0.42} strokeWidth={1.4} vectorEffect="non-scaling-stroke" />
     </svg>
 );
@@ -35,10 +40,10 @@ export const Sparkles = () => (
         {SPARKLES.map(([left, top, size, dl]) => (
             <div
                 key={`${left}-${top}`}
-                className="caped-sparkle"
+                className="caped-sparkle absolute animate-hero-twinkle"
                 style={{ left: `${left}%`, top: `${top}%`, width: size, height: size, animationDelay: `-${dl}s`, animationDuration: `${3.6 + dl * 0.6}s` }}
             >
-                <svg viewBox="0 0 24 24" aria-hidden="true">
+                <svg className="block w-full h-full overflow-visible" viewBox="0 0 24 24" aria-hidden="true">
                     <use href="#caped-spark" fill="#fff" stroke={INK} strokeWidth={1.4} />
                 </svg>
             </div>
@@ -48,13 +53,16 @@ export const Sparkles = () => (
 
 /* The far-off giant: it holds still behind the mist, only blinking. */
 export const GiantPenguin = () => (
-    <svg className="caped-giant" viewBox="0 0 1000 1100" aria-hidden="true">
+    <svg className="caped-giant block w-full h-auto opacity-50" viewBox="0 0 1000 1100" aria-hidden="true">
         <path d="M110 1100 C105 640 200 40 500 40 C800 40 895 640 890 1100 Z" fill="#44515a" />
         <path
             d="M250 1100 C236 760 236 420 300 250 C340 150 440 140 476 214 C486 236 490 262 492 280 L508 280 C510 262 514 236 524 214 C560 140 660 150 700 250 C764 420 764 760 750 1100 Z"
             fill="#fbfcfd"
         />
-        <g className="caped-giant__blink">
+        <g className={cn(
+            "caped-giant__blink [transform-box:fill-box] [transform-origin:50%_50%]",
+            "animate-hero-blink",
+        )}>
             <path d="M381 237 Q402 239 428 255 Q437 261 428 266 Q406 276 388 273 Q371 270 371 253 Q371 238 381 237 Z" fill="#44515a" />
             <path d="M619 237 Q598 239 572 255 Q563 261 572 266 Q594 276 612 273 Q629 270 629 253 Q629 238 619 237 Z" fill="#44515a" />
         </g>
@@ -75,8 +83,16 @@ const CLOUDS = Array.from({ length: 7 }, (_, i) => {
 export const Clouds = ({ front = false }: { front?: boolean }) => (
     <>
         {CLOUDS.slice(front ? 5 : 0, front ? 7 : 5).map((cloud, i) => (
-            <div key={i} className="caped-cloud" style={{ width: cloud.width, top: `${cloud.top}%`, "--cloud-duration": `${cloud.duration}s`, "--cloud-delay": `${cloud.delay}s`, scale: cloud.flipped ? "-1 1" : "1 1" } as CSSProperties}>
-                <svg viewBox="0 0 300 140">
+            <div key={i} className={cn(
+                "caped-cloud absolute left-0",
+                "animate-hero-cloud",
+                "max-[760px]:!w-40 max-[760px]:[animation-duration:calc(var(--cloud-duration)_*_3)]",
+                "max-[760px]:[animation-delay:calc(var(--cloud-delay)_*_3)]",
+                "motion-reduce:!transform-none",
+                ["motion-reduce:left-[10%]", "motion-reduce:left-[78%]", "motion-reduce:left-[-12%]", "motion-reduce:left-[52%]", "motion-reduce:left-[92%]"][i],
+                front && i === 1 && "max-[760px]:hidden",
+            )} style={{ width: cloud.width, top: `${cloud.top}%`, "--cloud-duration": `${cloud.duration}s`, "--cloud-delay": `${cloud.delay}s`, scale: cloud.flipped ? "-1 1" : "1 1" } as CSSProperties}>
+                <svg className="block w-full h-auto overflow-visible" viewBox="0 0 300 140">
                     <path d="M34 122 C10 122 8 94 32 92 C26 68 54 54 76 66 C82 36 118 24 142 42 C154 16 198 14 210 44 C232 32 264 46 260 72 C286 74 294 106 272 120 Z" fill="#fbfdff" />
                     <path d="M38 120 C44 106 64 102 80 110 C94 96 122 96 134 108 C152 94 184 96 194 108 C212 98 242 100 256 116 L262 120 Z" fill="#e3edf6" />
                     <path d="M76 66 C86 74 88 84 86 92 M142 42 C152 54 152 66 148 74 M210 44 C216 56 214 66 208 72 M80 110 C84 104 90 100 96 99 M134 108 C138 102 144 98 150 97 M194 108 C198 102 204 99 210 98" fill="none" stroke="#aabccb" strokeWidth="1.4" strokeLinecap="round" vectorEffect="non-scaling-stroke" />
@@ -88,7 +104,13 @@ export const Clouds = ({ front = false }: { front?: boolean }) => (
 );
 
 export const Plane = () => (
-    <div className="caped-plane">
+    <div className={cn(
+        "caped-plane absolute left-0 top-0 animate-hero-plane",
+        "motion-reduce:[transform:translate(17vw,_calc(var(--H)_*_.24))_rotate(-7deg)]",
+        "before:content-[''] before:absolute before:right-full before:top-2.5 before:w-[200px]",
+        "before:[border-top-width:1.5px] before:[border-top-style:solid]",
+        "before:[border-top-color:rgba(255,255,255,.9)]",
+    )}>
         <svg width="34" height="20" viewBox="0 0 34 20" fill="#fff" stroke="#4b5866" strokeWidth="1.4" strokeLinejoin="round">
             <path d="M3 11 Q17 8 31 9 Q34 10 31 11.5 Q17 13 3 11 Z" />
             <path d="M14 10.5 L9 18 L13 18 L20 10.8" />
