@@ -77,3 +77,17 @@ const RegisterButton = ({ variant = "default", className = "", label = "REGISTER
     );
 
 export default RegisterButton;
+
+export function JudgeMentorButton() {
+    return <a
+        href={EVENT.judgeMentorApplyUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        className={appearances.hero
+            .replace("bg-game-ink", "bg-game-pastel")
+            .replace("text-white", "text-game-ink")
+            .replace("tracking-[0.2em]", "tracking-[0.06em]")}
+    >
+        JUDGES / MENTORS <span aria-hidden="true">→</span>
+    </a>;
+}

@@ -111,7 +111,7 @@ export default function About() {
                     <div className="about-panels relative grid">
                         <article
                             className={aboutPanel(selected === 0)}
-                            id="about-pebble"
+                            id="about-byte"
                             aria-hidden={selected !== 0}
                         >
                             <div className={cn(
@@ -119,13 +119,13 @@ export default function About() {
                                 "px-[30px] pt-8 pb-[26px] max-[760px]:px-[18px] max-[760px]:pt-[26px] max-[760px]:pb-[18px]",
                             )}>
                                 <span className={ui.windowTitle}>STAGE 1-1</span>
-                                <h2 className={ui.heading} style={headingStyle}>meet pebble</h2>
-                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">pebble is the tiny penguin hero holding this whole hackathon together. armed with a fish and a cape that's a little too big, pebble believes every great project starts as one small, slightly chaotic idea. keep scrolling — pebble's walking the street at the bottom of your screen with you.</p>
+                                <h2 className={ui.heading} style={headingStyle}>the mission: tidalBYTE</h2>
+                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">tidalBYTE '26 is a {EVENT.hours}-hour, beginner-friendly hackathon. show up {eventDay} at {EVENT.room.toLowerCase()}, team up (or don't), build something you're proud of, and leave with new friends, free food, and maybe a TV.</p>
                                 <div className={cn(
                                     ui.pixelFrame,
                                     "max-[760px]:hidden",
                                 )}>
-                                    <PixelCanvas className="block w-full h-auto [image-rendering:crisp-edges]" scene="pebble" width={96} height={48} />
+                                    <PixelCanvas className="block w-full h-auto [image-rendering:crisp-edges]" scene="byte" width={96} height={48} />
                                     <span className={cn(
                                         "pix-bubble px-[11px] absolute top-[9%] left-1/2 -translate-x-1/2 whitespace-nowrap font-pixel",
                                         "text-[clamp(9px,_1vw,_11px)] text-game-ink bg-game-window border-[2.5px] border-solid",
@@ -135,7 +135,7 @@ export default function About() {
                                         "after:[border-right-color:#333f48] after:[border-bottom-width:2.5px]",
                                         "after:[border-bottom-style:solid] after:[border-bottom-color:#333f48]",
                                         "after:[transform:skewX(-30deg)]",
-                                    )}>hi! i'm pebble ♪</span>
+                                    )}>12 hrs. let's go!</span>
                                 </div>
                             </div>
                         </article>
@@ -171,7 +171,7 @@ export default function About() {
                         </article>
                         <article
                             className={aboutPanel(selected === 2)}
-                            id="about-byte"
+                            id="about-pebble"
                             aria-hidden={selected !== 2}
                         >
                             <div className={cn(
@@ -179,13 +179,13 @@ export default function About() {
                                 "px-[30px] pt-8 pb-[26px] max-[760px]:px-[18px] max-[760px]:pt-[26px] max-[760px]:pb-[18px]",
                             )}>
                                 <span className={ui.windowTitle}>STAGE 1-1</span>
-                                <h2 className={ui.heading} style={headingStyle}>the mission: tidalBYTE</h2>
-                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">tidalBYTE '26 is a {EVENT.hours}-hour, beginner-friendly hackathon. show up {eventDay} at {EVENT.room.toLowerCase()}, team up (or don't), build something you're proud of, and leave with new friends, free food, and maybe a scooter.</p>
+                                <h2 className={ui.heading} style={headingStyle}>meet pebble</h2>
+                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">pebble is the tiny penguin hero holding this whole hackathon together. armed with a fish and a cape that's a little too big, pebble believes every great project starts as one small, slightly chaotic idea. keep scrolling — pebble's walking the street at the bottom of your screen with you.</p>
                                 <div className={cn(
                                     ui.pixelFrame,
                                     "max-[760px]:hidden",
                                 )}>
-                                    <PixelCanvas className="block w-full h-auto [image-rendering:crisp-edges]" scene="byte" width={96} height={48} />
+                                    <PixelCanvas className="block w-full h-auto [image-rendering:crisp-edges]" scene="pebble" width={96} height={48} />
                                     <span className={cn(
                                         "pix-bubble px-[11px] absolute top-[9%] left-1/2 -translate-x-1/2 whitespace-nowrap font-pixel",
                                         "text-[clamp(9px,_1vw,_11px)] text-game-ink bg-game-window border-[2.5px] border-solid",
@@ -195,7 +195,7 @@ export default function About() {
                                         "after:[border-right-color:#333f48] after:[border-bottom-width:2.5px]",
                                         "after:[border-bottom-style:solid] after:[border-bottom-color:#333f48]",
                                         "after:[transform:skewX(-30deg)]",
-                                    )}>12 hrs. let's go!</span>
+                                    )}>hi! i'm pebble ♪</span>
                                 </div>
                             </div>
                         </article>
@@ -210,8 +210,8 @@ export default function About() {
                             type="button"
                             onClick={() => setSelected(0)}
                             aria-pressed={selected === 0}
-                            aria-controls="about-pebble"
-                        >pebble</button>
+                            aria-controls="about-byte"
+                        >tidalBYTE</button>
                         <button className={cn(
                             "py-2.5 px-3.5 border-2 border-solid border-game-ink rounded-lg bg-game-window text-game-ink",
                             "[font-family:inherit] text-[12px] leading-[1.5] cursor-pointer",
@@ -232,8 +232,8 @@ export default function About() {
                             type="button"
                             onClick={() => setSelected(2)}
                             aria-pressed={selected === 2}
-                            aria-controls="about-byte"
-                        >tidalBYTE</button>
+                            aria-controls="about-pebble"
+                        >pebble</button>
                     </div>
                 </div>
             </div>

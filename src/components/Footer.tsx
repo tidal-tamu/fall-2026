@@ -11,15 +11,16 @@ const SOCIALS = [
 ];
 
 /* The one inverted block on the page: the album runs out, the player reads
-   12:00:00 / 12:00:00, and there's a button to play it again from the top. */
+   the event duration, and there's a button to play it again from the top. */
 export default function Footer() {
+    const duration = `${Math.floor(EVENT.hours)}:${String(Math.round(EVENT.hours % 1 * 60)).padStart(2, "0")}:00`;
     return (
         <footer className="footer">
             <div className="relative mx-auto max-w-6xl">
                 <div className="flex flex-wrap items-center justify-between gap-3">
                     <p className="label !text-[10px] text-dim">END OF SIDE A</p>
                     <p className="font-lcd text-[15px] font-extrabold tracking-[0.12em] text-shade-300">
-                        {EVENT.hours}:00:00 / {EVENT.hours}:00:00
+                        {duration} / {duration}
                     </p>
                 </div>
                 <div className="footer__bar mt-4" aria-hidden="true" />

@@ -9,6 +9,7 @@ import Sponsors from "./Sponsors";
 import FAQs from "./FAQs";
 import Register from "./Register";
 import LevelSky from "./LevelSky";
+import FogBridge from "./FogBridge";
 import LevelNavigation from "./LevelNavigation";
 import { cn, ui } from "./ui";
 
@@ -51,6 +52,7 @@ const HackathonF26 = () => {
                 </div>
                 <main className={cn("byte-site group/level relative isolate text-game-ink font-gameMono", ui.levelMotion)}>
                     <LevelSky progress={levelProgress} />
+                    <FogBridge />
                     <About />
                     <Schedule />
                     <Prizes />

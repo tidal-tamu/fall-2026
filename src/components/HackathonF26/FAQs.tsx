@@ -5,10 +5,10 @@ import PixelCanvas from "./PixelArt";
 
 const questions = [
     ['who can join?', "any student, any major, any level! never coded before? perfect — you're exactly who this is for ♪"],
-    ['do i need a team?', "nope! come solo and we'll help you find teammates at the mixer. teams are up to 4."],
+    ['do i need a team?', "nope! come solo and we'll help you find teammates at team formation. teams are up to 4."],
     ['is it free?', '100% free. food, swag and wifi are on us (well, on our sponsors).'],
     ['what do i bring?', 'a laptop, a charger, your student id, and one (1) idea. or zero ideas. we keep spares.'],
-    ['is it overnight?', "nope, just 12 hours! you'll be home in bed before midnight."],
+    ['is it overnight?', "nope! doors open at 9:00 am and closing ceremony wraps up at 10:30 pm, all Central Time."],
     ["who's pebble?", "it me! tidal's mascot. i hold a fish. that's mostly the job."]
 ] as const;
 

@@ -32,23 +32,25 @@ export default function Register() {
                             "animate-press-start",
                             "[transition:color_.8s_ease,_border-color_.8s_ease] group-[.is-night]/level:text-[#c6d4de]",
                         )} aria-hidden="true">PRESS START</span>
-                        <a
-                            className={cn(
-                                ui.button,
-                                "mt-4",
-                            )}
-                            href={EVENT.registerUrl}
-                            aria-disabled={!EVENT.registrationOpen}
-                            onClick={event => {
-                                if (!EVENT.registrationOpen)
-                                    event.preventDefault();
-                            }}
-                        >
-                            {EVENT.registrationOpen ? "REGISTER" : "OPENS SOON"}
-                            <svg className="w-5 h-5" viewBox="0 0 7 7" aria-hidden="true" style={{ width: 14, height: 14 }}>
-                                <path fill="#6f98b8" d="M1 0h2v1h1V0h2v1h1v3h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1V4H0V1h1z" />
-                            </svg>
-                        </a>
+                        <div className="mt-4 flex flex-wrap items-center gap-4">
+                            <a
+                                className={ui.button}
+                                href={EVENT.registerUrl}
+                                aria-disabled={!EVENT.registrationOpen}
+                                onClick={event => {
+                                    if (!EVENT.registrationOpen)
+                                        event.preventDefault();
+                                }}
+                            >
+                                {EVENT.registrationOpen ? "REGISTER" : "OPENS SOON"}
+                                <svg className="w-5 h-5" viewBox="0 0 7 7" aria-hidden="true" style={{ width: 14, height: 14 }}>
+                                    <path fill="#6f98b8" d="M1 0h2v1h1V0h2v1h1v3h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1V4H0V1h1z" />
+                                </svg>
+                            </a>
+                            <a className={ui.button} href={EVENT.judgeMentorApplyUrl} target="_blank" rel="noopener noreferrer">
+                                JUDGES / MENTORS <span aria-hidden="true">→</span>
+                            </a>
+                        </div>
                     </div>
                     <div className="pc relative z-[2] max-[900px]:max-w-[380px]" aria-hidden="true">
                         <svg className="block w-full h-auto overflow-visible" viewBox="0 0 420 330">

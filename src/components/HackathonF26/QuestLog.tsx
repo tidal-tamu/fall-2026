@@ -10,7 +10,7 @@ export async function createQuestLog(): Promise<Blob | null> {
         await Promise.all(['20px "Press Start 2P"', '400 20px "Space Mono"', '700 20px "Space Mono"'].map(f => document.fonts.load(f)));
     }
     catch { /* The system monospace fallback can still render the export. */ }
-    const width = 1080;
+    const width = 1440;
     const windowLeft = 80;
     const windowWidth = width - 160;
     const padding = 54;
@@ -105,21 +105,21 @@ export async function createQuestLog(): Promise<Blob | null> {
             context.fill();
         }
         const base = y + (note ? 40 : 42);
-        context.font = pixelFont(19);
+        context.font = pixelFont(15);
         context.fillStyle = INK;
         context.textAlign = 'left';
         context.fillText(time, contentLeft, base);
         context.fillStyle = '#e3edf6';
-        roundedRect(contentLeft + 118, y + (h - 40) / 2, 40, 40, 8);
+        roundedRect(contentLeft + 240, y + (h - 40) / 2, 40, 40, 8);
         context.fill();
-        paintSprite(context, icon, contentLeft + 122 + (icon === 'mic' ? 10 : 0), y + (h - 40) / 2 + 4 + (icon === 'mic' ? 4 : 0), 2);
+        paintSprite(context, icon, contentLeft + 244 + (icon === 'mic' ? 10 : 0), y + (h - 40) / 2 + 4 + (icon === 'mic' ? 4 : 0), 2);
         context.font = monoFont(26, true);
         context.fillStyle = '#2c363e';
-        context.fillText(name, contentLeft + 180, base);
+        context.fillText(name, contentLeft + 300, base);
         if (note) {
             context.font = monoFont(20);
             context.fillStyle = '#5e6b75';
-            context.fillText(note, contentLeft + 180, base + 30);
+            context.fillText(note, contentLeft + 300, base + 30);
         }
         context.font = pixelFont(13);
         const tagWidth = context.measureText(TAG[kind]).width + 24;

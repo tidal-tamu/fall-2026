@@ -1,7 +1,7 @@
 import { cn, ui, pixelOutline } from "../ui";
 import { useEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
 import { EVENT, NAV, fmtCentral } from "../event";
-import RegisterButton from "../RegisterButton";
+import RegisterButton, { JudgeMentorButton } from "../RegisterButton";
 import CapedPenguin, { type CapeHandle } from "./caped/CapedPenguin";
 import { Fog } from "./caped/fog";
 import { Clouds, GiantPenguin, Plane, SkyGrid, Sparkles } from "./caped/scenery";
@@ -431,10 +431,11 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                 </div>
                 <div className={cn(
                     ui.heroReveal,
-                    "caped-cta caped-rv mt-[clamp(16px,_calc(var(--H)_*_0.03),_30px)] pointer-events-auto opacity-0",
+                    "caped-cta caped-rv mt-[clamp(16px,_calc(var(--H)_*_0.03),_30px)] pointer-events-auto opacity-0 flex flex-wrap justify-center gap-4",
                     "max-[760px]:!opacity-100 max-[760px]:!filter-none max-[760px]:!transform-none",
                 )} style={{ "--d": "1.35s" } as CSSProperties}>
                     <RegisterButton variant="hero" label="REGISTER" soonTag={false} />
+                    <JudgeMentorButton />
                 </div>
             </div>
 

@@ -24,7 +24,7 @@ function QuestRow({ quest, index }: {
     return (
         <li
             ref={row}
-            className={cn(`q${quest.highlight ? " main" : ""}${visible || reduce ? " in" : ""}`, "py-[11px] gap-3.5 relative grid [grid-template-columns:76px_30px_minmax(0,_1fr)_auto]",
+            className={cn(`q${quest.highlight ? " main" : ""}${visible || reduce ? " in" : ""}`, "py-[11px] gap-3.5 relative grid [grid-template-columns:160px_30px_minmax(0,_1fr)_auto]",
                 "items-center pr-3 pl-[30px] rounded-[10px]",
                 visible || reduce ? "opacity-100 transform-none" : "opacity-0 [transform:translateX(-14px)]",
                 "[transition:opacity_.5s_ease,_transform_.6s_cubic-bezier(.16,1,.3,1),_background_.2s]",
@@ -33,13 +33,15 @@ function QuestRow({ quest, index }: {
                 "hover:before:opacity-100",
                 quest.highlight ? "bg-[#f9ebdc] hover:bg-[#f6e1cc]" : "hover:bg-[#eef4f8] focus-within:bg-[#eef4f8]",
                 "hover:before:animate-quest-pointer max-[760px]:py-2.5",
-                "max-[760px]:gap-2.5 max-[760px]:[grid-template-columns:58px_minmax(0,_1fr)_auto]",
+                "max-[760px]:gap-2.5 max-[760px]:[grid-template-columns:82px_minmax(0,_1fr)_auto]",
                 "max-[760px]:pr-2 max-[760px]:pl-[22px]")}
             tabIndex={0}
             style={{ transitionDelay: `${index % 4 * 70}ms` }}
         >
             <span className="q-time font-pixel text-[11px] text-game-ink tabular-nums max-[760px]:text-[9px]">
-                {quest.time}
+                {quest.time.split("–").map((time, part) => <span key={part} className="block min-[761px]:inline">
+                    {part > 0 && "–"}{time}
+                </span>)}
             </span>
             <PixelCanvas className="w-[30px] h-[30px] [image-rendering:pixelated] max-[760px]:hidden" sprite={quest.icon} width={16} height={16} />
             <span className="q-name text-[15px] font-bold text-[#2c363e] leading-[1.35] max-[760px]:text-[14px]">
@@ -175,7 +177,7 @@ export default function Schedule() {
                     <p className={cn(
                         ui.intro,
                         "my-0 mx-auto",
-                    )}>the schedule for the day. times are a draft — the final quest log drops closer to nov 21.</p>
+                    )}>your schedule for nov 21. all times are Central Time.</p>
                 </header>
                 <div className={cn(
                     "qlog-wrap gap-7 grid [grid-template-columns:190px_minmax(0,_760px)] justify-center [align-items:start]",

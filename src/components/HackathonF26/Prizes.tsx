@@ -5,133 +5,71 @@ import PrizeArt from "./PrizeArt";
 const prizes = [
     {
         "rank": "1ST PLACE",
-        "name": "electric scooters",
+        "name": "TVs",
         "rarity": "LEGENDARY",
         "color": "#efd3b8",
         "recipient": "for the 1st place team",
-        "description": "zip across campus faster than a penguin in a cape. one for every teammate.",
+        "description": "bring the big-screen experience home.",
         "stats": [
             {
-                "label": "QTY",
-                "value": "\u00d74 \u00b7 up to 4"
-            },
-            {
                 "label": "TYPE",
-                "value": "transport"
-            },
-            {
-                "label": "SPEED",
-                "value": "very"
+                "value": "entertainment"
             }
         ]
     },
     {
         "rank": "2ND PLACE",
-        "name": "mechanical keyboards",
+        "name": "Ninja CREAMi",
         "rarity": "EPIC",
         "color": "#d9d6e3",
         "recipient": "for the 2nd place team",
-        "description": "clicky, thocky and hot-swappable. your code will sound as good as it looks.",
+        "description": "turn your next great idea into a frozen treat.",
         "stats": [
             {
-                "label": "QTY",
-                "value": "\u00d74 \u00b7 up to 4"
-            },
-            {
                 "label": "TYPE",
-                "value": "gear"
-            },
-            {
-                "label": "THOCK",
-                "value": "maximum"
+                "value": "kitchen"
             }
         ]
     },
     {
         "rank": "3RD PLACE",
-        "name": "instant cameras",
+        "name": "projectors",
         "rarity": "RARE",
         "color": "#c6d8e2",
         "recipient": "for the 3rd place team",
-        "description": "snap your team photo the second you hit submit. comes with a pack of film each.",
+        "description": "take movie nights and project demos to the big screen.",
         "stats": [
             {
-                "label": "QTY",
-                "value": "\u00d74 \u00b7 up to 4"
-            },
-            {
                 "label": "TYPE",
-                "value": "gear"
-            },
-            {
-                "label": "BONUS",
-                "value": "film pack"
+                "value": "entertainment"
             }
         ]
     },
     {
-        "rank": "BEST BEGINNER HACK",
-        "name": "drawing tablets",
+        "rank": "BEST BEGINNER",
+        "name": "LEGO sets",
         "rarity": "SPECIAL",
         "color": "#cdd8cb",
-        "recipient": "best beginner hack",
-        "description": "for the team that's new to this and built something great anyway.",
+        "recipient": "for the best beginner team",
+        "description": "keep building, one brick at a time.",
         "stats": [
             {
-                "label": "QTY",
-                "value": "\u00d74 \u00b7 up to 4"
-            },
+                "label": "TYPE",
+                "value": "building"
+            }
+        ]
+    },
+    {
+        "rank": "DESIGN TRACK",
+        "name": "iPad Airs",
+        "rarity": "SPECIAL",
+        "color": "#f9e4cf",
+        "recipient": "for the design track winners",
+        "description": "a fresh canvas for your next great design.",
+        "stats": [
             {
                 "label": "TYPE",
                 "value": "creative"
-            },
-            {
-                "label": "FOR",
-                "value": "first-timers"
-            }
-        ]
-    },
-    {
-        "rank": "BEST DESIGN",
-        "name": "retro handhelds",
-        "rarity": "SPECIAL",
-        "color": "#cdd8cb",
-        "recipient": "best design",
-        "description": "for the hack with the nicest pixels, flows and feels.",
-        "stats": [
-            {
-                "label": "QTY",
-                "value": "\u00d74 \u00b7 up to 4"
-            },
-            {
-                "label": "TYPE",
-                "value": "collectible"
-            },
-            {
-                "label": "STYLE",
-                "value": "pixel-perfect"
-            }
-        ]
-    },
-    {
-        "rank": "PEBBLE'S PICK",
-        "name": "giant pebble plush",
-        "rarity": "MYTHIC",
-        "color": "#f9e4cf",
-        "recipient": "pebble's pick",
-        "description": "pebble picks one project personally. no appeals. there is a fish involved.",
-        "stats": [
-            {
-                "label": "QTY",
-                "value": "\u00d71 \u00b7 very huggable"
-            },
-            {
-                "label": "TYPE",
-                "value": "plush"
-            },
-            {
-                "label": "JUDGE",
-                "value": "pebble"
             }
         ]
     }
@@ -207,19 +145,14 @@ export default function Prizes() {
                                 "bg-[var(--rc)]",
                             )} aria-hidden="true" />
                         </button>))}
-                        {[0, 1, 2].map(index => <div key={index} className={cn(
-                            "islot locked p-[10%] relative [aspect-ratio:1] rounded-xl border-[2.5px] border-dashed",
-                            "border-[#9fb1be] bg-[#eef3f7] cursor-default shadow-[none]",
-                            "[transition:transform_.2s_cubic-bezier(.34,1.56,.64,1),_background_.2s] grid place-items-center",
-                            "hover:transform-none focus-visible:[outline:2px_dashed_#333f48]",
-                            "focus-visible:[outline-offset:6px]",
-                        )} aria-hidden="true">
-                            <span className="font-pixel text-[12px] text-[#9fb1be]">?</span>
-                        </div>)}
-                        <p className={cn(
-                            "inv-note mx-0 [grid-column:1_/_-1] mt-1.5 mb-0 font-pixel text-[8px] leading-[1.8]",
-                            "text-game-muted",
-                        )}>? = more loot unlocks closer to nov 21</p>
+                        <div className={cn(
+                            "islot flex flex-col items-center justify-center gap-4 p-[10%] [aspect-ratio:1] rounded-xl",
+                            "border-[2.5px] border-dashed border-game-ink bg-game-sky text-game-ink",
+                            "shadow-[inset_0_-5px_0_#cfdde9]",
+                        )}>
+                            <span className="font-pixel text-[28px] max-[760px]:text-[20px]" aria-hidden="true">?</span>
+                            <span className="font-pixel text-[9px] leading-relaxed text-center max-[760px]:text-[7px]">and more!</span>
+                        </div>
                     </div>
                     <div
                         key={selected}
