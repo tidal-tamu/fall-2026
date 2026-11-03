@@ -5,7 +5,7 @@ import PrizeArt from "./PrizeArt";
 const prizes = [
     {
         "rank": "1ST PLACE",
-        "name": "TVs",
+        "name": "TV",
         "rarity": "LEGENDARY",
         "color": "#efd3b8",
         "recipient": "for the 1st place team",
@@ -33,7 +33,7 @@ const prizes = [
     },
     {
         "rank": "3RD PLACE",
-        "name": "projectors",
+        "name": "projector",
         "rarity": "RARE",
         "color": "#c6d8e2",
         "recipient": "for the 3rd place team",
@@ -47,7 +47,7 @@ const prizes = [
     },
     {
         "rank": "BEST BEGINNER",
-        "name": "LEGO sets",
+        "name": "LEGO set",
         "rarity": "SPECIAL",
         "color": "#cdd8cb",
         "recipient": "for the best beginner team",
@@ -61,7 +61,7 @@ const prizes = [
     },
     {
         "rank": "DESIGN TRACK",
-        "name": "iPad Airs",
+        "name": "iPad Air",
         "rarity": "SPECIAL",
         "color": "#f9e4cf",
         "recipient": "for the design track winners",
@@ -110,7 +110,7 @@ export default function Prizes() {
                     <p className={cn(
                         ui.intro,
                         "my-0 mx-auto",
-                    )}>the loot up for grabs. select an item to inspect it.</p>
+                    )}>the loot up for grabs</p>
                 </header>
                 <div className={cn(
                     ui.window,
@@ -146,12 +146,14 @@ export default function Prizes() {
                             )} aria-hidden="true" />
                         </button>))}
                         <div className={cn(
-                            "islot flex flex-col items-center justify-center gap-4 p-[10%] [aspect-ratio:1] rounded-xl",
+                            "islot relative min-w-0 [aspect-ratio:1] rounded-xl",
                             "border-[2.5px] border-dashed border-game-ink bg-game-sky text-game-ink",
                             "shadow-[inset_0_-5px_0_#cfdde9]",
                         )}>
-                            <span className="font-pixel text-[28px] max-[760px]:text-[20px]" aria-hidden="true">?</span>
-                            <span className="font-pixel text-[9px] leading-relaxed text-center max-[760px]:text-[7px]">and more!</span>
+                            <div className="absolute inset-1 flex flex-col items-center justify-center gap-4 max-[760px]:gap-2">
+                                <span className="font-pixel text-[28px] max-[760px]:text-[20px]" aria-hidden="true">?</span>
+                                <span className="font-pixel text-[9px] leading-relaxed text-center max-[760px]:text-[7px]">and more!</span>
+                            </div>
                         </div>
                     </div>
                     <div

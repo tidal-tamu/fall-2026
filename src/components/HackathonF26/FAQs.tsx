@@ -74,8 +74,8 @@ export default function FAQs() {
                         "rounded-[16px_16px_30px_16px] pt-4 pb-3.5 max-[760px]:[grid-column:1_/_-1]",
                         "max-[760px]:[grid-row:1]",
                     )}>
-                        <div className="gscreen relative rounded-md overflow-hidden border-2 border-solid border-[#2b343b] bg-game-sky">
-                            <PixelCanvas className="block w-full h-auto [image-rendering:crisp-edges]" scene="faq" width={120} height={72} talking={typing} />
+                        <div className="gscreen relative rounded-md overflow-hidden border-2 border-solid border-[#2b343b] bg-game-sky max-[760px]:min-h-[270px]">
+                            <PixelCanvas className="block w-full h-auto [image-rendering:crisp-edges] max-[760px]:absolute max-[760px]:inset-x-0 max-[760px]:bottom-0" scene="faq" width={120} height={72} talking={typing} />
                             <div className={cn(
                                 "gbubble px-3.5 absolute left-[5%] right-[5%] top-[6%] min-h-[34%] pt-3 pb-3.5 font-pixel",
                                 "text-[clamp(9px,_1.25vw,_12px)] leading-[1.75] text-game-ink bg-game-window border-[3px]",

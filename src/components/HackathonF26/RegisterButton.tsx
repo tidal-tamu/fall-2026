@@ -88,6 +88,8 @@ export function JudgeMentorButton() {
             .replace("text-white", "text-game-ink")
             .replace("tracking-[0.2em]", "tracking-[0.06em]")}
     >
-        JUDGES / MENTORS <span aria-hidden="true">→</span>
+        <span className="hidden max-[760px]:inline">JUDGES</span>
+        <span className="max-[760px]:hidden">JUDGES / MENTORS</span>
+        <span aria-hidden="true">→</span>
     </a>;
 }

@@ -177,7 +177,7 @@ export default function Schedule() {
                     <p className={cn(
                         ui.intro,
                         "my-0 mx-auto",
-                    )}>your schedule for nov 21. all times are Central Time.</p>
+                    )}>your schedule for November 21</p>
                 </header>
                 <div className={cn(
                     "qlog-wrap gap-7 grid [grid-template-columns:190px_minmax(0,_760px)] justify-center [align-items:start]",

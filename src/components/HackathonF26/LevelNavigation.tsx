@@ -68,10 +68,11 @@ export default function LevelNavigation({ progress }: {
         let step = 0;
         let easedProgress = -1;
         let previous = statusRef.current;
-        const padding = 64;
+        let padding = 64;
         function layout() {
             if (disposed || !road || !hero)
                 return;
+            padding = window.innerWidth <= 760 ? 28 : 64;
             heroEnd = hero.offsetHeight;
             sectionBounds = sections.map(section => {
                 const bounds = section!.getBoundingClientRect();
@@ -307,18 +308,18 @@ export default function LevelNavigation({ progress }: {
                     "plate px-[7px] gap-1.5 flex items-center pt-[5px] pb-1 whitespace-nowrap rounded-md font-pixel",
                     "text-[8px] text-game-ink bg-game-window border-2 border-solid border-game-ink",
                     "shadow-[2px_2px_0_#333f48] [transition:transform_.3s_cubic-bezier(.16,1,.3,1),_background_.3s]",
-                    "max-[760px]:px-[5px] max-[760px]:pt-1 max-[760px]:pb-[3px]",
+                    "max-[760px]:px-1 max-[760px]:pt-[5px] max-[760px]:pb-1 max-[760px]:text-[7px] max-[360px]:text-[6.5px]",
                 )}>
-                    <b className="px-1 font-normal pt-[3px] pb-0.5 rounded-[3px] bg-game-ink text-game-light">
+                    <b className="px-1 font-normal pt-[3px] pb-0.5 rounded-[3px] bg-game-ink text-game-light max-[760px]:hidden">
                         {stage.number}
                     </b>
-                    <em className="[font-style:normal] max-[760px]:hidden">
+                    <em className="[font-style:normal]">
                         {stage.sign}
                     </em>
                 </span>
                 <span className="pole w-[3px] h-[9px] bg-game-ink" />
             </a>))}
-            <div className="walker group/walker absolute z-[1] left-0 bottom-[27px] w-[42px] will-change-transform" ref={walker} aria-hidden="true">
+            <div className="walker group/walker absolute z-[3] left-0 bottom-[2px] w-[42px] will-change-transform" ref={walker} aria-hidden="true">
                 <WalkingPebble />
             </div>
         </nav>

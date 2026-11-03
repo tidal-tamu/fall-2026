@@ -150,7 +150,7 @@ export default function About() {
                             )}>
                                 <span className={ui.windowTitle}>STAGE 1-1</span>
                                 <h2 className={ui.heading} style={headingStyle}>the guild: tidal</h2>
-                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">tidal is a student org at texas a&amp;m for people who like to make things — coders, designers, tinkerers and the hackathon-curious. we run build nights, workshops, and the occasional all-day sprint like this one.</p>
+                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">tidal is a student org at texas a&amp;m for people who like to make things - coders, designers, tinkerers and the hackathon-curious. We run workshops, company talks, hackathons, and more!</p>
                                 <div className={cn(
                                     ui.pixelFrame,
                                     "max-[760px]:hidden",
@@ -180,7 +180,7 @@ export default function About() {
                             )}>
                                 <span className={ui.windowTitle}>STAGE 1-1</span>
                                 <h2 className={ui.heading} style={headingStyle}>meet pebble</h2>
-                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">pebble is the tiny penguin hero holding this whole hackathon together. armed with a fish and a cape that's a little too big, pebble believes every great project starts as one small, slightly chaotic idea. keep scrolling — pebble's walking the street at the bottom of your screen with you.</p>
+                                <p className="mx-0 mt-0 mb-[18px] text-[15px] leading-[1.75] text-[#3f4d57] max-[760px]:text-[14px]">pebble is the tiny penguin hero holding this whole hackathon together. armed with a fish and a cape that's a little too big, pebble believes every great project starts as one small, slightly chaotic idea. keep scrolling - pebble's walking the street at the bottom of your screen with you.</p>
                                 <div className={cn(
                                     ui.pixelFrame,
                                     "max-[760px]:hidden",

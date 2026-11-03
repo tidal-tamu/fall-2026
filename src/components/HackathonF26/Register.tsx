@@ -47,9 +47,6 @@ export default function Register() {
                                     <path fill="#6f98b8" d="M1 0h2v1h1V0h2v1h1v3h-1v1h-1v1h-1v1h-1v-1h-1v-1h-1V4H0V1h1z" />
                                 </svg>
                             </a>
-                            <a className={ui.button} href={EVENT.judgeMentorApplyUrl} target="_blank" rel="noopener noreferrer">
-                                JUDGES / MENTORS <span aria-hidden="true">→</span>
-                            </a>
                         </div>
                     </div>
                     <div className="pc relative z-[2] max-[900px]:max-w-[380px]" aria-hidden="true">
@@ -119,7 +116,7 @@ export default function Register() {
                     "[border-top-width:2px] [border-top-style:dashed] [border-top-color:#c9d6df] pt-[22px]",
                     "[transition:color_.8s_ease,_border-color_.8s_ease] group-[.is-night]/level:text-[#9fb1be] group-[.is-night]/level:[border-top-color:#4a5864]",
                 )}>
-                    <span>© 2026 tidal · texas a&amp;m</span>
+                    <span>© 2026 tidalTAMU</span>
                     <span>made with ♥, a fish, and too much lofi</span>
                 </div>
             </div>

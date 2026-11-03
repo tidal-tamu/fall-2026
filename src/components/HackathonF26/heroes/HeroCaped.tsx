@@ -257,14 +257,26 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                             {item.label.toUpperCase()}
                         </a>
                     ))}
-                    <details className="caped-mobile-menu hidden max-[760px]:block">
+                    <details className="caped-mobile-menu relative hidden max-[760px]:block"
+                        onKeyDown={event => {
+                            if (event.key === "Escape") {
+                                event.currentTarget.removeAttribute("open");
+                                event.currentTarget.querySelector("summary")?.focus();
+                            }
+                        }}>
                         <summary className={cn(
-                            "max-[760px]:py-3 max-[760px]:px-0 max-[760px]:cursor-pointer max-[760px]:text-[11px]",
-                            "max-[760px]:tracking-[.08em] max-[760px]:focus-visible:[outline:2px_dashed_#333f48]",
+                            "list-none [&::-webkit-details-marker]:hidden h-11 w-11 cursor-pointer rounded-xl",
+                            "border-2 border-game-ink bg-game-pastel text-game-ink shadow-[3px_3px_0_#a2b8c6]",
+                            "max-[760px]:focus-visible:[outline:2px_dashed_#333f48]",
                             "max-[760px]:focus-visible:[outline-offset:3px]",
-                        )}>MENU</summary>
+                        )}>
+                            <span className="sr-only">Menu</span>
+                            <svg className="mx-auto my-2.5 h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+                                <path d="M4 6h16M4 12h16M4 18h16" />
+                            </svg>
+                        </summary>
                         <nav className={cn(
-                            "max-[760px]:p-2.5 max-[760px]:absolute max-[760px]:right-5 max-[760px]:top-[72px]",
+                            "max-[760px]:p-2.5 max-[760px]:absolute max-[760px]:right-0 max-[760px]:top-[calc(100%_+_12px)] max-[760px]:z-30",
                             "max-[760px]:grid max-[760px]:min-w-[180px] max-[760px]:border-2 max-[760px]:border-solid",
                             "max-[760px]:border-game-ink max-[760px]:rounded-xl max-[760px]:bg-[#f6f9fb]",
                             "max-[760px]:shadow-[4px_4px_0_#a2b8c6] max-[760px]:focus-visible:[outline:2px_dashed_#333f48]",
@@ -280,10 +292,14 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                                     {item.label}
                                 </a>
                             ))}
+                            <div className="mt-2 border-t border-[#a2b8c6] px-1 pb-1 pt-3">
+                                <RegisterButton variant="nav" soonTag={false} className="w-full justify-center" />
+                            </div>
                         </nav>
                     </details>
                     <RegisterButton
                         variant="nav"
+                        className="max-[760px]:hidden"
                         soonTag={false}
                         icon={
                             <svg className="w-3.5 h-3.5 [shape-rendering:crispEdges]" viewBox="0 0 7 7" aria-hidden="true">
