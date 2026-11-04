@@ -112,8 +112,39 @@ const Letter = ({ c, i }: { c: string; i: number }) => (
     </span>
 );
 
+const headerLayout = "absolute inset-x-0 top-0 flex items-center justify-between py-6 pl-[clamp(20px,_4vw,_56px)] pr-[calc(clamp(20px,_4vw,_56px)_+_var(--mlh-badge-width)_+_16px)] [--mlh-badge-width:clamp(56px,7.5vw,94px)]";
+const wordmarkStyle = "font-pixel text-[19px] tracking-[0.02em] text-game-ink max-[760px]:text-[15px]";
+const menuButtonStyle = "h-11 w-11 place-items-center rounded-xl border-2 border-game-ink bg-game-pastel text-game-ink shadow-[3px_3px_0_#a2b8c6]";
+
+const menuIcon = (
+    <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
+        <path className="caped-menu-bar" d="M4 6h16" />
+        <path className="caped-menu-bar" d="M4 12h16" />
+        <path className="caped-menu-bar" d="M4 18h16" />
+    </svg>
+);
+
+const MlhBadge = ({ id }: { id?: string }) => (
+    <a
+        id={id}
+        className="absolute right-[clamp(20px,_4vw,_56px)] top-0 block w-[var(--mlh-badge-width)]"
+        href="https://mlh.io/na?utm_source=na-hackathon&utm_medium=TrustBadge&utm_campaign=2027-season&utm_content=black"
+        target="_blank"
+        rel="noopener noreferrer"
+    >
+        <img
+            className="block h-auto w-full"
+            src="https://logged-assets.s3.amazonaws.com/trust-badge/2027/mlh-trust-badge-2027-black.svg"
+            alt="Major League Hacking 2027 Hackathon Season"
+            width={393}
+            height={688}
+        />
+    </a>
+);
+
 const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
     const rootRef = useRef<HTMLElement>(null);
+    const mobileMenuRef = useRef<HTMLDialogElement>(null);
     const fogRef = useRef<HTMLCanvasElement>(null);
     const capeRef = useRef<CapeHandle>(null);
     const titleRef = useRef<HTMLHeadingElement>(null);
@@ -129,6 +160,15 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
         const update = () => setStaticScene(query.matches);
         query.addEventListener("change", update);
         return () => query.removeEventListener("change", update);
+    }, []);
+
+    useEffect(() => {
+        const mobile = window.matchMedia("(max-width: 760px)");
+        const closeOnDesktop = () => {
+            if (!mobile.matches) mobileMenuRef.current?.close();
+        };
+        mobile.addEventListener("change", closeOnDesktop);
+        return () => mobile.removeEventListener("change", closeOnDesktop);
     }, []);
 
     const depth = (d: number) => (el: HTMLElement | null) => {
@@ -229,15 +269,12 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                 <SkyGrid />
             </div>
 
-            <header className={cn(
-                "caped-nav py-6 px-[clamp(20px,_4vw,_56px)] absolute top-0 right-0 left-0 z-20 flex items-center",
-                "justify-between",
-            )}>
+            <header className={cn("caped-nav z-20", headerLayout)}>
                 <a className={cn(
                     ui.heroReveal,
-                    "caped-logo caped-rv text-game-ink font-pixel text-[19px] tracking-[0.02em] opacity-0",
+                    wordmarkStyle,
+                    "caped-logo caped-rv opacity-0",
                     "max-[760px]:!opacity-100 max-[760px]:!filter-none max-[760px]:!transform-none",
-                    "max-[760px]:text-[15px]",
                 )} style={{ "--d": ".05s" } as CSSProperties} href="#top">
                     tidalBYTE
                 </a>
@@ -257,46 +294,19 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                             {item.label.toUpperCase()}
                         </a>
                     ))}
-                    <details className="caped-mobile-menu relative hidden max-[760px]:block"
-                        onKeyDown={event => {
-                            if (event.key === "Escape") {
-                                event.currentTarget.removeAttribute("open");
-                                event.currentTarget.querySelector("summary")?.focus();
-                            }
-                        }}>
-                        <summary className={cn(
-                            "list-none [&::-webkit-details-marker]:hidden h-11 w-11 cursor-pointer rounded-xl",
-                            "border-2 border-game-ink bg-game-pastel text-game-ink shadow-[3px_3px_0_#a2b8c6]",
-                            "max-[760px]:focus-visible:[outline:2px_dashed_#333f48]",
-                            "max-[760px]:focus-visible:[outline-offset:3px]",
-                        )}>
-                            <span className="sr-only">Menu</span>
-                            <svg className="mx-auto my-2.5 h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true">
-                                <path d="M4 6h16M4 12h16M4 18h16" />
-                            </svg>
-                        </summary>
-                        <nav className={cn(
-                            "max-[760px]:p-2.5 max-[760px]:absolute max-[760px]:right-0 max-[760px]:top-[calc(100%_+_12px)] max-[760px]:z-30",
-                            "max-[760px]:grid max-[760px]:min-w-[180px] max-[760px]:border-2 max-[760px]:border-solid",
-                            "max-[760px]:border-game-ink max-[760px]:rounded-xl max-[760px]:bg-[#f6f9fb]",
-                            "max-[760px]:shadow-[4px_4px_0_#a2b8c6] max-[760px]:focus-visible:[outline:2px_dashed_#333f48]",
-                            "max-[760px]:focus-visible:[outline-offset:3px]",
-                        )} aria-label="Mobile sections">
-                            {NAV.map((item) => (
-                                <a className={cn(
-                                    "max-[760px]:py-3 max-[760px]:px-4 max-[760px]:text-[13px]",
-                                    "max-[760px]:focus-visible:[outline:2px_dashed_#333f48]",
-                                    "max-[760px]:focus-visible:[outline-offset:3px]",
-                                )} key={item.href} href={item.href}
-                                    onClick={(event) => event.currentTarget.closest("details")?.removeAttribute("open")}>
-                                    {item.label}
-                                </a>
-                            ))}
-                            <div className="mt-2 border-t border-[#a2b8c6] px-1 pb-1 pt-3">
-                                <RegisterButton variant="nav" soonTag={false} className="w-full justify-center" />
-                            </div>
-                        </nav>
-                    </details>
+                    <button
+                        type="button"
+                        aria-label="Open menu"
+                        aria-haspopup="dialog"
+                        aria-controls="caped-mobile-menu"
+                        className={cn(menuButtonStyle, "hidden max-[760px]:grid")}
+                        onClick={event => {
+                            event.currentTarget.focus();
+                            mobileMenuRef.current?.showModal();
+                        }}
+                    >
+                        {menuIcon}
+                    </button>
                     <RegisterButton
                         variant="nav"
                         className="max-[760px]:hidden"
@@ -308,7 +318,45 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                         }
                     />
                 </nav>
+                <MlhBadge id="mlh-trust-badge" />
             </header>
+
+            <dialog
+                ref={mobileMenuRef}
+                id="caped-mobile-menu"
+                aria-label="Menu"
+                className="fixed inset-0 m-0 h-[100dvh] max-h-none w-full max-w-none overflow-y-auto overscroll-contain bg-[#f6f9fb] text-game-ink"
+            >
+                <header className={cn("z-10", headerLayout)}>
+                    <button
+                        type="button"
+                        aria-label="Close menu"
+                        className={cn(menuButtonStyle, "order-last grid")}
+                        onClick={() => mobileMenuRef.current?.close()}
+                    >
+                        {menuIcon}
+                    </button>
+                    <a className={wordmarkStyle} href="#top" onClick={() => mobileMenuRef.current?.close()}>
+                        tidalBYTE
+                    </a>
+                    <MlhBadge />
+                </header>
+                <div className="caped-mobile-menu-content mx-auto flex w-full max-w-md flex-col gap-8 px-6 pb-6 pt-32">
+                    <nav className="grid gap-3" aria-label="Mobile sections">
+                        {NAV.map((item) => (
+                            <a
+                                key={item.href}
+                                href={item.href}
+                                className="rounded-xl border-2 border-game-ink bg-game-pastel px-4 py-3 text-lg"
+                                onClick={() => mobileMenuRef.current?.close()}
+                            >
+                                {item.label}
+                            </a>
+                        ))}
+                    </nav>
+                    <RegisterButton variant="nav" soonTag={false} className="w-full justify-center" />
+                </div>
+            </dialog>
 
             <div ref={depth(3)} className={cn(
                 "caped-layer caped-layer--clouds-back absolute top-0 right-0 bottom-0 left-0 pointer-events-none",

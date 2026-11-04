@@ -32,7 +32,7 @@ export const ui = {
     ),
     heroMotion: cn(
         "max-[760px]:[&_*:not(.caped-sparkle):not(.caped-giant__blink):not(.caped-plane):not(.caped-cloud)]:!animate-none",
-        "max-[760px]:[&_*:not(.caped-sparkle):not(.caped-giant__blink):not(.caped-plane):not(.caped-cloud)]:![transition:none]",
+        "max-[760px]:[&_*:not(.caped-sparkle):not(.caped-giant__blink):not(.caped-plane):not(.caped-cloud):not(#caped-mobile-menu):not(.caped-mobile-menu-content):not(.caped-menu-bar)]:![transition:none]",
         "max-[760px]:[&_*::before]:!animate-none max-[760px]:[&_*::before]:![transition:none]",
         "max-[760px]:[&_*::after]:!animate-none max-[760px]:[&_*::after]:![transition:none]",
         "motion-reduce:[&_*]:!animate-none motion-reduce:[&_*]:![transition:none]",

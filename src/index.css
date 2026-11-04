@@ -51,6 +51,81 @@ html::-webkit-scrollbar {
     display: none;
 }
 
+html:has(#caped-mobile-menu[open]) {
+    overflow: hidden;
+}
+
+#caped-mobile-menu::backdrop {
+    background: transparent;
+}
+
+#caped-mobile-menu .caped-menu-bar {
+    transform-origin: center;
+}
+
+#caped-mobile-menu[open] .caped-menu-bar:first-child {
+    transform: rotate(45deg) translateY(6px);
+}
+
+#caped-mobile-menu[open] .caped-menu-bar:nth-child(2) {
+    opacity: 0;
+}
+
+#caped-mobile-menu[open] .caped-menu-bar:last-child {
+    transform: rotate(-45deg) translateY(-6px);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    #caped-mobile-menu .caped-menu-bar {
+        transition: transform 240ms ease, opacity 180ms ease;
+    }
+
+    #caped-mobile-menu {
+        background-color: transparent;
+        transition: background-color 220ms ease, display 240ms allow-discrete,
+            overlay 240ms allow-discrete;
+    }
+
+    #caped-mobile-menu:not([open]) {
+        pointer-events: none;
+    }
+
+    #caped-mobile-menu .caped-mobile-menu-content {
+        opacity: 0;
+        transform: translateY(10px);
+        transition: opacity 240ms ease, transform 240ms ease;
+    }
+
+    #caped-mobile-menu[open] {
+        background-color: #f6f9fb;
+    }
+
+    #caped-mobile-menu[open] .caped-mobile-menu-content {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    @starting-style {
+        #caped-mobile-menu[open] .caped-menu-bar:first-child,
+        #caped-mobile-menu[open] .caped-menu-bar:last-child {
+            transform: none;
+        }
+
+        #caped-mobile-menu[open] .caped-menu-bar:nth-child(2) {
+            opacity: 1;
+        }
+
+        #caped-mobile-menu[open] {
+            background-color: transparent;
+        }
+
+        #caped-mobile-menu[open] .caped-mobile-menu-content {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+    }
+}
+
 #root {
     width: 100%;
     height: 100%;
