@@ -61,11 +61,11 @@ const prizes = [
     },
     {
         "rank": "DESIGN TRACK",
-        "name": "iPad Air",
+        "name": "Mystery prize",
         "rarity": "SPECIAL",
         "color": "#f9e4cf",
         "recipient": "for the design track winners",
-        "description": "a fresh canvas for your next great design.",
+        "description": "a mystery prize from Adobe for your next creative adventure.",
         "stats": [
             {
                 "label": "TYPE",

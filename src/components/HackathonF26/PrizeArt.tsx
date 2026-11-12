@@ -49,16 +49,18 @@ function Lego() {
     </>;
 }
 
-function Tablet() {
-    return <g transform="rotate(-10 100 100)">
-        <rect x="42" y="17" width="116" height="164" rx="12" fill={INK} {...outline} />
-        <rect x="50" y="27" width="100" height="144" rx="5" fill="#d9d6e3" />
-        <path d="M54 134q20-94 49-38t43-38v77q-25-38-44 10t-48-11" fill="#7fa7c4" />
-        <circle cx="100" cy="22" r="2" fill="#9fb1be" />
-    </g>;
+function MysteryPrize() {
+    return <>
+        <path d="M100 58C52 58 51 18 72 24c18 5 28 34 28 34Zm0 0c48 0 49-40 28-34-18 5-28 34-28 34Z" fill="#d9d6e3" {...outline} />
+        <rect x="37" y="78" width="126" height="97" rx="6" fill="#f9e4cf" {...outline} />
+        <rect x="29" y="58" width="142" height="29" rx="5" fill="#efd3b8" {...outline} />
+        <path d="M100 59v28" {...outline} />
+        <path d="M87 116c0-17 28-17 28 0 0 10-15 10-15 21" fill="none" {...outline} />
+        <circle cx="100" cy="149" r="3" fill={INK} />
+    </>;
 }
 
-const illustrations = [Television, Creami, Projector, Lego, Tablet];
+const illustrations = [Television, Creami, Projector, Lego, MysteryPrize];
 
 export default function PrizeArt({ index, label, className }: {
     className?: string;
