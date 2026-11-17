@@ -26,16 +26,18 @@ function Creami() {
     </>;
 }
 
-function Projector() {
+function Keyboard() {
     return <>
-        <path d="M139 89l49-28v92l-49-22z" fill="#f9e4cf" opacity=".6" />
-        <path d="M48 146v16m88-16v16" {...outline} />
-        <rect x="22" y="70" width="146" height="80" rx="16" fill="#dfe7ee" {...outline} />
-        <circle cx="125" cy="109" r="28" fill={INK} {...outline} />
-        <circle cx="125" cy="109" r="19" fill="#7fa7c4" />
-        <circle cx="119" cy="102" r="6" fill="#fbfdff" />
-        <path d="M38 96h39m-39 12h39m-39 12h39" {...outline} />
-        <circle cx="47" cy="81" r="3" fill="#cdd8cb" />
+        <path d="M100 84c0-28 40-20 34-58" fill="none" stroke="#7fa7c4" strokeWidth="6" strokeLinecap="round" />
+        <rect x="16" y="84" width="168" height="82" rx="14" fill="#dfe7ee" {...outline} />
+        {Array.from({ length: 27 }, (_, index) => {
+            const row = Math.floor(index / 9);
+            const column = index % 9;
+            return <rect key={index} x={28 + column * 16.3} y={96 + row * 16}
+                width="12.5" height="12" rx="3" fill={row === 1 && column === 4 ? "#efd3b8" : "#fbfdff"}
+                stroke={INK} strokeWidth="1.6" />;
+        })}
+        <rect x="62" y="146" width="76" height="11" rx="3" fill="#fbfdff" stroke={INK} strokeWidth="1.6" />
     </>;
 }
 
@@ -60,7 +62,7 @@ function MysteryPrize() {
     </>;
 }
 
-const illustrations = [Television, Creami, Projector, Lego, MysteryPrize];
+const illustrations = [Television, Creami, Keyboard, Lego, MysteryPrize];
 
 export default function PrizeArt({ index, label, className }: {
     className?: string;

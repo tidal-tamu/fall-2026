@@ -33,15 +33,15 @@ const prizes = [
     },
     {
         "rank": "3RD PLACE",
-        "name": "projector",
+        "name": "mechanical keyboard",
         "rarity": "RARE",
         "color": "#c6d8e2",
         "recipient": "for the 3rd place team",
-        "description": "take movie nights and project demos to the big screen.",
+        "description": "give your next great idea a satisfying soundtrack.",
         "stats": [
             {
                 "label": "TYPE",
-                "value": "entertainment"
+                "value": "gear"
             }
         ]
     },
