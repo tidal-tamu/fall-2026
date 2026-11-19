@@ -1,18 +1,103 @@
 {
-  "events": [
-    {
-      "id": "demo-1",
-      "event_name": "Opening Ceremony",
-      "location": "Main Hall",
-      "start_time": "2026-11-21T09:00:00-06:00",
-      "end_time": "2026-11-21T09:30:00-06:00"
-    },
-    {
-      "id": "demo-2",
-      "event_name": "Intro Workshop",
-      "location": "Room 201",
-      "start_time": "2026-11-21T09:30:00-06:00",
-      "end_time": "2026-11-21T10:30:00-06:00"
-    }
-  ]
+  "data": {
+    "schedule": [
+      {
+        "id": "ade99c92-54e5-42d4-90fe-4e5efd3a875e",
+        "event_name": "Doors Open and Check-in",
+        "description": "",
+        "start_time": "2026-11-21T15:00:00Z",
+        "end_time": "2026-11-21T15:30:00Z",
+        "location": "MSC 2300",
+        "tags": [
+          "Required"
+        ]
+      },
+      {
+        "id": "28a85df8-4338-49ab-a52e-69e5732ed6a5",
+        "event_name": "Opening Ceremony",
+        "description": "",
+        "start_time": "2026-11-21T15:30:00Z",
+        "end_time": "2026-11-21T16:00:00Z",
+        "location": "MSC 2300",
+        "tags": [
+          "Required"
+        ]
+      },
+      {
+        "id": "f21b899d-4b28-42fe-a58c-31b5ad257ce8",
+        "event_name": "Team Matchmaking and Intro to Agents",
+        "description": "",
+        "start_time": "2026-11-21T16:30:00Z",
+        "end_time": "2026-11-21T17:00:00Z",
+        "location": "MSC 2501",
+        "tags": [
+          "Workshops"
+        ]
+      },
+      {
+        "id": "ef667d2b-a0fc-4a7c-9a2c-1e9f337a3cba",
+        "event_name": "Lunch",
+        "description": "",
+        "start_time": "2026-11-21T18:30:00Z",
+        "end_time": "2026-11-21T19:30:00Z",
+        "location": "MSC 2300",
+        "tags": [
+          "Food"
+        ]
+      },
+      {
+        "id": "514c29ec-bb2c-4cf0-a44d-5552ad145273",
+        "event_name": "Gemini Totebag Painting",
+        "description": "",
+        "start_time": "2026-11-21T22:00:00Z",
+        "end_time": "2026-11-21T23:00:00Z",
+        "location": "MSC 2501",
+        "tags": [
+          "Workshops"
+        ]
+      },
+      {
+        "id": "9be76386-0dc1-4393-84a2-058bf647aac9",
+        "event_name": "Dinner",
+        "description": "",
+        "start_time": "2026-11-22T00:00:00Z",
+        "end_time": "2026-11-22T01:00:00Z",
+        "location": "MSC 2300",
+        "tags": [
+          "Food"
+        ]
+      },
+      {
+        "id": "43f19347-5a5e-4f6d-929c-39581b0cb476",
+        "event_name": "Submissions Due!",
+        "description": "",
+        "start_time": "2026-11-22T01:30:00Z",
+        "end_time": "2026-11-22T01:45:00Z",
+        "location": "",
+        "tags": [
+          "Required"
+        ]
+      },
+      {
+        "id": "277a1f82-e2c6-4a94-b6b9-95a962547def",
+        "event_name": "Judging",
+        "description": "",
+        "start_time": "2026-11-22T02:00:00Z",
+        "end_time": "2026-11-22T03:30:00Z",
+        "location": "MSC 2300",
+        "tags": [
+          "Required"
+        ]
+      },
+      {
+        "id": "c3210210-80b7-4ed4-8223-6d8e8eb2b283",
+        "event_name": "Closing Ceremony & Awards",
+        "description": "",
+        "start_time": "2026-11-22T04:00:00Z",
+        "end_time": "2026-11-22T04:30:00Z",
+        "location": "MSC 2300",
+        "tags": []
+      }
+    ]
+  }
 }
