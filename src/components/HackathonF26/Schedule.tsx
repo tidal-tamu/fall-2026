@@ -219,6 +219,7 @@ export default function Schedule() {
                         <ol className="qlist p-0 mx-0 list-none mt-2 mb-0">
                             {QUESTS.map((quest, index) => <QuestRow key={`${quest.time}-${quest.name}`} quest={quest} index={index} />)}
                         </ol>
+                        <a href="/schedule/" className="inline-block p-3 font-bold underline">View live schedule →</a>
                         <SaveQuestLog />
                     </div>
                 </div>
