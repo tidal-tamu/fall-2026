@@ -1,21 +1,20 @@
 import { cn, ui, headingStyle } from "./ui";
 import { useEffect, useRef, useState } from "react";
 import { useInView, useReducedMotion } from "framer-motion";
-import { QUESTS, EVENT, fmtCentral } from "./event";
+import { useSchedule } from "../../schedule/useSchedule";
+import { EVENT, fmtCentral } from "./event";
 import PixelCanvas from "./PixelArt";
 import { createQuestLog } from "./QuestLog";
+import { toScheduleQuest, type ScheduleQuest } from "./scheduleQuests";
 
 const questTags = {
     main: "bg-game-peach",
     side: "bg-game-blue",
     food: "bg-game-sage",
-    boss: "bg-game-ink text-game-cream",
 } as const;
 
-type Quest = (typeof QUESTS)[number];
-
 function QuestRow({ quest, index }: {
-    quest: Quest;
+    quest: ScheduleQuest;
     index: number;
 }) {
     const row = useRef<HTMLLIElement>(null);
@@ -24,24 +23,22 @@ function QuestRow({ quest, index }: {
     return (
         <li
             ref={row}
-            className={cn(`q${quest.highlight ? " main" : ""}${visible || reduce ? " in" : ""}`, "py-[11px] gap-3.5 relative grid [grid-template-columns:160px_30px_minmax(0,_1fr)_auto]",
+            className={cn("q py-[11px] gap-3.5 relative grid [grid-template-columns:160px_30px_minmax(0,_1fr)_auto]",
                 "items-center pr-3 pl-[30px] rounded-[10px]",
                 visible || reduce ? "opacity-100 transform-none" : "opacity-0 [transform:translateX(-14px)]",
                 "[transition:opacity_.5s_ease,_transform_.6s_cubic-bezier(.16,1,.3,1),_background_.2s]",
                 "before:content-['▶'] before:absolute before:left-[9px] before:top-1/2 before:[translate:0_-50%]",
                 "before:text-[11px] before:text-game-ink before:opacity-0 before:[transition:opacity_.15s]",
                 "hover:before:opacity-100",
-                quest.highlight ? "bg-[#f9ebdc] hover:bg-[#f6e1cc]" : "hover:bg-[#eef4f8] focus-within:bg-[#eef4f8]",
+                "hover:bg-[#eef4f8] focus-within:bg-[#eef4f8]",
                 "hover:before:animate-quest-pointer max-[760px]:py-2.5",
                 "max-[760px]:gap-2.5 max-[760px]:[grid-template-columns:82px_minmax(0,_1fr)_auto]",
                 "max-[760px]:pr-2 max-[760px]:pl-[22px]")}
             tabIndex={0}
             style={{ transitionDelay: `${index % 4 * 70}ms` }}
         >
-            <span className="q-time font-pixel text-[11px] text-game-ink tabular-nums max-[760px]:text-[9px]">
-                {quest.time.split("–").map((time, part) => <span key={part} className="block min-[761px]:inline">
-                    {part > 0 && "–"}{time}
-                </span>)}
+            <span className="q-time font-pixel text-[11px] text-game-ink tabular-nums whitespace-nowrap max-[760px]:text-[9px]">
+                {quest.time}
             </span>
             <PixelCanvas className="w-[30px] h-[30px] [image-rendering:pixelated] max-[760px]:hidden" sprite={quest.icon} width={16} height={16} />
             <span className="q-name text-[15px] font-bold text-[#2c363e] leading-[1.35] max-[760px]:text-[14px]">
@@ -50,15 +47,15 @@ function QuestRow({ quest, index }: {
                     {quest.note}
                 </small>}
             </span>
-            <span className={cn(`tag ${quest.kind}`, questTags[quest.kind], "px-[7px] font-pixel text-[7.5px] tracking-[.03em] pt-1.5 pb-[5px] rounded-[5px] border-2",
+            {quest.kind && <span className={cn(`tag ${quest.kind}`, questTags[quest.kind], "px-[7px] font-pixel text-[7.5px] tracking-[.03em] pt-1.5 pb-[5px] rounded-[5px] border-2",
                 "border-solid border-game-ink whitespace-nowrap")}>
                 {quest.kind.toUpperCase()}
-            </span>
+            </span>}
         </li>
     );
 }
 
-function SaveQuestLog() {
+function SaveQuestLog({ quests }: { quests: ScheduleQuest[] }) {
     const dialog = useRef<HTMLDialogElement>(null);
     const imageUrl = useRef<string>();
     const mounted = useRef(false);
@@ -77,7 +74,7 @@ function SaveQuestLog() {
         setSaving(true);
         setError("");
         try {
-            const blob = await createQuestLog();
+            const blob = await createQuestLog(quests);
             if (!mounted.current)
                 return;
             if (!blob)
@@ -161,6 +158,8 @@ function SaveQuestLog() {
 }
 
 export default function Schedule() {
+    const { events, failed } = useSchedule();
+    const quests = events?.map(toScheduleQuest);
     const dateLine = fmtCentral(EVENT.startsAt, { weekday: "short", month: "short", day: "numeric" }).toUpperCase().replace(",", " ·");
     return (
         <section id="schedule" className={cn(
@@ -214,12 +213,18 @@ export default function Schedule() {
                                 <b className="font-normal text-game-ink">tidalBYTE '26</b>
                             </span>
                             <span>{dateLine} · {EVENT.room}</span>
-                            <span>{QUESTS.length} QUESTS</span>
+                            {quests && <span>{quests.length} {quests.length === 1 ? "QUEST" : "QUESTS"}</span>}
                         </div>
-                        <ol className="qlist p-0 mx-0 list-none mt-2 mb-0">
-                            {QUESTS.map((quest, index) => <QuestRow key={`${quest.time}-${quest.name}`} quest={quest} index={index} />)}
-                        </ol>
-                        <SaveQuestLog />
+                        {failed && <p role="status" className="px-2.5 mt-3 text-sm text-game-muted">{quests ? "Refresh failed. Showing the last schedule received." : "Schedule temporarily unavailable."}</p>}
+                        {!failed && !quests && <p role="status" className="px-2.5 mt-3 text-sm text-game-muted">Loading schedule.</p>}
+                        {quests?.length === 0 && <p className="px-2.5 mt-3 text-sm text-game-muted">No events have been published yet.</p>}
+                        {!!quests?.length && (
+                            <ol className="qlist p-0 mx-0 list-none mt-2 mb-0">
+                                {quests.map((quest, index) => <QuestRow key={quest.id} quest={quest} index={index} />)}
+                            </ol>
+                        )}
+                        <a href="/schedule/" className="inline-block p-3 font-bold underline">View live schedule →</a>
+                        {!!quests?.length && <SaveQuestLog quests={quests} />}
                     </div>
                 </div>
             </div>
