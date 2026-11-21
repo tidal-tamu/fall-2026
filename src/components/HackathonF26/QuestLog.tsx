@@ -1,11 +1,11 @@
-import { QUESTS, EVENT, fmtCentral } from "./event";
+import { EVENT, fmtCentral } from "./event";
 import { paintSprite } from "./PixelArt";
+import type { ScheduleQuest } from "./scheduleQuests";
 
 const INK = "#333f48";
 
-const TAG = { main: "MAIN", side: "SIDE", food: "FOOD", boss: "BOSS" };
 // Draw the same quest data as the React list onto a shareable image.
-export async function createQuestLog(): Promise<Blob | null> {
+export async function createQuestLog(quests: ScheduleQuest[]): Promise<Blob | null> {
     try {
         await Promise.all(['20px "Press Start 2P"', '400 20px "Space Mono"', '700 20px "Space Mono"'].map(f => document.fonts.load(f)));
     }
@@ -20,7 +20,7 @@ export async function createQuestLog(): Promise<Blob | null> {
     const monoFont = (n: number, b = false) => `${b ? 700 : 400} ${n}px "Space Mono", monospace`;
     const windowTop = 170;
     const headerHeight = 190;
-    const rowsHeight = QUESTS.reduce((a, q) => a + (q.note ? 92 : 66), 0);
+    const rowsHeight = quests.reduce((a, q) => a + (q.note ? 92 : 66), 0);
     const windowHeight = headerHeight + rowsHeight + 120;
     const height = windowTop + windowHeight + 140;
     const canvas = document.createElement('canvas');
@@ -79,7 +79,7 @@ export async function createQuestLog(): Promise<Blob | null> {
     context.font = pixelFont(14);
     context.fillStyle = '#53616b';
     context.textAlign = 'right';
-    context.fillText(QUESTS.length + ' QUESTS', contentRight, y - 6);
+    context.fillText(`${quests.length} ${quests.length === 1 ? 'QUEST' : 'QUESTS'}`, contentRight, y - 6);
     y += 44;
     context.textAlign = 'left';
     context.font = monoFont(23);
@@ -96,44 +96,45 @@ export async function createQuestLog(): Promise<Blob | null> {
     context.stroke();
     context.setLineDash([]);
     y += 16;
-    const tagColors = { main: '#efd3b8', side: '#c6d8e2', food: '#cdd8cb', boss: INK };
-    for (const { time: time, name, note, kind, icon, highlight: highlight } of QUESTS) {
+    const tagColors = { main: '#efd3b8', side: '#c6d8e2', food: '#cdd8cb' };
+    const nameX = contentLeft + 300;
+    for (const { time, name, note, kind, icon } of quests) {
         const h = note ? 92 : 66;
-        if (highlight) {
-            roundedRect(contentLeft - 16, y + 4, contentRight - contentLeft + 32, h - 8, 14);
-            context.fillStyle = '#f9ebdc';
-            context.fill();
-        }
+        const label = kind?.toUpperCase();
+        context.font = pixelFont(13);
+        const tagWidth = label ? context.measureText(label).width + 24 : 0;
+        const tagX = contentRight - tagWidth;
+        const textWidth = tagX - nameX - 20;
         const base = y + (note ? 40 : 42);
         context.font = pixelFont(15);
         context.fillStyle = INK;
         context.textAlign = 'left';
-        context.fillText(time, contentLeft, base);
+        context.fillText(time, contentLeft, base, 225);
         context.fillStyle = '#e3edf6';
         roundedRect(contentLeft + 240, y + (h - 40) / 2, 40, 40, 8);
         context.fill();
-        paintSprite(context, icon, contentLeft + 244 + (icon === 'mic' ? 10 : 0), y + (h - 40) / 2 + 4 + (icon === 'mic' ? 4 : 0), 2);
+        paintSprite(context, icon, contentLeft + 244, y + (h - 40) / 2 + 4, 2);
         context.font = monoFont(26, true);
         context.fillStyle = '#2c363e';
-        context.fillText(name, contentLeft + 300, base);
+        context.fillText(name, nameX, base, textWidth);
         if (note) {
             context.font = monoFont(20);
             context.fillStyle = '#5e6b75';
-            context.fillText(note, contentLeft + 300, base + 30);
+            context.fillText(note, nameX, base + 30, textWidth);
         }
-        context.font = pixelFont(13);
-        const tagWidth = context.measureText(TAG[kind]).width + 24;
-        const tagX = contentRight - tagWidth;
-        const tagY = y + h / 2 - 18;
-        roundedRect(tagX, tagY, tagWidth, 34, 8);
-        context.fillStyle = tagColors[kind];
-        context.fill();
-        context.lineWidth = 3;
-        context.strokeStyle = INK;
-        context.stroke();
-        context.fillStyle = kind === 'boss' ? '#f9e4cf' : INK;
-        context.textAlign = 'center';
-        context.fillText(TAG[kind], tagX + tagWidth / 2, tagY + 24);
+        if (kind && label) {
+            const tagY = y + h / 2 - 18;
+            roundedRect(tagX, tagY, tagWidth, 34, 8);
+            context.fillStyle = tagColors[kind];
+            context.fill();
+            context.lineWidth = 3;
+            context.strokeStyle = INK;
+            context.stroke();
+            context.font = pixelFont(13);
+            context.fillStyle = INK;
+            context.textAlign = 'center';
+            context.fillText(label, tagX + tagWidth / 2, tagY + 24);
+        }
         y += h;
     }
     y += 26;

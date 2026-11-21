@@ -13,6 +13,17 @@
         ]
       },
       {
+        "id": "7ba03fbc-e64e-4870-b401-211c01ec2e28",
+        "event_name": "Breakfast",
+        "description": "Breakfast tacos",
+        "start_time": "2026-11-21T15:00:00Z",
+        "end_time": "2026-11-21T15:30:00Z",
+        "location": "MSC 2300",
+        "tags": [
+          "Food"
+        ]
+      },
+      {
         "id": "28a85df8-4338-49ab-a52e-69e5732ed6a5",
         "event_name": "Opening Ceremony",
         "description": "",

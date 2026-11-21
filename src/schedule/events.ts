@@ -3,6 +3,7 @@ export interface ScheduleEvent {
     name: string;
     location: string;
     description: string;
+    tags: string[];
     start: number;
     end: number;
 }
@@ -28,6 +29,7 @@ function parseEvent(value: unknown): ScheduleEvent {
         name: value.event_name,
         location: typeof value.location === "string" ? value.location : "",
         description: typeof value.description === "string" ? value.description : "",
+        tags: Array.isArray(value.tags) ? value.tags.filter((tag): tag is string => typeof tag === "string") : [],
         start,
         end,
     };

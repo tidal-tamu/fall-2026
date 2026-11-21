@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import { readSchedule, type ScheduleEvent } from "./events";
 
-export const demoMode = import.meta.env.DEV && !import.meta.env.VITE_SCHEDULE_URL;
-const scheduleUrl = demoMode ? "/schedule-demo.json" : import.meta.env.VITE_SCHEDULE_URL;
+const apiUrl = import.meta.env.VITE_SCHEDULE_URL?.trim();
+const scheduleUrl = apiUrl || "/schedule-demo.json";
+export const demoMode = import.meta.env.DEV && !apiUrl;
 
 export function useSchedule() {
     const [events, setEvents] = useState<ScheduleEvent[] | null>(null);
@@ -14,7 +15,6 @@ export function useSchedule() {
 
         async function refresh() {
             try {
-                if (!scheduleUrl) throw new Error("Schedule URL is missing.");
                 const response = await fetch(scheduleUrl, { signal: controller.signal, cache: "no-store" });
                 if (!response.ok) throw new Error("Schedule request failed.");
                 const items = readSchedule(await response.json());

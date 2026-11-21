@@ -1,6 +1,7 @@
-import { cn, ui, pixelOutline } from "../ui";
+import { cn, ui } from "../ui";
 import { useEffect, useRef, useState, type CSSProperties, type RefObject } from "react";
 import { EVENT, NAV, fmtCentral } from "../event";
+import TidalByteTitle from "../TidalByteTitle";
 import RegisterButton, { JudgeMentorButton } from "../RegisterButton";
 import CapedPenguin, { type CapeHandle } from "./caped/CapedPenguin";
 import { Fog } from "./caped/fog";
@@ -21,18 +22,8 @@ const skyBackground: CSSProperties = {
 /*  a still frame.                                                            */
 /* -------------------------------------------------------------------------- */
 
-const titleStyle = {
-    "--ink-sh": pixelOutline("#3d4a52", ".045em"),
-    textShadow: "var(--ink-sh)",
-    "--glitch-one": ["var(--ink-sh)", "-0.12em 0 0 rgba(118, 163, 212, 0.95)", "0.12em 0 0 rgba(240, 192, 148, 0.95)"].join(", "),
-    "--glitch-two": ["var(--ink-sh)", "0.08em 0.02em 0 rgba(242, 201, 160, 0.95)"].join(", "),
-} as CSSProperties;
-
 const IDLE = 0.14; // the cape's resting billow
-const TILT = [-3, 2, -2, 3, -1, 2, -3, 1, -2, 0, 3, -2];
 const NOISE = "#%&$@/*+=?01<>";
-const WORD = [..."tidalBYTE"];
-const YEAR = [..."'26"];
 const STATIC_SCENE_QUERY = "(max-width: 760px), (prefers-reduced-motion: reduce)";
 const prefersStaticScene = () => window.matchMedia(STATIC_SCENE_QUERY).matches;
 
@@ -94,23 +85,6 @@ function useTitleGlitch(title: RefObject<HTMLHeadingElement>, staticScene: boole
         };
     }, [title, staticScene]);
 }
-
-const Letter = ({ c, i }: { c: string; i: number }) => (
-    <span className={cn(
-        "group-[.is-in]/hero:animate-hero-letter group-[.is-in]/hero:[filter:blur(10px)]",
-        "group-[.is-in]/hero:[transform:translateY(.28em)_scale(.9)]",
-        "[&.is-g1]:[translate:.07em_-0.03em] [&.is-g1]:[text-shadow:var(--glitch-one)]",
-        "[&.is-g2]:opacity-75 [&.is-g2]:[translate:-0.06em_.03em] [&.is-g2]:[text-shadow:var(--glitch-two)]",
-        "motion-reduce:!opacity-100 motion-reduce:!filter-none motion-reduce:!transform-none",
-        "caped-ch relative inline-block isolate [rotate:var(--r,_0deg)] opacity-0",
-        "before:content-[attr(data-c)] before:absolute before:top-0 before:left-0 before:z-[-1]",
-        "before:text-white before:[-webkit-text-stroke:0.27em_#ffffff] before:[text-shadow:none]",
-        "before:[filter:drop-shadow(0_0.07em_0.05em_rgba(38,_48,_58,_0.22))] max-[760px]:!opacity-100",
-        "max-[760px]:!filter-none max-[760px]:!transform-none",
-    )} aria-hidden="true" data-c={c} style={{ "--i": i, "--r": `${TILT[i]}deg` } as CSSProperties}>
-        {c}
-    </span>
-);
 
 const headerLayout = "absolute inset-x-0 top-0 flex items-center justify-between py-6 pl-[clamp(20px,_4vw,_56px)] pr-[calc(clamp(20px,_4vw,_56px)_+_var(--mlh-badge-width)_+_16px)] [--mlh-badge-width:clamp(56px,7.5vw,94px)]";
 const wordmarkStyle = "font-pixel text-[19px] tracking-[0.02em] text-game-ink max-[760px]:text-[15px]";
@@ -440,25 +414,11 @@ const HeroCaped = ({ shouldAnimate = false }: { shouldAnimate?: boolean }) => {
                 "items-center text-center pointer-events-none",
             )}>
                 {/* <p className="caped-eyebrow caped-rv" style={{ "--d": ".2s" } as CSSProperties}>TEXAS A&amp;M · TIDAL PRESENTS</p> */}
-                <h1 style={titleStyle} ref={titleRef} className={cn(
-                    "caped-title mx-0 ",
-                    "mt-[0.38em] mb-[0.48em] text-[#bdd0da] font-pixel",
-                    "text-[clamp(1.45rem,_7vw,_calc(var(--H)_*_0.1))] font-normal leading-[1.1] tracking-[0.08em]",
-                    " whitespace-nowrap cursor-default pointer-events-auto",
-                )}>
-                    <span className="sr-only">tidalBYTE &apos;26</span>
-                    {WORD.map((c, i) => (
-                        <Letter key={i} c={c} i={i} />
-                    ))}
-                    <span className={cn(
-                        "caped-year inline-block text-[0.58em] tracking-[0.06em] [rotate:-9deg]",
-                        "[translate:0.15em_-0.6em]",
-                    )} aria-hidden="true">
-                        {YEAR.map((c, j) => (
-                            <Letter key={j} c={c} i={WORD.length + j} />
-                        ))}
-                    </span>
-                </h1>
+                <TidalByteTitle
+                    titleRef={titleRef}
+                    animate
+                    className="caped-title mx-0 mt-[0.38em] mb-[0.48em] text-[clamp(1.45rem,_7vw,_calc(var(--H)_*_0.1))] cursor-default pointer-events-auto"
+                />
                 <div className={cn(
                     "caped-pills gap-3.5 flex flex-wrap justify-center max-[760px]:gap-1.5 max-[760px]:flex-nowrap",
                     "max-[760px]:w-[min(100%,_340px)]",
